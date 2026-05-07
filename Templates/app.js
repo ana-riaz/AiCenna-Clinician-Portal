@@ -65,6 +65,7 @@ function openPt(id, tab) {
   document.getElementById('sum-content').innerHTML  = renderSummary(id);
   document.getElementById('labs-content').innerHTML = renderLabs(id);
   document.getElementById('hist-content').innerHTML = renderHistory(id);
+  document.getElementById('meds-content').innerHTML = renderMedications(id);
   summaryVerified = false;
   currentVitalFilter = '7d';
   const t = tab||'ov';

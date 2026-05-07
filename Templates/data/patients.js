@@ -80,7 +80,39 @@ const patientData = {
       {name:'Alcohol',       detail:'Weekly — monitor given diabetes and hypertension', tag:'Monitor',   tc:'al'},
       {name:'Doctor Visits', detail:'Monthly — adequate given critical status',         tag:'Compliant', tc:'me'}
     ],
-    femaleSpecific: null
+    femaleSpecific: null,
+    medicationDetail: {
+      active: [
+        {
+          name: 'Metformin 500mg', class: 'Antidiabetic',
+          frequency: 'Twice daily · with meals',
+          prescribedBy: 'Dr. Sarah Johnson', since: 'Jan 2022',
+          adherence: 64, missedLast30: 11, lastTaken: 'Today, 8:00 AM',
+          notes: 'Take with food',
+          dots: [1,0,1,1,0,1,1,0,1,0,1,1,0,1]
+        },
+        {
+          name: 'Lisinopril 10mg', class: 'ACE Inhibitor',
+          frequency: 'Once daily · morning',
+          prescribedBy: 'Dr. Sarah Johnson', since: 'Mar 2021',
+          adherence: 71, missedLast30: 9, lastTaken: 'Today, 8:05 AM',
+          notes: null,
+          dots: [1,1,0,1,1,1,0,1,1,1,0,1,1,0]
+        },
+        {
+          name: 'Aspirin 81mg', class: 'Antiplatelet',
+          frequency: 'Once daily · evening',
+          prescribedBy: 'Dr. Sarah Johnson', since: 'Jun 2022',
+          adherence: 58, missedLast30: 13, lastTaken: 'Yesterday, 9:00 PM',
+          notes: 'Take after food',
+          dots: [1,0,1,0,1,1,0,0,1,1,0,1,0,0]
+        }
+      ],
+      past: [
+        {name:'Glibenclamide 5mg', class:'Sulfonylurea', from:'Mar 2020', to:'Nov 2021',
+         reason:'Discontinued — recurrent hypoglycemic episodes'}
+      ]
+    }
   },
 
   fatima: {
@@ -155,7 +187,23 @@ const patientData = {
     femaleSpecific:[
       {name:'Pregnancy',   detail:'Not pregnant',                     tag:'N/A',        tc:'me'},
       {name:'Mammography', detail:'Adherent — screenings up to date', tag:'Adherent ✓', tc:'ok'}
-    ]
+    ],
+    medicationDetail: {
+      active: [
+        {
+          name: 'Lisinopril 10mg', class: 'ACE Inhibitor',
+          frequency: 'Once daily · morning',
+          prescribedBy: 'Dr. Sarah Johnson', since: 'Feb 2023',
+          adherence: 78, missedLast30: 7, lastTaken: 'Today, 7:45 AM',
+          notes: null,
+          dots: [1,1,1,1,0,1,1,1,1,0,1,1,1,0]
+        }
+      ],
+      past: [
+        {name:'Metformin 250mg', class:'Antidiabetic', from:'Jan 2023', to:'Feb 2023',
+         reason:'Discontinued — GI intolerance (nausea, diarrhea)'}
+      ]
+    }
   },
 
   sara: {
@@ -225,7 +273,28 @@ const patientData = {
     femaleSpecific:[
       {name:'Pregnancy',   detail:'Not pregnant — confirmed pre-op',  tag:'N/A',     tc:'me'},
       {name:'Mammography', detail:'Not due — screening starts at 40', tag:'Not Due', tc:'me'}
-    ]
+    ],
+    medicationDetail: {
+      active: [
+        {
+          name: 'Amoxicillin 500mg', class: 'Antibiotic',
+          frequency: 'Three times daily · every 8h',
+          prescribedBy: 'Dr. Sarah Johnson', since: 'Apr 21, 2026',
+          adherence: 96, missedLast30: 1, lastTaken: 'Today, 10:00 AM',
+          notes: '7-day post-op course',
+          dots: [2,2,2,2,2,2,2,2,2,1,1,1,1,1]
+        },
+        {
+          name: 'Paracetamol 500mg', class: 'Analgesic',
+          frequency: 'As needed · up to 4× daily',
+          prescribedBy: 'Dr. Sarah Johnson', since: 'Apr 21, 2026',
+          adherence: 92, missedLast30: 2, lastTaken: 'Today, 10:00 AM',
+          notes: 'Pain management post-surgery',
+          dots: [2,2,2,2,2,2,2,2,2,1,1,1,0,1]
+        }
+      ],
+      past: []
+    }
   }
 };
 

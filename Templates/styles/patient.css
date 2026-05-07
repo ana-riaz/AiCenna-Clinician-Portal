@@ -183,3 +183,59 @@
 .hrow:last-child{border-bottom:none}
 .hrn{font-weight:700}
 .hrd{font-size:10px;color:var(--dim);margin-top:2px}
+
+/* ── Medications tab ────────────────────────────────────────────────────────── */
+.meds-layout{display:flex;flex-direction:column;gap:14px}
+.adh-banner{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:18px;backdrop-filter:blur(10px)}
+.adh-banner-score{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;letter-spacing:-0.03em;line-height:1;flex-shrink:0}
+.adh-banner-score.ok{color:var(--success)}
+.adh-banner-score.warn{color:var(--warning)}
+.adh-banner-score.danger{color:var(--danger)}
+.adh-banner-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.adh-banner-title span.ok{color:var(--success)}
+.adh-banner-title span.warn{color:var(--warning)}
+.adh-banner-title span.danger{color:var(--danger)}
+.adh-banner-sub{font-size:10px;color:var(--dim)}
+.med-sec-label{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em}
+.med-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.med-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:16px;backdrop-filter:blur(8px);display:flex;flex-direction:column;gap:12px}
+.med-head{display:flex;justify-content:space-between;align-items:flex-start}
+.med-name{font-size:13px;font-weight:700;margin-bottom:5px}
+.med-cls{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(56,189,248,0.1);color:var(--blue);font-weight:600}
+.med-status-badge{font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(94,234,212,0.12);color:var(--success);flex-shrink:0}
+.med-meta{display:flex;flex-direction:column;gap:0}
+.med-row{display:flex;justify-content:space-between;align-items:center;font-size:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.med-row:last-child{border-bottom:none}
+.med-row span:first-child{color:var(--dim)}
+.med-row span:last-child{color:var(--muted);font-weight:500;text-align:right}
+.med-note{color:var(--blue) !important}
+.adh-wrap{display:flex;flex-direction:column;gap:6px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.07)}
+.adh-toprow{display:flex;justify-content:space-between;align-items:center}
+.adh-lbl{font-size:9px;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
+.adh-pct{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700}
+.adh-pct.ok{color:var(--success)}
+.adh-pct.warn{color:var(--warning)}
+.adh-pct.danger{color:var(--danger)}
+.adh-track{height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.adh-fill{height:100%;border-radius:3px}
+.adh-fill.ok{background:var(--success)}
+.adh-fill.warn{background:var(--warning)}
+.adh-fill.danger{background:var(--danger)}
+.adh-dots{display:flex;gap:3px}
+.adh-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.adh-dot.taken{background:rgba(94,234,212,0.45);border:1px solid var(--success)}
+.adh-dot.missed{background:rgba(251,113,133,0.15);border:1px solid rgba(251,113,133,0.45)}
+.adh-dot.na{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)}
+.adh-axis{display:flex;justify-content:space-between;font-size:8px;color:var(--dim);opacity:0.65}
+.adh-stats{display:flex;justify-content:space-between;align-items:center;font-size:10px}
+.adh-last{color:var(--dim)}
+.adh-miss.ok{color:var(--success);font-weight:600}
+.adh-miss.warn{color:var(--warning);font-weight:600}
+.adh-miss.danger{color:var(--danger);font-weight:600}
+.med-past-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;backdrop-filter:blur(8px)}
+.med-past-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);gap:16px}
+.med-past-row:last-child{border-bottom:none}
+.med-past-name{font-size:12px;font-weight:700;margin-bottom:3px}
+.med-past-sub{font-size:10px;color:var(--dim)}
+.med-past-reason{font-size:10px;color:var(--warning);font-weight:500;text-align:right;max-width:220px}
+.med-empty{padding:20px;text-align:center;color:var(--dim);font-size:11px}
