@@ -26,7 +26,10 @@ const patientData = {
       stress:  {val:'82',  unit:'/100',  trend:'↑ Critically high',        tc:'c', bars:[50,55,60,65,70,75,82]},
       hrv:     {val:'19',  unit:'ms',    trend:'↓ Severely low autonomic', tc:'c', bars:[55,48,42,36,30,24,19]},
       rem:     {val:'32',  unit:'min',   trend:'↓ Very low REM sleep',     tc:'c', bars:[72,68,62,55,48,40,32]},
-      recovery:{val:'28',  unit:'/100',  trend:'↓ Critical recovery',      tc:'c', bars:[70,63,55,48,42,35,28]}
+      recovery:{val:'28',  unit:'/100',  trend:'↓ Critical recovery',      tc:'c', bars:[70,63,55,48,42,35,28]},
+      temp:    {val:'99',  unit:'°F',    trend:'↑ Mildly elevated',         tc:'e', bars:[98,99,99,99,99,99,99]},
+      steps:   {val:'2800',unit:'steps', trend:'↓ Low activity',            tc:'e', bars:[3200,3100,3000,2900,2860,2820,2800]},
+      calories:{val:'185', unit:'kcal',  trend:'↓ Low energy expenditure',  tc:'e', bars:[220,210,200,196,192,188,185]}
     },
     vitalHistory:{
       hr:      {daily:gen(101,84,102,30,4),  hourly:gen(102,100,103,24,2)},
@@ -37,7 +40,10 @@ const patientData = {
       stress:  {daily:gen(111,62,82,30,4),   hourly:gen(112,80,84,24,2)},
       hrv:     {daily:gen(113,38,19,30,2),   hourly:gen(114,18,21,24,2)},
       rem:     {daily:gen(115,62,32,30,4),   hourly:gen(116,30,34,24,2)},
-      recovery:{daily:gen(117,58,28,30,4),   hourly:gen(118,27,30,24,2)}
+      recovery:{daily:gen(117,58,28,30,4),   hourly:gen(118,27,30,24,2)},
+      temp:    {daily:gen(701,98,99,30,1),    hourly:gen(702,98,100,24,1)},
+      steps:   {daily:gen(703,3200,2800,30,300), hourly:gen(704,80,380,24,100)},
+      calories:{daily:gen(705,220,185,30,20), hourly:gen(706,6,22,24,5)}
     },
     conditions:['Hypertension','Type 2 Diabetes'],
     medications:['Metformin 500mg','Lisinopril 10mg','Aspirin 81mg'],
@@ -152,7 +158,10 @@ const patientData = {
       stress:  {val:'68',  unit:'/100',  trend:'↑ Elevated',              tc:'e', bars:[40,45,50,55,60,65,68]},
       hrv:     {val:'28',  unit:'ms',    trend:'↓ Low autonomic tone',    tc:'c', bars:[70,65,60,55,48,40,35]},
       rem:     {val:'48',  unit:'min',   trend:'↓ Below optimal',         tc:'e', bars:[80,75,70,65,58,52,48]},
-      recovery:{val:'44',  unit:'/100',  trend:'↓ Poor recovery',        tc:'c', bars:[75,70,65,58,52,47,44]}
+      recovery:{val:'44',  unit:'/100',  trend:'↓ Poor recovery',        tc:'c', bars:[75,70,65,58,52,47,44]},
+      temp:    {val:'99',  unit:'°F',    trend:'→ Normal range',           tc:'n', bars:[98,99,99,98,99,99,99]},
+      steps:   {val:'4500',unit:'steps', trend:'↓ Below average activity', tc:'e', bars:[5200,5100,4900,4800,4700,4600,4500]},
+      calories:{val:'260', unit:'kcal',  trend:'→ Moderate activity',      tc:'n', bars:[300,285,278,272,268,264,260]}
     },
     vitalHistory:{
       hr:      {daily:gen(201,78,88,30,3),   hourly:gen(202,86,90,24,2)},
@@ -163,7 +172,10 @@ const patientData = {
       stress:  {daily:gen(211,55,68,30,3),   hourly:gen(212,66,70,24,2)},
       hrv:     {daily:gen(213,48,28,30,3),   hourly:gen(214,26,30,24,2)},
       rem:     {daily:gen(215,68,48,30,4),   hourly:gen(216,46,50,24,3)},
-      recovery:{daily:gen(217,62,44,30,4),   hourly:gen(218,42,46,24,3)}
+      recovery:{daily:gen(217,62,44,30,4),   hourly:gen(218,42,46,24,3)},
+      temp:    {daily:gen(711,98,99,30,1),    hourly:gen(712,98,100,24,1)},
+      steps:   {daily:gen(713,5200,4500,30,300), hourly:gen(714,100,480,24,120)},
+      calories:{daily:gen(715,300,260,30,25), hourly:gen(716,8,28,24,6)}
     },
     conditions:['Hypertension','Insulin Resistance'],
     medications:['Lisinopril 10mg'],
@@ -254,7 +266,10 @@ const patientData = {
       stress:  {val:'34', unit:'/100',  trend:'→ Low — recovering well',tc:'n', bars:[55,50,45,42,38,35,34]},
       hrv:     {val:'52', unit:'ms',    trend:'↑ Improving daily',      tc:'n', bars:[38,40,43,46,48,50,52]},
       rem:     {val:'72', unit:'min',   trend:'→ Adequate',             tc:'n', bars:[65,67,68,70,71,72,72]},
-      recovery:{val:'78', unit:'/100',  trend:'↑ Good recovery',       tc:'n', bars:[55,58,62,66,70,74,78]}
+      recovery:{val:'78', unit:'/100',  trend:'↑ Good recovery',       tc:'n', bars:[55,58,62,66,70,74,78]},
+      temp:    {val:'98',  unit:'°F',    trend:'→ Normal',                tc:'n', bars:[98,98,98,98,98,98,98]},
+      steps:   {val:'7200',unit:'steps', trend:'↑ Improving post-recovery',tc:'n', bars:[5500,5800,6200,6500,6800,7000,7200]},
+      calories:{val:'380', unit:'kcal',  trend:'↑ Increasing activity',   tc:'n', bars:[300,320,340,355,365,374,380]}
     },
     vitalHistory:{
       hr:      {daily:gen(301,74,68,30,2),  hourly:gen(302,67,70,24,1)},
@@ -265,7 +280,10 @@ const patientData = {
       stress:  {daily:gen(311,55,34,30,3),  hourly:gen(312,33,36,24,2)},
       hrv:     {daily:gen(313,35,52,30,3),  hourly:gen(314,50,54,24,2)},
       rem:     {daily:gen(315,58,72,30,4),  hourly:gen(316,70,74,24,3)},
-      recovery:{daily:gen(317,45,78,30,5),  hourly:gen(318,76,80,24,3)}
+      recovery:{daily:gen(317,45,78,30,5),  hourly:gen(318,76,80,24,3)},
+      temp:    {daily:gen(721,97,98,30,1),   hourly:gen(722,97,99,24,1)},
+      steps:   {daily:gen(723,5500,7200,30,300), hourly:gen(724,150,600,24,120)},
+      calories:{daily:gen(725,300,380,30,25), hourly:gen(726,10,40,24,8)}
     },
     conditions:['Post-op: Appendectomy'],
     medications:['Amoxicillin 500mg','Paracetamol 500mg'],
@@ -354,7 +372,10 @@ const patientData = {
       stress:  {val:'58',  unit:'/100',  trend:'↑ Moderate stress',             tc:'e', bars:[42,45,48,50,53,56,58]},
       hrv:     {val:'38',  unit:'ms',    trend:'→ Moderate autonomic balance',  tc:'n', bars:[44,42,40,40,39,38,38]},
       rem:     {val:'56',  unit:'min',   trend:'→ Below average',               tc:'n', bars:[62,61,60,58,57,57,56]},
-      recovery:{val:'64',  unit:'/100',  trend:'→ Moderate recovery',           tc:'n', bars:[68,67,66,65,65,64,64]}
+      recovery:{val:'64',  unit:'/100',  trend:'→ Moderate recovery',           tc:'n', bars:[68,67,66,65,65,64,64]},
+      temp:    {val:'99',  unit:'°F',    trend:'→ Normal',                       tc:'n', bars:[98,99,98,99,99,98,99]},
+      steps:   {val:'5800',unit:'steps', trend:'→ Moderate activity',            tc:'n', bars:[6200,6000,5900,5850,5830,5810,5800]},
+      calories:{val:'320', unit:'kcal',  trend:'→ Moderate',                     tc:'n', bars:[340,335,330,328,325,322,320]}
     },
     vitalHistory:{
       hr:      {daily:gen(201,72,82,30,3),  hourly:gen(202,80,84,24,2)},
@@ -365,7 +386,10 @@ const patientData = {
       stress:  {daily:gen(211,42,58,30,4),  hourly:gen(212,56,61,24,2)},
       hrv:     {daily:gen(213,44,38,30,2),  hourly:gen(214,37,40,24,2)},
       rem:     {daily:gen(215,62,56,30,4),  hourly:gen(216,55,58,24,2)},
-      recovery:{daily:gen(217,68,64,30,3),  hourly:gen(218,63,66,24,2)}
+      recovery:{daily:gen(217,68,64,30,3),  hourly:gen(218,63,66,24,2)},
+      temp:    {daily:gen(731,98,99,30,1),   hourly:gen(732,98,100,24,1)},
+      steps:   {daily:gen(733,6200,5800,30,300), hourly:gen(734,100,560,24,120)},
+      calories:{daily:gen(735,340,320,30,20), hourly:gen(736,10,30,24,6)}
     },
     conditions:['Pre-hypertension','Dyslipidemia'],
     medications:['Atorvastatin 10mg','Aspirin 81mg'],
@@ -437,7 +461,10 @@ const patientData = {
       stress:  {val:'74',  unit:'/100',  trend:'↑ High chronic stress',         tc:'e', bars:[52,56,60,64,68,71,74]},
       hrv:     {val:'22',  unit:'ms',    trend:'↓ Reduced autonomic function',  tc:'e', bars:[38,35,32,29,27,24,22]},
       rem:     {val:'42',  unit:'min',   trend:'↓ Reduced REM sleep',           tc:'e', bars:[58,55,52,50,47,44,42]},
-      recovery:{val:'39',  unit:'/100',  trend:'↓ Poor recovery score',         tc:'e', bars:[55,52,48,46,43,41,39]}
+      recovery:{val:'39',  unit:'/100',  trend:'↓ Poor recovery score',         tc:'e', bars:[55,52,48,46,43,41,39]},
+      temp:    {val:'99',  unit:'°F',    trend:'→ Normal range',                 tc:'n', bars:[98,99,99,98,99,99,99]},
+      steps:   {val:'3200',unit:'steps', trend:'↓ Below target — mobility',     tc:'e', bars:[3600,3500,3400,3350,3300,3250,3200]},
+      calories:{val:'230', unit:'kcal',  trend:'↓ Low activity',                tc:'e', bars:[270,265,258,252,246,238,230]}
     },
     vitalHistory:{
       hr:      {daily:gen(301,78,95,30,4),   hourly:gen(302,92,97,24,3)},
@@ -448,7 +475,10 @@ const patientData = {
       stress:  {daily:gen(311,52,74,30,4),   hourly:gen(312,72,77,24,2)},
       hrv:     {daily:gen(313,38,22,30,2),   hourly:gen(314,21,24,24,2)},
       rem:     {daily:gen(315,58,42,30,4),   hourly:gen(316,40,44,24,2)},
-      recovery:{daily:gen(317,55,39,30,4),   hourly:gen(318,37,42,24,2)}
+      recovery:{daily:gen(317,55,39,30,4),   hourly:gen(318,37,42,24,2)},
+      temp:    {daily:gen(741,98,99,30,1),    hourly:gen(742,98,100,24,1)},
+      steps:   {daily:gen(743,3600,3200,30,250), hourly:gen(744,80,320,24,80)},
+      calories:{daily:gen(745,270,230,30,20), hourly:gen(746,7,22,24,5)}
     },
     conditions:['Type 2 Diabetes','Obesity','Hypertension Stage 1'],
     medications:['Metformin 1000mg','Amlodipine 5mg','Vitamin D3'],
@@ -530,7 +560,10 @@ const patientData = {
       stress:  {val:'42',  unit:'/100',  trend:'→ Mild — managed with CBT',        tc:'n', bars:[48,46,44,43,43,42,42]},
       hrv:     {val:'54',  unit:'ms',    trend:'→ Good autonomic variability',     tc:'n', bars:[52,53,54,54,53,54,54]},
       rem:     {val:'74',  unit:'min',   trend:'→ Good REM sleep duration',        tc:'n', bars:[72,73,74,74,74,74,74]},
-      recovery:{val:'84',  unit:'/100',  trend:'→ Strong recovery score',          tc:'n', bars:[82,83,84,84,84,84,84]}
+      recovery:{val:'84',  unit:'/100',  trend:'→ Strong recovery score',          tc:'n', bars:[82,83,84,84,84,84,84]},
+      temp:    {val:'98',  unit:'°F',    trend:'→ Normal',                          tc:'n', bars:[98,98,98,98,98,98,98]},
+      steps:   {val:'9200',unit:'steps', trend:'↑ Very active',                    tc:'n', bars:[8800,8900,9000,9100,9150,9180,9200]},
+      calories:{val:'480', unit:'kcal',  trend:'↑ High activity',                  tc:'n', bars:[450,455,460,465,470,476,480]}
     },
     vitalHistory:{
       hr:      {daily:gen(401,68,68,30,3),  hourly:gen(402,66,70,24,2)},
@@ -541,7 +574,10 @@ const patientData = {
       stress:  {daily:gen(411,40,42,30,5),  hourly:gen(412,40,45,24,3)},
       hrv:     {daily:gen(413,52,54,30,2),  hourly:gen(414,52,56,24,2)},
       rem:     {daily:gen(415,72,74,30,3),  hourly:gen(416,72,76,24,2)},
-      recovery:{daily:gen(417,82,84,30,3),  hourly:gen(418,82,86,24,2)}
+      recovery:{daily:gen(417,82,84,30,3),  hourly:gen(418,82,86,24,2)},
+      temp:    {daily:gen(751,98,98,30,1),   hourly:gen(752,97,99,24,1)},
+      steps:   {daily:gen(753,8800,9200,30,350), hourly:gen(754,200,900,24,150)},
+      calories:{daily:gen(755,450,480,30,25), hourly:gen(756,15,50,24,8)}
     },
     conditions:['Anxiety (Mild)'],
     medications:['Escitalopram 5mg'],
@@ -607,7 +643,10 @@ const patientData = {
       stress:  {val:'64',  unit:'/100',  trend:'↑ Moderate-high — post-cardiac',    tc:'e', bars:[48,50,54,57,60,62,64]},
       hrv:     {val:'29',  unit:'ms',    trend:'↓ Reduced — AFib effect',           tc:'e', bars:[40,38,36,34,32,30,29]},
       rem:     {val:'50',  unit:'min',   trend:'→ Below average REM',               tc:'n', bars:[58,56,54,52,52,51,50]},
-      recovery:{val:'58',  unit:'/100',  trend:'→ Below average — cardiac rehab',   tc:'n', bars:[62,61,61,60,59,59,58]}
+      recovery:{val:'58',  unit:'/100',  trend:'→ Below average — cardiac rehab',   tc:'n', bars:[62,61,61,60,59,59,58]},
+      temp:    {val:'99',  unit:'°F',    trend:'→ Normal',                           tc:'n', bars:[98,99,99,98,99,98,99]},
+      steps:   {val:'3800',unit:'steps', trend:'↓ Limited — cardiac rehab',         tc:'e', bars:[4200,4100,4000,3950,3900,3850,3800]},
+      calories:{val:'260', unit:'kcal',  trend:'→ Moderate — rehab guided',         tc:'n', bars:[290,280,275,270,267,263,260]}
     },
     vitalHistory:{
       hr:      {daily:gen(501,74,88,30,4),  hourly:gen(502,86,91,24,3)},
@@ -618,7 +657,10 @@ const patientData = {
       stress:  {daily:gen(511,48,64,30,4),  hourly:gen(512,62,67,24,2)},
       hrv:     {daily:gen(513,40,29,30,2),  hourly:gen(514,28,31,24,2)},
       rem:     {daily:gen(515,58,50,30,4),  hourly:gen(516,49,52,24,2)},
-      recovery:{daily:gen(517,62,58,30,3),  hourly:gen(518,57,60,24,2)}
+      recovery:{daily:gen(517,62,58,30,3),  hourly:gen(518,57,60,24,2)},
+      temp:    {daily:gen(761,98,99,30,1),   hourly:gen(762,98,100,24,1)},
+      steps:   {daily:gen(763,4200,3800,30,250), hourly:gen(764,90,380,24,90)},
+      calories:{daily:gen(765,290,260,30,20), hourly:gen(766,8,28,24,6)}
     },
     conditions:['Post-MI (3 months)','Atrial Fibrillation'],
     medications:['Warfarin 5mg','Bisoprolol 5mg','Ramipril 5mg','Aspirin 75mg'],
@@ -706,7 +748,10 @@ const patientData = {
       stress:  {val:'79',  unit:'/100',  trend:'↑ Critically high',                tc:'c', bars:[52,58,63,67,72,76,79]},
       hrv:     {val:'17',  unit:'ms',    trend:'↓ Severely reduced',               tc:'c', bars:[34,30,26,24,21,19,17]},
       rem:     {val:'31',  unit:'min',   trend:'↓ Very low REM sleep',             tc:'c', bars:[58,53,47,42,38,35,31]},
-      recovery:{val:'31',  unit:'/100',  trend:'↓ Critical recovery',              tc:'c', bars:[58,52,46,41,37,34,31]}
+      recovery:{val:'31',  unit:'/100',  trend:'↓ Critical recovery',              tc:'c', bars:[58,52,46,41,37,34,31]},
+      temp:    {val:'100', unit:'°F',    trend:'↑ Elevated — inflammatory',        tc:'c', bars:[99,99,100,100,100,100,100]},
+      steps:   {val:'1500',unit:'steps', trend:'↓ Critically low activity',        tc:'c', bars:[2200,2000,1900,1800,1700,1600,1500]},
+      calories:{val:'98',  unit:'kcal',  trend:'↓ Minimal activity',               tc:'c', bars:[150,140,130,120,110,104,98]}
     },
     vitalHistory:{
       hr:      {daily:gen(521,84,109,30,5),   hourly:gen(522,106,112,24,3)},
@@ -717,7 +762,10 @@ const patientData = {
       stress:  {daily:gen(531,52,79,30,4),    hourly:gen(532,77,82,24,2)},
       hrv:     {daily:gen(533,34,17,30,2),    hourly:gen(534,16,19,24,1)},
       rem:     {daily:gen(535,58,31,30,4),    hourly:gen(536,30,33,24,2)},
-      recovery:{daily:gen(537,58,31,30,4),    hourly:gen(538,30,33,24,2)}
+      recovery:{daily:gen(537,58,31,30,4),    hourly:gen(538,30,33,24,2)},
+      temp:    {daily:gen(771,98,100,30,1),    hourly:gen(772,99,101,24,1)},
+      steps:   {daily:gen(773,2200,1500,30,200), hourly:gen(774,40,200,24,60)},
+      calories:{daily:gen(775,150,98,30,15),   hourly:gen(776,3,14,24,4)}
     },
     conditions:['Chronic Kidney Disease (Stage 3B)','Hypertension Stage 2'],
     medications:['Amlodipine 10mg','Furosemide 40mg','Erythropoietin 4000IU'],
@@ -796,7 +844,10 @@ const patientData = {
       stress:  {val:'62',  unit:'/100',  trend:'↑ Moderate-high chronic stress',   tc:'e', bars:[44,48,52,55,58,60,62]},
       hrv:     {val:'41',  unit:'ms',    trend:'→ Low-normal',                     tc:'n', bars:[46,45,44,43,43,42,41]},
       rem:     {val:'54',  unit:'min',   trend:'→ Below average',                  tc:'n', bars:[60,58,57,56,55,55,54]},
-      recovery:{val:'61',  unit:'/100',  trend:'→ Below average',                  tc:'n', bars:[66,65,64,63,62,62,61]}
+      recovery:{val:'61',  unit:'/100',  trend:'→ Below average',                  tc:'n', bars:[66,65,64,63,62,62,61]},
+      temp:    {val:'97',  unit:'°F',    trend:'↓ Below normal — hypothyroid',     tc:'e', bars:[98,97,97,97,97,97,97]},
+      steps:   {val:'5500',unit:'steps', trend:'→ Moderate activity',              tc:'n', bars:[5000,5100,5200,5300,5400,5450,5500]},
+      calories:{val:'310', unit:'kcal',  trend:'→ Moderate',                       tc:'n', bars:[280,290,295,300,305,308,310]}
     },
     vitalHistory:{
       hr:      {daily:gen(541,70,79,30,3),  hourly:gen(542,77,81,24,2)},
@@ -807,7 +858,10 @@ const patientData = {
       stress:  {daily:gen(551,44,62,30,4),  hourly:gen(552,60,65,24,2)},
       hrv:     {daily:gen(553,46,41,30,2),  hourly:gen(554,40,43,24,2)},
       rem:     {daily:gen(555,60,54,30,3),  hourly:gen(556,53,56,24,2)},
-      recovery:{daily:gen(557,66,61,30,3),  hourly:gen(558,60,63,24,2)}
+      recovery:{daily:gen(557,66,61,30,3),  hourly:gen(558,60,63,24,2)},
+      temp:    {daily:gen(781,98,97,30,1),   hourly:gen(782,96,98,24,1)},
+      steps:   {daily:gen(783,5000,5500,30,300), hourly:gen(784,100,540,24,110)},
+      calories:{daily:gen(785,280,310,30,20), hourly:gen(786,9,32,24,7)}
     },
     conditions:['PCOS','Hypothyroidism','Insulin Resistance'],
     medications:['Levothyroxine 75mcg','Metformin 500mg','Vitamin D3'],
@@ -889,7 +943,10 @@ const patientData = {
       stress:  {val:'72',  unit:'/100',  trend:'↑ High chronic burden',             tc:'e', bars:[48,53,58,62,66,69,72]},
       hrv:     {val:'16',  unit:'ms',    trend:'↓ Critical — severe CHF marker',    tc:'c', bars:[28,25,22,20,19,17,16]},
       rem:     {val:'38',  unit:'min',   trend:'↓ Reduced REM',                     tc:'e', bars:[54,51,48,45,43,40,38]},
-      recovery:{val:'34',  unit:'/100',  trend:'↓ Very poor recovery',              tc:'e', bars:[50,47,44,41,39,36,34]}
+      recovery:{val:'34',  unit:'/100',  trend:'↓ Very poor recovery',              tc:'e', bars:[50,47,44,41,39,36,34]},
+      temp:    {val:'99',  unit:'°F',    trend:'↑ Mildly elevated — COPD/CHF',     tc:'e', bars:[98,99,99,99,100,99,99]},
+      steps:   {val:'1200',unit:'steps', trend:'↓ Severely limited — COPD',        tc:'c', bars:[1600,1500,1400,1350,1300,1250,1200]},
+      calories:{val:'85',  unit:'kcal',  trend:'↓ Exercise intolerant',             tc:'c', bars:[120,110,100,95,90,88,85]}
     },
     vitalHistory:{
       hr:      {daily:gen(561,78,93,30,4),  hourly:gen(562,91,96,24,3)},
@@ -900,7 +957,10 @@ const patientData = {
       stress:  {daily:gen(571,48,72,30,4),  hourly:gen(572,70,75,24,2)},
       hrv:     {daily:gen(573,28,16,30,2),  hourly:gen(574,15,18,24,1)},
       rem:     {daily:gen(575,54,38,30,4),  hourly:gen(576,37,40,24,2)},
-      recovery:{daily:gen(577,50,34,30,4),  hourly:gen(578,33,36,24,2)}
+      recovery:{daily:gen(577,50,34,30,4),  hourly:gen(578,33,36,24,2)},
+      temp:    {daily:gen(791,98,99,30,1),   hourly:gen(792,98,100,24,1)},
+      steps:   {daily:gen(793,1600,1200,30,150), hourly:gen(794,20,160,24,40)},
+      calories:{daily:gen(795,120,85,30,12),  hourly:gen(796,2,12,24,3)}
     },
     conditions:['COPD (Stage 2)','Chronic Heart Failure (EF 38%)'],
     medications:['Tiotropium 18mcg','Salbutamol inhaler PRN','Carvedilol 6.25mg','Furosemide 40mg','Spironolactone 25mg'],

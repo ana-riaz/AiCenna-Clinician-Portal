@@ -20,23 +20,24 @@
 <div class="shell">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="logo">
       <img src="assets/aicenna-logo.png" alt="AiCenna" class="logo-img"/>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">◀</button>
     </div>
     <nav class="nav">
-      <div class="nav-section">Overview</div>
+      <div class="nav-section"><span class="nav-label">Overview</span></div>
       <div class="nav-item active" onclick="showDash()">
-        <span>⊞</span> Dashboard
+        <span class="nav-icon">⊞</span><span class="nav-label"> Dashboard</span>
       </div>
       <div class="nav-item" onclick="navAlerts()">
-        <span>🔔</span> Active Alerts
-        <span class="badge b" id="nav-al-badge" style="display:none">0</span>
+        <span class="nav-icon">🔔</span><span class="nav-label"> Active Alerts</span>
+        <span class="badge b nav-label" id="nav-al-badge" style="display:none">0</span>
       </div>
-      <div class="nav-section">Records</div>
+      <div class="nav-section"><span class="nav-label">Records</span></div>
       <div class="nav-item" onclick="navLabs()">
-        <span>🧪</span> Lab Reports
-        <span class="badge">1</span>
+        <span class="nav-icon">🧪</span><span class="nav-label"> Lab Reports</span>
+        <span class="badge nav-label">1</span>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -151,7 +152,6 @@
           <div class="pid">
             <div class="pbav" id="ptAv"></div>
             <div>
-              <div class="pmn" id="ptName"></div>
               <div class="pmm" id="ptMeta"></div>
             </div>
             <span class="rb" id="ptRisk"></span>

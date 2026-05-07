@@ -59,7 +59,7 @@
 .ogrid{display:grid;grid-template-columns:315px 1fr;gap:14px;align-items:stretch}
 .twin-bare{display:flex;flex-direction:column;align-items:center;padding:0 16px}
 .twin-label{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;text-align:center;flex-shrink:0}
-.twin-img-wrap{flex:1;min-height:0;max-height:70%;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.15s}
+.twin-img-wrap{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.15s}
 .twin-img-wrap:hover{opacity:0.85}
 .twin-svg{height:100%;width:auto;display:block;margin:0 auto}
 .score-block{flex:1;text-align:center;padding:10px;background:var(--glass-strong);border-radius:12px;border:1px solid var(--glass-border)}

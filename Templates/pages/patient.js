@@ -3,9 +3,6 @@ function renderOverview(id) {
   const d  = patientData[id];
 
   const demoRows = [
-    {k:'Age / Sex',        v:`${d.age} · ${d.sex}`},
-    {k:'Height / Weight',  v:`${d.height} · ${d.weight}`},
-    {k:'Blood Type',       v:d.blood},
     {k:'Hospitalizations', v:d.hospitalizations},
     {k:'Doctor Visits',    v:d.doctorVisits, cls:['Monthly','Compliant','As needed'].includes(d.doctorVisits)?'ok':'warn'},
     {k:'Sleep Quality',    v:d.sleep,        cls:['Poor','Fair'].includes(d.sleep)?'warn':'ok'},
@@ -27,30 +24,32 @@ function renderOverview(id) {
       <div class="twin-bare">
         <div class="twin-label">Digital Twin</div>
         <div class="twin-img-wrap" onclick="openTwinFullscreen('${id}')">${mkTwinSVG(id)}</div>
-        <div class="ov-clinical">
-          <div class="ov-sec-hd">Clinical Profile</div>
-          <div class="ov-health-group">
-            <div class="ov-hlbl">Active Conditions</div>
-            <div class="tags">${d.conditions.map(c => `<span class="tg co">${c}</span>`).join('')}</div>
-          </div>
-          <div class="ov-health-group">
-            <div class="ov-hlbl">Current Medications</div>
-            <div class="tags">${d.medications.map(m => `<span class="tg me">${m}</span>`).join('')}</div>
-          </div>
-          <div class="ov-health-group">
-            <div class="ov-hlbl">Allergies · Family Risk</div>
-            <div class="tags">${d.allergies.map(a => `<span class="tg al">${a}</span>`).join('')}${d.familyRisk.map(r => `<span class="tg fa">${r}</span>`).join('')}</div>
-          </div>
-        </div>
       </div>
       <div class="vright">
         <div class="vgrid" id="vgrid-${id}">${renderVitalsGrid(id, '7d')}</div>
       </div>
     </div>
 
-    <div class="ov-sec-card">
-      <div class="ov-sec-hd">Demographics</div>
-      ${demoRows.map(r => `<div class="ob-row"><span class="ob-k">${r.k}</span><span class="ob-v${r.cls?' '+r.cls:''}">${r.v}</span></div>`).join('')}
+    <div class="ov-bottom">
+      <div class="ov-sec-card">
+        <div class="ov-sec-hd">Demographics</div>
+        ${demoRows.map(r => `<div class="ob-row"><span class="ob-k">${r.k}</span><span class="ob-v${r.cls?' '+r.cls:''}">${r.v}</span></div>`).join('')}
+      </div>
+      <div class="ov-sec-card">
+        <div class="ov-sec-hd">Clinical Profile</div>
+        <div class="ov-health-group">
+          <div class="ov-hlbl">Active Conditions</div>
+          <div class="tags">${d.conditions.map(c => `<span class="tg co">${c}</span>`).join('')}</div>
+        </div>
+        <div class="ov-health-group">
+          <div class="ov-hlbl">Current Medications</div>
+          <div class="tags">${d.medications.map(m => `<span class="tg me">${m}</span>`).join('')}</div>
+        </div>
+        <div class="ov-health-group">
+          <div class="ov-hlbl">Allergies · Family Risk</div>
+          <div class="tags">${d.allergies.map(a => `<span class="tg al">${a}</span>`).join('')}${d.familyRisk.map(r => `<span class="tg fa">${r}</span>`).join('')}</div>
+        </div>
+      </div>
     </div>
 
     ${renderSummary(id)}

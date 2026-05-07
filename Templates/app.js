@@ -83,8 +83,7 @@ function openPt(id, tab, backTo) {
   const d = patientData[id];
   const a = document.getElementById('ptAv');
   a.textContent=d.init; a.style.background=d.bg; a.style.color=d.rc;
-  document.getElementById('ptName').textContent=d.name;
-  document.getElementById('ptMeta').textContent=d.meta;
+  document.getElementById('ptMeta').textContent=`${d.age} yrs · ${d.sex} · ${d.height} · ${d.weight} · ${d.blood}`;
   const rb = document.getElementById('ptRisk');
   rb.textContent=d.rl; rb.className='rb '+d.risk;
   const _sc = d.healthScore>=80?'ok':d.healthScore>=60?'warn':'danger';
@@ -194,6 +193,13 @@ function closeQuickView() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeTwinOverlay(); closeQuickView(); }
 });
+
+// ── Sidebar collapse ──────────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const collapsed = sb.classList.toggle('collapsed');
+  document.querySelector('.sidebar-toggle').textContent = collapsed ? '▶' : '◀';
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 showDash();
