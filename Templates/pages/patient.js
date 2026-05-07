@@ -21,7 +21,7 @@ function renderOverview(id) {
 
   return `<div class="ogrid">
     <div class="twin-card">
-      <div class="twin-label">Vector Twin</div>
+      <div class="twin-label">Digital Twin</div>
       <div class="twin-img-wrap" onclick="openTwinFullscreen('${id}')">${mkTwinSVG(id)}</div>
       <div class="score-row">
         <div class="score-block"><div class="scv ${sc}">${d.healthScore}</div><div class="scl">Health Score</div></div>

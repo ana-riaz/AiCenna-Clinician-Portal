@@ -229,5 +229,5 @@ function renderQuickView(ptId) {
           <div class="qv-ftxt">${f.txt}</div>
         </div>`).join('')}
     </div>
-    <button class="btn btnp qv-open-btn" onclick="closeQuickView();openPt('${ptId}')">Open Digital Twin →</button>`;
+    <button class="btn btnp qv-open-btn" onclick="closeQuickView();openPt('${ptId}')">Open Full Profile →</button>`;
 }

@@ -30,7 +30,7 @@ function showDash() {
 function navPatients() {
   clearSearch();
   showView('patientsView');
-  document.getElementById('htitle').textContent='My Digital Twins';
+  document.getElementById('htitle').textContent='My Patients';
   document.getElementById('patients-list').innerHTML=renderPatientsView();
   setNavActive('patients');
   closeQuickView();
@@ -128,7 +128,7 @@ document.addEventListener('click', function(e) {
 // ── Digital twin overlay ──────────────────────────────────────────────────────
 function openTwinFullscreen(ptId) {
   const d = patientData[ptId];
-  document.getElementById('twinOvTitle').textContent = d.name + ' · Vector Twin';
+  document.getElementById('twinOvTitle').textContent = d.name + ' · Digital Twin';
   document.getElementById('twinOvBody').innerHTML = mkTwinSVG(ptId);
   document.getElementById('twinOverlay').classList.add('vis');
 }

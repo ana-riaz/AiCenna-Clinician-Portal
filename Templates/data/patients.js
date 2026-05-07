@@ -47,24 +47,45 @@ const patientData = {
     summaryPat:'Your oxygen levels are dangerously low and your heart is working much harder than it should. Your blood pressure and blood sugar are both very high. You need to see your doctor urgently — these are signs that your body is under serious stress and requires immediate attention.',
     summaryConf:'High', summaryBadge:'h',
     findings:[
-      {sev:'h', txt:'SpO2 88% — critical, below 90% threshold',      src:'vitals · watch'},
-      {sev:'h', txt:'BP 158/95 — Stage 2 Hypertension',               src:'vitals · manual'},
-      {sev:'h', txt:'Blood Glucose 218 mg/dL — severely elevated',    src:'vitals · glucometer'},
-      {sev:'h', txt:'HR 102 bpm — +28% above baseline',               src:'vitals · watch'},
-      {sev:'m', txt:'HRV RMSSD 19ms — critically low autonomic tone', src:'vitals · watch'},
-      {sev:'l', txt:'Sleep 42/100 — compounding recovery deficit',    src:'vitals · watch'}
+      {sev:'h', txt:'SpO2 88% — critical, below 90% threshold',                      src:'vitals · watch'},
+      {sev:'h', txt:'BP 158/95 — Stage 2 Hypertension',                               src:'vitals · manual'},
+      {sev:'h', txt:'Platelet Count 52 ×10⁹/L — critically low (ref 157–371)',        src:'labs · CBC'},
+      {sev:'h', txt:'Undifferentiated Blasts 5% — haematology review required',       src:'labs · CBC'},
+      {sev:'h', txt:'Blood Glucose 218 mg/dL — severely elevated',                    src:'vitals · glucometer'},
+      {sev:'m', txt:'Serum Creatinine 1.63 — eGFR 58, early diabetic nephropathy',   src:'labs · KFT'},
+      {sev:'m', txt:'HRV RMSSD 19ms — critically low autonomic tone',                 src:'vitals · watch'},
+      {sev:'l', txt:'Sleep 42/100 — compounding recovery deficit',                    src:'vitals · watch'}
     ],
-    labs:[{
-      name:'HbA1c & Metabolic Panel', date:'April 20, 2026 · IDC · Dr. Sarah Johnson',
-      status:'3 Flagged', statusCls:'f',
-      rows:[
-        {test:'HbA1c',           val:'8.2%',       ref:'< 5.7%',     flag:'CRITICAL'},
-        {test:'Fasting Glucose', val:'198 mg/dL',  ref:'70–99',      flag:'CRITICAL'},
-        {test:'Creatinine',      val:'1.4 mg/dL',  ref:'0.7–1.2',    flag:'HIGH'},
-        {test:'LDL Cholesterol', val:'142 mg/dL',  ref:'< 100',      flag:'HIGH'},
-        {test:'Hemoglobin',      val:'13.8 g/dL',  ref:'13.5–17.5',  flag:'NORMAL'}
-      ]
-    }],
+    labs:[
+      {
+        name:'CBC with Differential', date:'May 7, 2026 · Mayo Clinic Laboratories',
+        status:'5 Flagged', statusCls:'f',
+        rows:[
+          {test:'Hemoglobin',              val:'15.1 g/dL',     ref:'11.6–15.0',   flag:'HIGH'},
+          {test:'Hematocrit',              val:'45.4 %',        ref:'35.5–44.9',   flag:'HIGH'},
+          {test:'WBC (Leukocytes)',        val:'10.4 ×10⁹/L',  ref:'3.4–9.6',     flag:'HIGH'},
+          {test:'Platelet Count',          val:'52 ×10⁹/L',    ref:'157–371',     flag:'CRITICAL'},
+          {test:'Erythrocytes (RBC)',      val:'4.82 ×10¹²/L', ref:'3.92–5.13',   flag:'NORMAL'},
+          {test:'MCV',                     val:'94.0 fL',       ref:'78.2–97.9',   flag:'NORMAL'},
+          {test:'Lymphocytes',             val:'67 %',          ref:'18–42',       flag:'HIGH'},
+          {test:'Neutrophilic Segs',       val:'11 %',          ref:'50–75',       flag:'HIGH'},
+          {test:'Undifferentiated Blasts', val:'5 %',           ref:'< 1',         flag:'CRITICAL'}
+        ]
+      },
+      {
+        name:'Kidney Function Test', date:'Oct 10, 2024 · Labsmart Diagnostics',
+        status:'2 Flagged', statusCls:'f',
+        rows:[
+          {test:'Serum Urea',             val:'19.27 mg/dL',  ref:'7.0–25',     flag:'NORMAL'},
+          {test:'Serum Creatinine',       val:'1.63 mg/dL',   ref:'0.55–1.02',  flag:'HIGH'},
+          {test:'eGFR',                   val:'58.03',         ref:'> 60',       flag:'HIGH'},
+          {test:'Serum Calcium',          val:'9.29 mg/dL',   ref:'8.4–10.2',   flag:'NORMAL'},
+          {test:'Serum Potassium',        val:'3.6 mmol/L',   ref:'3.5–5.1',    flag:'NORMAL'},
+          {test:'Serum Uric Acid',        val:'4.0 mg/dL',    ref:'2.6–6.0',    flag:'NORMAL'},
+          {test:'BUN / Creatinine Ratio', val:'10.17',         ref:'6–22',       flag:'NORMAL'}
+        ]
+      }
+    ],
     medHistory:[
       {name:'Type 2 Diabetes', detail:'Active · on Metformin 500mg',      tag:'Active', tc:'co'},
       {name:'Hypertension',    detail:'Active · on Lisinopril 10mg',       tag:'Active', tc:'co'},
@@ -159,17 +180,28 @@ const patientData = {
       {sev:'m', txt:'Recovery score 44/100 — cumulative load',     src:'vitals · watch'},
       {sev:'l', txt:'Family history: diabetes + hypertension',     src:'onboarding'}
     ],
-    labs:[{
-      name:'Complete Blood Count — CBC Panel', date:'April 15, 2026 · IDC · Dr. Sarah Johnson',
-      status:'2 Flagged', statusCls:'f',
-      rows:[
-        {test:'HbA1c',           val:'6.4%',        ref:'< 5.7%',    flag:'HIGH'},
-        {test:'Fasting Insulin', val:'18.2 µIU/mL', ref:'2.6–24.9',  flag:'NORMAL'},
-        {test:'hs-CRP',          val:'4.1 mg/L',    ref:'< 3.0',     flag:'HIGH'},
-        {test:'Vitamin B12',     val:'198 pg/mL',   ref:'200–900',   flag:'NORMAL'},
-        {test:'Hemoglobin',      val:'13.1 g/dL',   ref:'12.0–16.0', flag:'NORMAL'}
-      ]
-    }],
+    labs:[
+      {
+        name:'HbA1c & Biochemistry', date:'Nov 11, 2024 · Labsmart Software',
+        status:'2 Flagged', statusCls:'f',
+        rows:[
+          {test:'HbA1c (Glycosylated Hb)', val:'6.0 %',        ref:'< 5.7%',   flag:'HIGH'},
+          {test:'Est. Average Glucose',    val:'126.55 mg/dL', ref:'< 100',    flag:'HIGH'}
+        ]
+      },
+      {
+        name:'Lipid Profile', date:'Nov 11, 2024 · Labsmart Software',
+        status:'All Normal', statusCls:'ok',
+        rows:[
+          {test:'Total Cholesterol',  val:'125 mg/dL', ref:'125–200',  flag:'NORMAL'},
+          {test:'Triglycerides',      val:'80 mg/dL',  ref:'30–200',   flag:'NORMAL'},
+          {test:'HDL Cholesterol',    val:'40 mg/dL',  ref:'35–80',    flag:'NORMAL'},
+          {test:'LDL Cholesterol',    val:'69 mg/dL',  ref:'< 100',    flag:'NORMAL'},
+          {test:'VLDL',               val:'16 mg/dL',  ref:'5–40',     flag:'NORMAL'},
+          {test:'Total / HDL Ratio',  val:'3.13',       ref:'< 5.0',    flag:'NORMAL'}
+        ]
+      }
+    ],
     medHistory:[
       {name:'Hypertension',    detail:'Active · on Lisinopril 10mg', tag:'Active',   tc:'co'},
       {name:'Hospitalization', detail:'1 prior · no surgeries',       tag:'Resolved', tc:'me'}
@@ -249,17 +281,26 @@ const patientData = {
       {sev:'l', txt:'All vitals within normal range',                         src:'vitals · watch'},
       {sev:'l', txt:'No signs of infection or complications',                 src:'clinical assessment'}
     ],
-    labs:[{
-      name:'Post-Operative CBC Panel', date:'April 26, 2026 · IDC · Dr. Sarah Johnson',
-      status:'2 Flagged', statusCls:'f',
-      rows:[
-        {test:'WBC',        val:'11.2 ×10⁹/L', ref:'4.5–11.0',  flag:'HIGH'},
-        {test:'Hemoglobin', val:'11.8 g/dL',   ref:'12.0–16.0', flag:'HIGH'},
-        {test:'Platelets',  val:'342 ×10⁹/L',  ref:'150–400',   flag:'NORMAL'},
-        {test:'CRP',        val:'2.1 mg/L',     ref:'< 3.0',     flag:'NORMAL'},
-        {test:'ESR',        val:'28 mm/hr',     ref:'< 20',       flag:'HIGH'}
-      ]
-    }],
+    labs:[
+      {
+        name:'Post-Operative CBC Panel', date:'April 26, 2026 · IDC · Dr. Sarah Johnson',
+        status:'2 Flagged', statusCls:'f',
+        rows:[
+          {test:'WBC',        val:'11.2 ×10⁹/L', ref:'4.5–11.0',  flag:'HIGH'},
+          {test:'Hemoglobin', val:'11.8 g/dL',   ref:'12.0–16.0', flag:'HIGH'},
+          {test:'Platelets',  val:'342 ×10⁹/L',  ref:'150–400',   flag:'NORMAL'},
+          {test:'CRP',        val:'2.1 mg/L',     ref:'< 3.0',     flag:'NORMAL'},
+          {test:'ESR',        val:'28 mm/hr',     ref:'< 20',      flag:'HIGH'}
+        ]
+      },
+      {
+        name:'Serology Panel', date:'Apr 9, 2026 · Al-Khidmat Raazi Diagnostics · Dr. Hasaan Zia',
+        status:'All Normal', statusCls:'ok',
+        rows:[
+          {test:'RA Factor', val:'< 15.0 IU/mL', ref:'Negative: < 15 · Positive: > 15', flag:'NORMAL'}
+        ]
+      }
+    ],
     medHistory:[
       {name:'Appendectomy', detail:'April 21, 2026 · Laparoscopic · Uncomplicated', tag:'Recent', tc:'al'}
     ],
