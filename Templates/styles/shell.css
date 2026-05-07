@@ -9,21 +9,21 @@
 .dash::-webkit-scrollbar-thumb{background:var(--glass-strong);border-radius:2px}
 
 /* ── Sidebar ────────────────────────────────────────────────────────────────── */
-.sidebar{width:var(--sidebar-w);background:rgba(8,18,37,0.8);backdrop-filter:blur(20px);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;flex-shrink:0;z-index:10}
-.logo{padding:0 20px;height:var(--header-h);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--glass-border)}
+.sidebar{width:var(--sidebar-w);background:#F8FAFF;border-right:1px solid #dde3f0;display:flex;flex-direction:column;flex-shrink:0;z-index:10}
+.logo{padding:0 20px;height:var(--header-h);display:flex;align-items:center;gap:10px;border-bottom:1px solid #dde3f0}
 .logo-img{height:32px;width:auto;object-fit:contain}
 .nav{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:2px}
-.nav-section{font-size:9px;font-weight:700;letter-spacing:0.1em;color:var(--dim);text-transform:uppercase;padding:10px 8px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;cursor:pointer;color:var(--muted);transition:all 0.15s;font-size:12px;font-weight:500}
-.nav-item:hover{background:var(--glass);color:var(--ink)}
-.nav-item.active{background:linear-gradient(135deg,rgba(56,189,248,0.18),rgba(139,92,246,0.18));color:var(--ink);border:1px solid rgba(56,189,248,0.25)}
+.nav-section{font-size:9px;font-weight:700;letter-spacing:0.1em;color:#94a3b8;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;cursor:pointer;color:#475569;transition:all 0.15s;font-size:12px;font-weight:500}
+.nav-item:hover{background:rgba(56,189,248,0.08);color:#1e3a5f}
+.nav-item.active{background:linear-gradient(135deg,rgba(56,189,248,0.12),rgba(139,92,246,0.12));color:#1e3a5f;border:1px solid rgba(56,189,248,0.22)}
 .nav-item .badge{margin-left:auto;background:var(--danger);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px}
 .nav-item .badge.b{background:var(--violet)}
-.sidebar-footer{padding:14px;border-top:1px solid var(--glass-border)}
+.sidebar-footer{padding:14px;border-top:1px solid #dde3f0}
 .doctor-card{display:flex;align-items:center;gap:10px}
 .doc-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
-.doc-info .dn{font-weight:600;font-size:12px}
-.doc-info .dr{font-size:10px;color:var(--muted)}
+.doc-info .dn{font-weight:600;font-size:12px;color:#1e3a5f}
+.doc-info .dr{font-size:10px;color:#64748b}
 
 /* ── Header ─────────────────────────────────────────────────────────────────── */
 .header{height:var(--header-h);background:rgba(8,18,37,0.6);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0;position:relative;z-index:20}

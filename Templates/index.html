@@ -6,15 +6,15 @@
 <title>AiCenna — Doctor Dashboard</title>
 
 <!-- CSS variables, reset, background gradient -->
-<link rel="stylesheet" href="css/base.css"/>
+<link rel="stylesheet" href="styles/base.css"/>
 <!-- Shell chrome: layout, sidebar, header, notification dropdown -->
-<link rel="stylesheet" href="css/shell.css"/>
+<link rel="stylesheet" href="styles/shell.css"/>
 <!-- Dashboard views: stats cards, patient table, risk badges, alerts -->
-<link rel="stylesheet" href="css/dashboard.css"/>
+<link rel="stylesheet" href="styles/dashboard.css"/>
 <!-- Patient views: tabs, overview, summary, labs, history -->
-<link rel="stylesheet" href="css/patient.css"/>
+<link rel="stylesheet" href="styles/patient.css"/>
 <!-- Report modal -->
-<link rel="stylesheet" href="css/modal.css"/>
+<link rel="stylesheet" href="styles/modal.css"/>
 </head>
 <body>
 <div class="shell">
@@ -22,7 +22,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="aicenna-logo.png" alt="AiCenna" class="logo-img"/>
+      <img src="assets/aicenna-logo.png" alt="AiCenna" class="logo-img"/>
     </div>
     <nav class="nav">
       <div class="nav-section">Overview</div>
@@ -178,10 +178,23 @@
   </div>
 </div>
 
-<!-- JS: data → renderers → app logic -->
-<script src="js/data.js"></script>
-<script src="js/patient-tabs.js"></script>
-<script src="js/list-views.js"></script>
-<script src="js/app.js"></script>
+<!-- TWIN OVERLAY -->
+<div id="twinOverlay" class="twin-overlay">
+  <div class="twin-ov-bar">
+    <div class="twin-ov-back" onclick="closeTwinOverlay()">← Back</div>
+    <div class="twin-ov-title" id="twinOvTitle"></div>
+    <button class="twin-ov-close" onclick="closeTwinOverlay()">✕</button>
+  </div>
+  <div class="twin-ov-body" id="twinOvBody"></div>
+</div>
+
+<!-- JS load order: data → components → pages → app -->
+<script src="data/patients.js"></script>
+<script src="components/twin.js"></script>
+<script src="components/vitals.js"></script>
+<script src="components/modal.js"></script>
+<script src="pages/dashboard.js"></script>
+<script src="pages/patient.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

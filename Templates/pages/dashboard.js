@@ -1,5 +1,5 @@
 // ── Patients list view ────────────────────────────────────────────────────────
-function renderPatientsView(){
+function renderPatientsView() {
   const vc = {n:'ok', e:'warn', c:'danger'};
   return Object.keys(patientData).map(id => {
     const d = patientData[id];
@@ -10,7 +10,7 @@ function renderPatientsView(){
       {label:'SpO2',           val:v.spo2.val,    unit:'%',    c:vc[v.spo2.tc]},
       {label:'Blood Pressure', val:v.bp.val,      unit:'',     c:vc[v.bp.tc]},
       {label:'Health Score',   val:d.healthScore, unit:'/100', c:sc}
-    ].map(x=>`
+    ].map(x => `
       <div class="vstat">
         <div class="vstat-label">${x.label}</div>
         <div class="vstat-val ${x.c}">${x.val}<span class="vstat-unit">${x.unit}</span></div>
@@ -31,15 +31,15 @@ function renderPatientsView(){
       </div>
       <div class="vitals-strip">${vitCells}</div>
       <div class="tags-strip">
-        ${d.conditions.map(c=>`<span class="tg co">${c}</span>`).join('')}
-        ${d.medications.map(m=>`<span class="tg me">${m}</span>`).join('')}
+        ${d.conditions.map(c => `<span class="tg co">${c}</span>`).join('')}
+        ${d.medications.map(m => `<span class="tg me">${m}</span>`).join('')}
       </div>
     </div>`;
   }).join('');
 }
 
 // ── Summaries list view ───────────────────────────────────────────────────────
-function renderSummariesView(){
+function renderSummariesView() {
   return Object.keys(patientData).map(id => {
     const d = patientData[id];
     const cLabel = d.summaryBadge==='h'?'High confidence':'Medium confidence';
@@ -58,7 +58,7 @@ function renderSummariesView(){
       <div class="sum-preview-body">
         <div class="stxt">${d.summaryDoc.substring(0,220)}…</div>
         <div class="finding-tags">
-          ${d.findings.slice(0,3).map(f=>`<span class="finding-tag ${f.sev}">${f.txt.split('·')[0].trim()}</span>`).join('')}
+          ${d.findings.slice(0,3).map(f => `<span class="finding-tag ${f.sev}">${f.txt.split('·')[0].trim()}</span>`).join('')}
         </div>
       </div>
     </div>`;
@@ -66,11 +66,11 @@ function renderSummariesView(){
 }
 
 // ── Labs list view ────────────────────────────────────────────────────────────
-function renderLabsView(){
+function renderLabsView() {
   const fv = {CRITICAL:'c', HIGH:'f', NORMAL:'n'};
   return Object.keys(patientData).map(id => {
     const d = patientData[id];
-    const totalFlagged = d.labs.reduce((n,lab)=>n+lab.rows.filter(r=>r.flag!=='NORMAL').length, 0);
+    const totalFlagged = d.labs.reduce((n, lab) => n + lab.rows.filter(r => r.flag !== 'NORMAL').length, 0);
     const fc = totalFlagged > 2 ? 'danger' : totalFlagged > 0 ? 'warn' : 'ok';
     const labPanels = d.labs.map(lab => `
       <div class="lab-sub-panel">
@@ -82,7 +82,7 @@ function renderLabsView(){
           <span class="lsb ${lab.statusCls}">${lab.status}</span>
         </div>
         <div class="lrow lhd lrow-5"><span>Test</span><span>Value</span><span>Reference</span><span>Status</span><span></span></div>
-        ${lab.rows.map(r=>`<div class="lrow lrow-5">
+        ${lab.rows.map(r => `<div class="lrow lrow-5">
           <span>${r.test}</span>
           <span class="lv ${fv[r.flag]||'n'}">${r.val}</span>
           <span class="lr-ref">${r.ref}</span>

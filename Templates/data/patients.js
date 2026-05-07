@@ -1,3 +1,13 @@
+// ── History generator (deterministic seeded RNG) ─────────────────────────────
+function gen(seed, from, to, n, noise) {
+  let s = (seed * 1664525 + 1013904223) | 0; s = s >>> 0;
+  return Array.from({length: n}, (_, i) => {
+    s ^= s << 13; s ^= s >> 17; s ^= s << 5;
+    const b = from + (to - from) * (i / Math.max(n - 1, 1));
+    return Math.round(b + ((s >>> 0) / 4294967296 - 0.5) * noise * 2);
+  });
+}
+
 // ── Patient records ───────────────────────────────────────────────────────────
 const patientData = {
   ahmed: {
@@ -17,6 +27,17 @@ const patientData = {
       hrv:     {val:'19',  unit:'ms',    trend:'↓ Severely low autonomic', tc:'c', bars:[55,48,42,36,30,24,19]},
       rem:     {val:'32',  unit:'min',   trend:'↓ Very low REM sleep',     tc:'c', bars:[72,68,62,55,48,40,32]},
       recovery:{val:'28',  unit:'/100',  trend:'↓ Critical recovery',      tc:'c', bars:[70,63,55,48,42,35,28]}
+    },
+    vitalHistory:{
+      hr:      {daily:gen(101,84,102,30,4),  hourly:gen(102,100,103,24,2)},
+      spo2:    {daily:gen(103,96,88,30,1),   hourly:gen(104,89,88,24,1)},
+      bp:      {daily:gen(105,82,95,30,3),   hourly:gen(106,93,96,24,2)},
+      sleep:   {daily:gen(107,68,42,30,4),   hourly:gen(108,40,43,24,2)},
+      glucose: {daily:gen(109,162,218,30,8), hourly:gen(110,212,220,24,5)},
+      stress:  {daily:gen(111,62,82,30,4),   hourly:gen(112,80,84,24,2)},
+      hrv:     {daily:gen(113,38,19,30,2),   hourly:gen(114,18,21,24,2)},
+      rem:     {daily:gen(115,62,32,30,4),   hourly:gen(116,30,34,24,2)},
+      recovery:{daily:gen(117,58,28,30,4),   hourly:gen(118,27,30,24,2)}
     },
     conditions:['Hypertension','Type 2 Diabetes'],
     medications:['Metformin 500mg','Lisinopril 10mg','Aspirin 81mg'],
@@ -79,6 +100,17 @@ const patientData = {
       hrv:     {val:'28',  unit:'ms',    trend:'↓ Low autonomic tone',    tc:'c', bars:[70,65,60,55,48,40,35]},
       rem:     {val:'48',  unit:'min',   trend:'↓ Below optimal',         tc:'e', bars:[80,75,70,65,58,52,48]},
       recovery:{val:'44',  unit:'/100',  trend:'↓ Poor recovery',        tc:'c', bars:[75,70,65,58,52,47,44]}
+    },
+    vitalHistory:{
+      hr:      {daily:gen(201,78,88,30,3),   hourly:gen(202,86,90,24,2)},
+      spo2:    {daily:gen(203,97,96,30,1),   hourly:gen(204,95,97,24,1)},
+      bp:      {daily:gen(205,79,85,30,2),   hourly:gen(206,83,87,24,2)},
+      sleep:   {daily:gen(207,76,58,30,4),   hourly:gen(208,56,60,24,2)},
+      glucose: {daily:gen(209,118,142,30,6), hourly:gen(210,138,145,24,4)},
+      stress:  {daily:gen(211,55,68,30,3),   hourly:gen(212,66,70,24,2)},
+      hrv:     {daily:gen(213,48,28,30,3),   hourly:gen(214,26,30,24,2)},
+      rem:     {daily:gen(215,68,48,30,4),   hourly:gen(216,46,50,24,3)},
+      recovery:{daily:gen(217,62,44,30,4),   hourly:gen(218,42,46,24,3)}
     },
     conditions:['Hypertension','Insulin Resistance'],
     medications:['Lisinopril 10mg'],
@@ -144,6 +176,17 @@ const patientData = {
       rem:     {val:'72', unit:'min',   trend:'→ Adequate',             tc:'n', bars:[65,67,68,70,71,72,72]},
       recovery:{val:'78', unit:'/100',  trend:'↑ Good recovery',       tc:'n', bars:[55,58,62,66,70,74,78]}
     },
+    vitalHistory:{
+      hr:      {daily:gen(301,74,68,30,2),  hourly:gen(302,67,70,24,1)},
+      spo2:    {daily:gen(303,95,97,30,1),  hourly:gen(304,96,98,24,1)},
+      bp:      {daily:gen(305,80,76,30,2),  hourly:gen(306,75,78,24,1)},
+      sleep:   {daily:gen(307,45,75,30,4),  hourly:gen(308,73,78,24,2)},
+      glucose: {daily:gen(309,95,92,30,3),  hourly:gen(310,90,94,24,2)},
+      stress:  {daily:gen(311,55,34,30,3),  hourly:gen(312,33,36,24,2)},
+      hrv:     {daily:gen(313,35,52,30,3),  hourly:gen(314,50,54,24,2)},
+      rem:     {daily:gen(315,58,72,30,4),  hourly:gen(316,70,74,24,3)},
+      recovery:{daily:gen(317,45,78,30,5),  hourly:gen(318,76,80,24,3)}
+    },
     conditions:['Post-op: Appendectomy'],
     medications:['Amoxicillin 500mg','Paracetamol 500mg'],
     allergies:['None known'],
@@ -198,25 +241,24 @@ const aiSuggestions = [
 const TC = {n:'var(--success)', e:'var(--warning)', c:'var(--danger)'};
 
 const vitMeta = [
-  {key:'hr',       label:'Heart Rate',     src:'watch'},
-  {key:'spo2',     label:'SpO2',           src:'watch'},
-  {key:'bp',       label:'Blood Pressure', src:'manual'},
-  {key:'sleep',    label:'Sleep Score',    src:'watch'},
-  {key:'glucose',  label:'Blood Glucose',  src:'manual'},
-  {key:'stress',   label:'Stress Score',   src:'watch'},
-  {key:'hrv',      label:'HRV RMSSD',      src:'watch'},
-  {key:'rem',      label:'Sleep REM',      src:'watch'},
-  {key:'recovery', label:'Recovery Score', src:'watch'}
+  {key:'hr',       label:'Heart Rate',     src:'watch',  unit:'bpm',   min:40,  max:130},
+  {key:'spo2',     label:'SpO2',           src:'watch',  unit:'%',     min:80,  max:100},
+  {key:'bp',       label:'Blood Pressure', src:'manual', unit:'mmHg',  min:60,  max:105},
+  {key:'sleep',    label:'Sleep Score',    src:'watch',  unit:'/100',  min:0,   max:100},
+  {key:'glucose',  label:'Blood Glucose',  src:'manual', unit:'mg/dL', min:60,  max:250},
+  {key:'stress',   label:'Stress Score',   src:'watch',  unit:'/100',  min:0,   max:100},
+  {key:'hrv',      label:'HRV RMSSD',      src:'watch',  unit:'ms',    min:5,   max:75},
+  {key:'rem',      label:'Sleep REM',      src:'watch',  unit:'min',   min:0,   max:100},
+  {key:'recovery', label:'Recovery Score', src:'watch',  unit:'/100',  min:0,   max:100}
 ];
 
-function mkBars(arr, tc){
+function mkBars(arr, tc) {
   return '<div class="mbar">' +
-    arr.map((h,i) =>
+    arr.map((h, i) =>
       `<span style="height:${h}%" class="${i===arr.length-1?'bar-'+tc:''}"></span>`
     ).join('') + '</div>';
 }
 
-function mkTag(tag, tc){
+function mkTag(tag, tc) {
   return `<span class="tg ${tc}">${tag}</span>`;
 }
-

@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
+
   --ink: #F8FAFF;
   --muted: rgba(226,232,255,0.72);
   --dim: rgba(203,213,255,0.54);

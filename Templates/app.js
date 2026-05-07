@@ -3,7 +3,7 @@ let currentPt = null;
 let summaryVerified = false;
 
 // ── Router ────────────────────────────────────────────────────────────────────
-function showView(id){
+function showView(id) {
   ['dashView','patientsView','summariesView','labsView'].forEach(v =>
     document.getElementById(v).style.display='none'
   );
@@ -12,22 +12,22 @@ function showView(id){
   currentPt = null;
 }
 
-function showDash(){
+function showDash() {
   showView('dashView');
   document.getElementById('htitle').textContent='Dashboard';
   setNavActive('dash');
 }
 
-function navPatients(){
+function navPatients() {
   showView('patientsView');
   document.getElementById('htitle').textContent='My Patients';
   document.getElementById('patients-list').innerHTML=renderPatientsView();
   setNavActive('patients');
 }
 
-function navSummaries(){
+function navSummaries() {
   setNavActive('summaries');
-  if(currentPt){
+  if (currentPt) {
     swTab('sum', document.querySelector('.tab[data-tab="sum"]'));
   } else {
     showView('summariesView');
@@ -36,9 +36,9 @@ function navSummaries(){
   }
 }
 
-function navLabs(){
+function navLabs() {
   setNavActive('labs');
-  if(currentPt){
+  if (currentPt) {
     swTab('labs', document.querySelector('.tab[data-tab="labs"]'));
   } else {
     showView('labsView');
@@ -47,7 +47,7 @@ function navLabs(){
   }
 }
 
-function openPt(id, tab){
+function openPt(id, tab) {
   currentPt = id;
   ['dashView','patientsView','summariesView','labsView'].forEach(v =>
     document.getElementById(v).style.display='none'
@@ -66,84 +66,64 @@ function openPt(id, tab){
   document.getElementById('labs-content').innerHTML = renderLabs(id);
   document.getElementById('hist-content').innerHTML = renderHistory(id);
   summaryVerified = false;
+  currentVitalFilter = '7d';
   const t = tab||'ov';
   swTab(t, document.querySelector('.tab[data-tab="'+t+'"]'));
   setNavActive(null);
 }
 
-function swTab(name, el){
+function swTab(name, el) {
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('act'));
   document.getElementById('t-'+name).classList.add('act');
-  if(el) el.classList.add('act');
+  if (el) el.classList.add('act');
 }
 
-function setNavActive(key){
+function setNavActive(key) {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const map={dash:0,patients:1,labs:2};
-  if(key!==null && map[key]!==undefined)
+  const map = {dash:0, patients:1, labs:2};
+  if (key !== null && map[key] !== undefined)
     document.querySelectorAll('.nav-item')[map[key]].classList.add('active');
 }
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function flagClass(flag){
-  return flag==='CRITICAL'?'danger':flag==='HIGH'?'warn':'ok';
-}
-
-function openReportModal(ptId, testName){
-  const d = patientData[ptId];
-  let row, labName;
-  for(const lab of d.labs){
-    const found = lab.rows.find(r=>r.test===testName);
-    if(found){ row=found; labName=lab.name; break; }
-  }
-  if(!row) return;
-  const fc = flagClass(row.flag);
-  document.getElementById('modal-content').innerHTML=`
-    <div class="modal-patient-header">
-      <div class="modal-pt-av pav ${d.risk}">${d.init}</div>
-      <div><div class="modal-pt-name">${d.name}</div><div class="modal-pt-lab">${labName}</div></div>
-    </div>
-    <div class="modal-body">
-      <div class="modal-test-name">${testName}</div>
-      <div class="modal-results-grid">
-        <div><div class="modal-result-label">RESULT</div><div class="modal-result-val ${fc}">${row.val}</div></div>
-        <div><div class="modal-result-label">REFERENCE RANGE</div><div class="modal-ref">${row.ref}</div></div>
-      </div>
-      <span class="modal-flag ${row.flag}">${row.flag}</span>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btng full" onclick="closeModal()">Close</button>
-    </div>`;
-  document.getElementById('reportModal').classList.add('vis');
-}
-
-function closeModal(){
-  document.getElementById('reportModal').classList.remove('vis');
-}
-
 // ── Notifications ─────────────────────────────────────────────────────────────
-function toggleNotif(){
+function toggleNotif() {
   document.getElementById('ndrop').classList.toggle('vis');
 }
 
-function markAllRead(){
-  document.querySelectorAll('#ndrop .al').forEach(a=>{
+function markAllRead() {
+  document.querySelectorAll('#ndrop .al').forEach(a => {
     a.classList.remove('unr');
-    const dot=a.querySelector('.ud'); if(dot) dot.remove();
+    const dot = a.querySelector('.ud'); if (dot) dot.remove();
   });
   document.querySelector('.ndot').classList.add('hidden');
 }
 
-function clearAlerts(){
-  const panels=document.querySelectorAll('.panel');
-  panels[1].querySelectorAll('.al').forEach(a=>a.remove());
-  const c=document.querySelector('.scard.c4 .sv'); if(c) c.textContent='0';
+function clearAlerts() {
+  const panels = document.querySelectorAll('.panel');
+  panels[1].querySelectorAll('.al').forEach(a => a.remove());
+  const c = document.querySelector('.scard.c4 .sv'); if (c) c.textContent='0';
 }
 
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.icon-btn')&&!e.target.closest('.ndrop'))
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.icon-btn') && !e.target.closest('.ndrop'))
     document.getElementById('ndrop').classList.remove('vis');
+});
+
+// ── Digital twin overlay ──────────────────────────────────────────────────────
+function openTwinFullscreen(ptId) {
+  const d = patientData[ptId];
+  document.getElementById('twinOvTitle').textContent = d.name + ' · Digital Twin';
+  document.getElementById('twinOvBody').innerHTML = mkTwinSVG(ptId);
+  document.getElementById('twinOverlay').classList.add('vis');
+}
+
+function closeTwinOverlay() {
+  document.getElementById('twinOverlay').classList.remove('vis');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeTwinOverlay();
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────

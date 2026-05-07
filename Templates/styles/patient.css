@@ -1,3 +1,16 @@
+/* ── Digital twin overlay ────────────────────────────────────────────────────── */
+.twin-overlay{display:none;position:fixed;inset:0;background:#060f1e;z-index:500;flex-direction:column}
+.twin-overlay.vis{display:flex;animation:tov-in 0.18s ease}
+@keyframes tov-in{from{opacity:0}to{opacity:1}}
+.twin-ov-bar{display:flex;align-items:center;padding:0 24px;height:56px;border-bottom:1px solid rgba(56,189,248,0.12);flex-shrink:0}
+.twin-ov-back{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.35);cursor:pointer;font-size:11px;font-weight:600;transition:color 0.12s;user-select:none}
+.twin-ov-back:hover{color:#38bdf8}
+.twin-ov-title{flex:1;text-align:center;color:rgba(255,255,255,0.25);font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase}
+.twin-ov-close{background:none;border:none;color:rgba(255,255,255,0.3);font-size:16px;cursor:pointer;line-height:1;padding:4px 6px;transition:color 0.12s;font-family:inherit}
+.twin-ov-close:hover{color:#fb7185}
+.twin-ov-body{flex:1;display:flex;align-items:center;justify-content:center}
+.twin-ov-body .twin-svg{height:82vh;width:auto;display:block}
+
 /* ── Patient view chrome ────────────────────────────────────────────────────── */
 .pview{flex:1;display:none;flex-direction:column;overflow:hidden}
 .pview.vis{display:flex}
@@ -22,8 +35,9 @@
 .ogrid{display:grid;grid-template-columns:260px 1fr;gap:16px}
 .twin-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:20px;display:flex;flex-direction:column;align-items:center;backdrop-filter:blur(10px)}
 .twin-label{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px;text-align:center}
-.twin-img-wrap{width:100%;height:260px;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:10px}
-.twin-img{height:100%;width:auto;mix-blend-mode:multiply;filter:brightness(1.08) contrast(1.1) saturate(1.15)}
+.twin-img-wrap{width:100%;height:260px;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:opacity 0.15s}
+.twin-img-wrap:hover{opacity:0.85}
+.twin-svg{height:100%;width:auto;display:block;margin:0 auto}
 .score-row{display:flex;align-items:center;gap:8px;margin-top:14px;width:100%}
 .score-block{flex:1;text-align:center;padding:10px;background:var(--glass-strong);border-radius:12px;border:1px solid var(--glass-border)}
 .scv{font-size:20px;font-weight:800;letter-spacing:-0.02em}
@@ -41,14 +55,25 @@
 .vc{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:13px;backdrop-filter:blur(8px)}
 .vn{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
 .vsrc{font-size:8px;padding:2px 5px;border-radius:4px;background:var(--glass-strong);color:var(--dim);text-transform:none;letter-spacing:0}
+.vval-row{display:flex;align-items:baseline;gap:0;flex-wrap:wrap}
 .vval{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:500;letter-spacing:-0.02em;line-height:1}
 .vunit{font-size:10px;color:var(--dim);margin-left:2px}
-.vtrend{font-size:9px;margin-top:5px}
+.vperiod{font-size:8px;color:var(--dim);font-weight:700;margin-left:6px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.7;align-self:flex-end;padding-bottom:1px}
+/* ── Sparkline scale wrapper ─────────────────────────────────────────────────── */
+.spark-wrap{display:flex;gap:5px;align-items:flex-start;margin:7px 0 2px}
+.spark-yscale{display:flex;flex-direction:column;justify-content:space-between;height:40px;width:22px;flex-shrink:0;text-align:right;font-size:7px;font-family:'JetBrains Mono',monospace;color:var(--dim);opacity:0.75;padding:3.5px 0}
+.spark-inner{flex:1;min-width:0}
+.sparkline{width:100%;height:40px;display:block;overflow:visible}
+.spark-xscale{display:flex;justify-content:space-between;font-size:7px;font-family:'JetBrains Mono',monospace;color:var(--dim);opacity:0.7;margin-top:3px;letter-spacing:-0.02em}
+.vtrend{font-size:9px;margin-top:2px}
 .vtrend.n{color:var(--success)}
 .vtrend.e{color:var(--warning)}
 .vtrend.c{color:var(--danger)}
-.mbar{display:flex;align-items:flex-end;gap:2px;height:20px;margin-top:5px}
-.mbar span{flex:1;background:var(--glass-strong);border-radius:2px}
+/* ── Vital filter bar ──────────────────────────────────────────────────────── */
+.vital-filter-bar{display:flex;gap:4px;margin-bottom:10px}
+.vfbtn{padding:4px 11px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass-strong);color:var(--muted);font-family:inherit;transition:all 0.15s}
+.vfbtn:hover{color:var(--ink)}
+.vfbtn.act{background:linear-gradient(135deg,rgba(56,189,248,0.18),rgba(139,92,246,0.18));color:var(--ink);border-color:rgba(56,189,248,0.35)}
 .irow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .ic{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:14px;backdrop-filter:blur(8px)}
 .ict{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px}
@@ -60,10 +85,6 @@
 .tg.fa{background:rgba(139,92,246,0.12);color:var(--violet)}
 .tg.ok{background:rgba(94,234,212,0.12);color:var(--success)}
 
-/* Mini bar chart — last bar colored by status */
-.mbar span.bar-n{background:var(--success)}
-.mbar span.bar-e{background:var(--warning)}
-.mbar span.bar-c{background:var(--danger)}
 
 /* ── Summary tab ────────────────────────────────────────────────────────────── */
 .slayout{display:grid;grid-template-columns:1fr 280px;gap:14px}
