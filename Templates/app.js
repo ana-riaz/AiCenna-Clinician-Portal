@@ -1,6 +1,7 @@
 // ── State ─────────────────────────────────────────────────────────────────────
 let currentPt = null;
 let summaryVerified = false;
+let _searchOrigin = null; // view to restore when search is cleared
 
 // ── Router ────────────────────────────────────────────────────────────────────
 function showView(id) {
@@ -12,17 +13,27 @@ function showView(id) {
   currentPt = null;
 }
 
+function clearSearch() {
+  const input = document.querySelector('.search input');
+  if (input) input.value = '';
+  setPtSearch('');
+  _searchOrigin = null;
+}
+
 function showDash() {
+  clearSearch();
   showView('dashView');
   document.getElementById('htitle').textContent='Dashboard';
   setNavActive('dash');
 }
 
 function navPatients() {
+  clearSearch();
   showView('patientsView');
-  document.getElementById('htitle').textContent='My Patients';
+  document.getElementById('htitle').textContent='My Digital Twins';
   document.getElementById('patients-list').innerHTML=renderPatientsView();
   setNavActive('patients');
+  closeQuickView();
 }
 
 function navSummaries() {
@@ -37,6 +48,7 @@ function navSummaries() {
 }
 
 function navLabs() {
+  clearSearch();
   setNavActive('labs');
   if (currentPt) {
     swTab('labs', document.querySelector('.tab[data-tab="labs"]'));
@@ -109,12 +121,14 @@ function clearAlerts() {
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.icon-btn') && !e.target.closest('.ndrop'))
     document.getElementById('ndrop').classList.remove('vis');
+  if (!e.target.closest('.qv-panel') && !e.target.closest('.vbtn-qv'))
+    closeQuickView();
 });
 
 // ── Digital twin overlay ──────────────────────────────────────────────────────
 function openTwinFullscreen(ptId) {
   const d = patientData[ptId];
-  document.getElementById('twinOvTitle').textContent = d.name + ' · Digital Twin';
+  document.getElementById('twinOvTitle').textContent = d.name + ' · Vector Twin';
   document.getElementById('twinOvBody').innerHTML = mkTwinSVG(ptId);
   document.getElementById('twinOverlay').classList.add('vis');
 }
@@ -123,8 +137,47 @@ function closeTwinOverlay() {
   document.getElementById('twinOverlay').classList.remove('vis');
 }
 
+// ── Search ────────────────────────────────────────────────────────────────────
+function onSearch(q) {
+  setPtSearch(q);
+
+  if (!q.trim()) {
+    // Restore origin view when search is cleared
+    if (_searchOrigin !== null) {
+      const origin = _searchOrigin;
+      _searchOrigin = null;
+      if (origin === 'labs') { navLabs(); return; }
+      showDash();
+    }
+    return;
+  }
+
+  const patientsVisible = document.getElementById('patientsView').style.display !== 'none';
+  if (!patientsVisible) {
+    // Record where to return before forcing navigation
+    if (_searchOrigin === null) {
+      _searchOrigin = document.getElementById('labsView').style.display !== 'none' ? 'labs' : 'dash';
+    }
+    showView('patientsView');
+    document.getElementById('htitle').textContent = 'My Digital Twins';
+    document.getElementById('patients-list').innerHTML = renderPatientsView();
+    setNavActive('patients');
+    closeQuickView();
+  }
+}
+
+// ── Quick view ────────────────────────────────────────────────────────────────
+function openQuickView(ptId) {
+  document.getElementById('qv-body').innerHTML = renderQuickView(ptId);
+  document.getElementById('qvPanel').classList.add('vis');
+}
+
+function closeQuickView() {
+  document.getElementById('qvPanel').classList.remove('vis');
+}
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeTwinOverlay();
+  if (e.key === 'Escape') { closeTwinOverlay(); closeQuickView(); }
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────

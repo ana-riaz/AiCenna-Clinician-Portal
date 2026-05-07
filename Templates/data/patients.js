@@ -14,7 +14,7 @@ const patientData = {
     init:'AK', name:'Ahmed Khan', meta:'55 yrs · Male · A+ · Hypertension · Diabetes',
     risk:'cr', rl:'Critical', rc:'var(--danger)', bg:'rgba(251,113,133,0.2)',
     gender:'male', age:55, sex:'Male', blood:'A+',
-    height:'172cm', weight:'89kg', healthScore:58, dataWindow:'7d',
+    height:'172cm', weight:'89kg', healthScore:58, baselineScore:38, dataWindow:'7d',
     sleep:'Poor', caffeine:'Daily', alcohol:'Weekly', nicotine:'10/day',
     doctorVisits:'Monthly', hospitalizations:'2 · Surgeries 1',
     vitals:{
@@ -119,7 +119,7 @@ const patientData = {
     init:'FR', name:'Fatima Rehman', meta:'38 yrs · Female · B+ · Prediabetes · Neuropathy',
     risk:'hi', rl:'High', rc:'var(--warning)', bg:'rgba(251,191,36,0.2)',
     gender:'female', age:38, sex:'Female', blood:'B+',
-    height:'165cm', weight:'68kg', healthScore:72, dataWindow:'14d',
+    height:'165cm', weight:'68kg', healthScore:72, baselineScore:61, dataWindow:'14d',
     sleep:'Fair', caffeine:'Daily', alcohol:'Rarely', nicotine:'None',
     doctorVisits:'Yearly', hospitalizations:'1 · Surgeries 0',
     vitals:{
@@ -208,9 +208,9 @@ const patientData = {
 
   sara: {
     init:'SM', name:'Sara Malik', meta:'34 yrs · Female · B+ · Post-op monitoring',
-    risk:'st', rl:'Stable', rc:'var(--success)', bg:'rgba(94,234,212,0.2)',
+    risk:'st', rl:'Low', rc:'var(--success)', bg:'rgba(94,234,212,0.2)',
     gender:'female', age:34, sex:'Female', blood:'B+',
-    height:'161cm', weight:'58kg', healthScore:86, dataWindow:'5d',
+    height:'161cm', weight:'58kg', healthScore:86, baselineScore:82, dataWindow:'5d',
     sleep:'Good', caffeine:'Occasional', alcohol:'Rarely', nicotine:'None',
     doctorVisits:'As needed', hospitalizations:'1 · Surgeries 1',
     vitals:{

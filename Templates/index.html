@@ -30,7 +30,7 @@
         <span>⊞</span> Dashboard
       </div>
       <div class="nav-item" onclick="navPatients()">
-        <span>👤</span> My Patients
+        <span>👤</span> Digital Twins
         <span class="badge b">3</span>
       </div>
       <div class="nav-section">Records</div>
@@ -56,7 +56,7 @@
       <div class="header-title" id="htitle">Dashboard</div>
       <div class="search">
         <span class="search-icon">⌕</span>
-        <input type="text" placeholder="Search patients…"/>
+        <input type="text" placeholder="Search digital twins…" oninput="onSearch(this.value)"/>
       </div>
       <div class="icon-btn" onclick="toggleNotif()">🔔<div class="ndot"></div></div>
 
@@ -75,7 +75,7 @@
       <!-- DASHBOARD VIEW -->
       <div class="dash" id="dashView">
         <div class="stats">
-          <div class="scard c1"><div class="sl">Total Patients</div><div class="sv">3</div><div class="ss"><span class="up">MVP stage</span></div></div>
+          <div class="scard c1"><div class="sl">Digital Twins</div><div class="sv">3</div><div class="ss"><span class="up">MVP stage</span></div></div>
           <div class="scard c2"><div class="sl">Summaries Pending</div><div class="sv">2</div><div class="ss">Awaiting verification</div></div>
           <div class="scard c3"><div class="sl">Lab Reports</div><div class="sv">1</div><div class="ss"><span class="dn">1 flagged value</span></div></div>
           <div class="scard c4"><div class="sl">Active Alerts</div><div class="sv">2</div><div class="ss"><span class="dn">Needs attention</span></div></div>
@@ -84,8 +84,8 @@
         <div class="tcol">
           <!-- PATIENT LIST PANEL -->
           <div class="panel">
-            <div class="ph"><div class="pt">My Patients</div><div class="pa" onclick="showDash()">View all</div></div>
-            <div class="pth"><span>Patient</span><span>Risk</span><span>Last Vital</span><span></span></div>
+            <div class="ph"><div class="pt">My Digital Twins</div><div class="pa" onclick="showDash()">View all</div></div>
+            <div class="pth"><span>Digital Twin</span><span>Risk</span><span>Last Vital</span><span></span></div>
             <div class="ptr" onclick="openPt('ahmed')">
               <div class="pp"><div class="pav cr">AK</div><div><div class="pn">Ahmed Khan</div><div class="pc">Hypertension · Diabetes</div></div></div>
               <div><span class="rb cr">Critical</span></div>
@@ -100,7 +100,7 @@
             </div>
             <div class="ptr" onclick="openPt('sara')">
               <div class="pp"><div class="pav st">SM</div><div><div class="pn">Sara Malik</div><div class="pc">Post-op monitoring</div></div></div>
-              <div><span class="rb st">Stable</span></div>
+              <div><span class="rb st">Low</span></div>
               <div class="pvit">HR 68 · SpO2 97%</div>
               <button class="vbtn" onclick="openPt('sara');event.stopPropagation()">View Twin</button>
             </div>
@@ -117,24 +117,24 @@
         </div>
       </div>
 
-      <!-- PATIENTS VIEW -->
+      <!-- DIGITAL TWINS VIEW -->
       <div class="dash" id="patientsView">
-        <div class="view-title">My Patients</div>
-        <div class="view-sub">Click a patient to open their full digital twin</div>
+        <div class="view-title">My Digital Twins</div>
+        <div class="view-sub">Click to open a patient's Digital Twin</div>
         <div id="patients-list"></div>
       </div>
 
       <!-- SUMMARIES VIEW -->
       <div class="dash" id="summariesView">
         <div class="view-title">AI Summaries</div>
-        <div class="view-sub">All patient summaries — click to open full profile</div>
+        <div class="view-sub">All Digital Twin summaries — click to open</div>
         <div id="summaries-list"></div>
       </div>
 
       <!-- LAB REPORTS VIEW -->
       <div class="dash" id="labsView">
         <div class="view-title">Lab Reports</div>
-        <div class="view-sub">All patient lab results — click a row for the full report</div>
+        <div class="view-sub">All Digital Twin lab results — click a row for the full report</div>
         <div id="labs-list"></div>
       </div>
 
@@ -190,12 +190,24 @@
   <div class="twin-ov-body" id="twinOvBody"></div>
 </div>
 
+<!-- QUICK VIEW PANEL -->
+<div id="qvPanel" class="qv-panel">
+  <div class="qv-bar">
+    <span class="qv-bar-title">Quick Preview</span>
+    <button class="qv-close" onclick="closeQuickView()">✕</button>
+  </div>
+  <div class="qv-body" id="qv-body"></div>
+</div>
+
 <!-- JS load order: data → components → pages → app -->
 <script src="data/patients.js"></script>
 <script src="components/twin.js"></script>
 <script src="components/vitals.js"></script>
 <script src="components/modal.js"></script>
 <script src="pages/dashboard.js"></script>
+<script src="components/summary.js"></script>
+<script src="components/medications.js"></script>
+<script src="components/labs.js"></script>
 <script src="pages/patient.js"></script>
 <script src="app.js"></script>
 </body>
