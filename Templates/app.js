@@ -181,4 +181,4 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-setNavActive('dash');
+showDash();
