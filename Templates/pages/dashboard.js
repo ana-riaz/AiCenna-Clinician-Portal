@@ -121,6 +121,77 @@ function renderPatientsView() {
   <div id="pt-cards">${renderPatientsCards()}</div>`;
 }
 
+// ── Dashboard patient list ────────────────────────────────────────────────────
+let dashFilter = 'all';
+let dashSort   = 'risk';
+
+function toggleDashFilterDD() {
+  document.getElementById('dash-sort-menu').classList.remove('vis');
+  document.getElementById('dash-dd-menu').classList.toggle('vis');
+}
+
+function toggleDashSortDD() {
+  document.getElementById('dash-dd-menu').classList.remove('vis');
+  document.getElementById('dash-sort-menu').classList.toggle('vis');
+}
+
+function setDashFilter(f, el) {
+  dashFilter = f;
+  document.querySelectorAll('#dash-dd-menu .dash-dd-item').forEach(i => i.classList.remove('act'));
+  el.classList.add('act');
+  document.getElementById('dash-dd-label').textContent = el.textContent;
+  document.getElementById('dash-dd-menu').classList.remove('vis');
+  refreshDashPatients();
+}
+
+function setDashSort(s, el) {
+  dashSort = s;
+  document.querySelectorAll('#dash-sort-menu .dash-dd-item').forEach(i => i.classList.remove('act'));
+  el.classList.add('act');
+  document.getElementById('dash-sort-label').textContent = el.textContent;
+  document.getElementById('dash-sort-menu').classList.remove('vis');
+  refreshDashPatients();
+}
+
+function _dashVitCell(id) {
+  const v = patientData[id].vitals;
+  if (v.spo2.tc==='c')    return `<span class="fl">SpO2 ${v.spo2.val}%</span>`;
+  if (v.hr.tc==='c')      return `<span class="fl">HR ${v.hr.val} bpm</span>`;
+  if (v.bp.tc==='c')      return `<span class="fl">BP ${v.bp.val}</span>`;
+  if (v.glucose.tc==='c') return `<span class="fl">Glucose ${v.glucose.val}</span>`;
+  if (v.spo2.tc==='e')    return `<span class="fl">SpO2 ${v.spo2.val}%</span>`;
+  if (v.hr.tc==='e')      return `<span class="fl">HR ${v.hr.val} bpm</span>`;
+  return `HR ${v.hr.val} · SpO2 ${v.spo2.val}%`;
+}
+
+function refreshDashPatients() {
+  const el = document.getElementById('dash-pts-body');
+  if (!el) return;
+  const rMap = {critical:'cr', high:'hi', medium:'me', low:'st'};
+  let ids = Object.keys(patientData);
+  if (dashFilter !== 'all') {
+    const cls = rMap[dashFilter];
+    ids = ids.filter(id => patientData[id].risk===cls ||
+      (dashFilter==='low' && (patientData[id].risk==='lo'||patientData[id].risk==='st')));
+  }
+  ids.sort((a, b) => {
+    const da = patientData[a], db = patientData[b];
+    if (dashSort === 'name') return da.name.localeCompare(db.name);
+    if (dashSort === 'age')  return da.age - db.age;
+    return (riskOrder[da.risk]??4) - (riskOrder[db.risk]??4);
+  });
+  el.innerHTML = ids.map(id => {
+    const d = patientData[id];
+    return `<div class="ptr" onclick="openPt('${id}')">
+      <div class="pp"><div class="pav ${d.risk}">${d.init}</div>
+        <div><div class="pn">${d.name}</div><div class="pc">${d.conditions.slice(0,2).join(' · ')}</div></div></div>
+      <div><span class="rb ${d.risk}">${d.rl}</span></div>
+      <div class="pvit" id="dashvit-${id}">${_dashVitCell(id)}</div>
+      <button class="vbtn" onclick="openPt('${id}');event.stopPropagation()">View Twin</button>
+    </div>`;
+  }).join('');
+}
+
 // ── Summaries list view ───────────────────────────────────────────────────────
 function renderSummariesView() {
   return Object.keys(patientData).map(id => {

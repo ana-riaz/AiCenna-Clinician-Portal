@@ -11,6 +11,20 @@
 .twin-ov-body{flex:1;display:flex;align-items:center;justify-content:center}
 .twin-ov-body .twin-svg{height:82vh;width:auto;display:block}
 
+/* ── Health score ring (header) ─────────────────────────────────────────────── */
+.pt-score-ring{position:relative;width:40px;height:40px;flex-shrink:0;margin-left:10px}
+.psring-svg{width:40px;height:40px;transform:rotate(-90deg)}
+.psring-bg{fill:none;stroke:rgba(255,255,255,0.07);stroke-width:3}
+.psring-fill{fill:none;stroke-width:3;stroke-linecap:round;animation:ring-in 0.7s ease forwards}
+.psring-fill.ok{stroke:var(--success)}
+.psring-fill.warn{stroke:var(--warning)}
+.psring-fill.danger{stroke:var(--danger)}
+@keyframes ring-in{from{stroke-dasharray:0 87.96}}
+.psring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:'JetBrains Mono',monospace}
+.psring-num.ok{color:var(--success)}
+.psring-num.warn{color:var(--warning)}
+.psring-num.danger{color:var(--danger)}
+
 /* ── Patient view chrome ────────────────────────────────────────────────────── */
 .pview{flex:1;display:none;flex-direction:column;overflow:hidden}
 .pview.vis{display:flex}
@@ -31,28 +45,46 @@
 .tp::-webkit-scrollbar-thumb{background:var(--glass-strong);border-radius:2px}
 .tp.act{display:block}
 
-/* ── Overview — digital twin ────────────────────────────────────────────────── */
-.ogrid{display:grid;grid-template-columns:260px 1fr;gap:16px}
-.twin-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:20px;display:flex;flex-direction:column;align-items:center;backdrop-filter:blur(10px)}
-.twin-label{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px;text-align:center}
-.twin-img-wrap{width:100%;height:260px;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:opacity 0.15s}
+/* ── Overview layout ────────────────────────────────────────────────────────── */
+.ov-layout{display:flex;flex-direction:column;gap:12px}
+
+/* Profile bar */
+.ov-profile{display:flex;align-items:center;gap:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;padding:14px 20px;backdrop-filter:blur(10px);flex-shrink:0}
+.ov-prof-info{flex:1;min-width:0}
+.ov-prof-name{font-size:14px;font-weight:800;letter-spacing:-0.01em}
+.ov-prof-meta{font-size:10px;color:var(--muted);margin-top:3px}
+.ov-prof-scores{display:flex;gap:8px}
+
+/* Digital Twin | Vitals row */
+.ogrid{display:grid;grid-template-columns:315px 1fr;gap:14px;align-items:stretch}
+.twin-bare{display:flex;flex-direction:column;align-items:center;padding:0 16px}
+.twin-label{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;text-align:center;flex-shrink:0}
+.twin-img-wrap{flex:1;min-height:0;max-height:70%;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.15s}
 .twin-img-wrap:hover{opacity:0.85}
 .twin-svg{height:100%;width:auto;display:block;margin:0 auto}
-.score-row{display:flex;align-items:center;gap:8px;margin-top:14px;width:100%}
 .score-block{flex:1;text-align:center;padding:10px;background:var(--glass-strong);border-radius:12px;border:1px solid var(--glass-border)}
 .scv{font-size:20px;font-weight:800;letter-spacing:-0.02em}
 .scl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
-.onboard-tags{margin-top:12px;width:100%;display:flex;flex-direction:column;gap:5px}
+
+/* Demographics + Health Summary row */
+.ov-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ov-sec-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;padding:16px 18px;backdrop-filter:blur(10px)}
+.ov-sec-hd{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--glass-border)}
 .ob-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:10px}
+.ob-row:last-child{border-bottom:none}
 .ob-k{color:var(--dim)}
 .ob-v{font-weight:600;color:var(--muted)}
 .ob-v.warn{color:var(--warning)}
 .ob-v.ok{color:var(--success)}
+.ov-health-group{margin-bottom:12px}
+.ov-health-group:last-child{margin-bottom:0}
+.ov-hlbl{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.ov-clinical{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:14px 16px;margin-top:10px;width:100%;box-sizing:border-box}
 
 /* ── Overview — vitals ──────────────────────────────────────────────────────── */
 .vright{display:flex;flex-direction:column;gap:12px}
-.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.vc{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:13px;backdrop-filter:blur(8px)}
+.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.vc{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:13px;backdrop-filter:blur(8px);min-height:140px}
 .vn{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
 .vsrc{font-size:8px;padding:2px 5px;border-radius:4px;background:var(--glass-strong);color:var(--dim);text-transform:none;letter-spacing:0}
 .vval-row{display:flex;align-items:baseline;gap:0;flex-wrap:wrap}
@@ -74,9 +106,6 @@
 .vfbtn{padding:4px 11px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass-strong);color:var(--muted);font-family:inherit;transition:all 0.15s}
 .vfbtn:hover{color:var(--ink)}
 .vfbtn.act{background:linear-gradient(135deg,rgba(56,189,248,0.18),rgba(139,92,246,0.18));color:var(--ink);border-color:rgba(56,189,248,0.35)}
-.irow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.ic{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:14px;backdrop-filter:blur(8px)}
-.ict{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px}
 .tags{display:flex;flex-wrap:wrap;gap:5px}
 .tg{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600}
 .tg.co{background:rgba(251,113,133,0.15);color:var(--danger)}
@@ -150,8 +179,8 @@
 .scv.warn{color:var(--warning)}
 .scv.danger{color:var(--danger)}
 
-/* ── Labs tab – 5-column layout ──────────────────────────────────────────────── */
-.lrow-5{grid-template-columns:2fr 1fr 1.5fr 75px 100px}
+/* ── Labs tab ────────────────────────────────────────────────────────────────── */
+.lrh-right{display:flex;align-items:center;gap:8px}
 .lr-ref{color:var(--dim);font-size:10px}
 .vbtn-sm{font-size:9px;padding:4px 8px}
 

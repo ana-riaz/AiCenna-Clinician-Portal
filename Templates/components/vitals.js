@@ -58,14 +58,18 @@ function mkSparkline(values, meta, tc, sparkId) {
   </svg>`;
 }
 
+// ── Vitals shown in overview (must be even count) ─────────────────────────────
+const OV_VITALS = ['hr','spo2','bp','glucose','temp','sleep','steps','calories'];
+
 // ── Vitals grid renderer ──────────────────────────────────────────────────────
 function renderVitalsGrid(id, filter) {
   const d = patientData[id];
   const periodLabel = {'24h':'current','7d':'7d avg','15d':'15d avg','30d':'30d avg'}[filter];
   const xStart = {'24h':'24h ago','7d':'7d ago','15d':'15d ago','30d':'30d ago'}[filter];
 
-  return vitMeta.map(m => {
+  return vitMeta.filter(m => OV_VITALS.includes(m.key)).map(m => {
     const v = d.vitals[m.key];
+    if (!v || !d.vitalHistory[m.key]) return `<div class="vc"><div class="vn">${m.label} <span class="vsrc">${m.src}</span></div><div class="vval-row"><span class="vval" style="color:var(--dim)">—</span></div><div class="vtrend n">No data available</div></div>`;
     const sparkValues = getFilterSlice(d.vitalHistory[m.key], filter);
     const trendText = computeTrend(sparkValues, m, filter);
 

@@ -2,10 +2,11 @@
 let currentPt = null;
 let summaryVerified = false;
 let _searchOrigin = null; // view to restore when search is cleared
+let _ptBack = 'dash';     // where the ← Back button returns to
 
 // ── Router ────────────────────────────────────────────────────────────────────
 function showView(id) {
-  ['dashView','patientsView','summariesView','labsView'].forEach(v =>
+  ['dashView','patientsView','summariesView','labsView','alertsView'].forEach(v =>
     document.getElementById(v).style.display='none'
   );
   document.getElementById('ptView').classList.remove('vis');
@@ -25,6 +26,7 @@ function showDash() {
   showView('dashView');
   document.getElementById('htitle').textContent='Dashboard';
   setNavActive('dash');
+  refreshDashPatients();
 }
 
 function navPatients() {
@@ -59,9 +61,22 @@ function navLabs() {
   }
 }
 
-function openPt(id, tab) {
+function navAlerts() {
+  clearSearch();
+  showView('alertsView');
+  document.getElementById('htitle').textContent='Active Alerts';
+  setNavActive('alerts');
+  renderAlertsViewContent();
+}
+
+function ptBack() {
+  _ptBack === 'alerts' ? navAlerts() : showDash();
+}
+
+function openPt(id, tab, backTo) {
+  _ptBack = backTo || 'dash';
   currentPt = id;
-  ['dashView','patientsView','summariesView','labsView'].forEach(v =>
+  ['dashView','patientsView','summariesView','labsView','alertsView'].forEach(v =>
     document.getElementById(v).style.display='none'
   );
   document.getElementById('ptView').classList.add('vis');
@@ -72,15 +87,18 @@ function openPt(id, tab) {
   document.getElementById('ptMeta').textContent=d.meta;
   const rb = document.getElementById('ptRisk');
   rb.textContent=d.rl; rb.className='rb '+d.risk;
+  const _sc = d.healthScore>=80?'ok':d.healthScore>=60?'warn':'danger';
+  const _fill = ((d.healthScore/100)*87.96).toFixed(2);
+  document.getElementById('ptScoreRing').innerHTML =
+    `<svg viewBox="0 0 36 36" class="psring-svg"><circle cx="18" cy="18" r="14" class="psring-bg"/><circle cx="18" cy="18" r="14" class="psring-fill ${_sc}" stroke-dasharray="${_fill} 87.96"/></svg><span class="psring-num ${_sc}">${d.healthScore}</span>`;
   document.getElementById('htitle').textContent=d.name;
   document.getElementById('ov-content').innerHTML   = renderOverview(id);
-  document.getElementById('sum-content').innerHTML  = renderSummary(id);
   document.getElementById('labs-content').innerHTML = renderLabs(id);
   document.getElementById('hist-content').innerHTML = renderHistory(id);
   document.getElementById('meds-content').innerHTML = renderMedications(id);
   summaryVerified = false;
   currentVitalFilter = '7d';
-  const t = tab||'ov';
+  const t = (tab === 'sum' ? 'ov' : tab) || 'ov';
   swTab(t, document.querySelector('.tab[data-tab="'+t+'"]'));
   setNavActive(null);
 }
@@ -94,7 +112,7 @@ function swTab(name, el) {
 
 function setNavActive(key) {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const map = {dash:0, patients:1, labs:2};
+  const map = {dash:0, alerts:1, labs:2};
   if (key !== null && map[key] !== undefined)
     document.querySelectorAll('.nav-item')[map[key]].classList.add('active');
 }
@@ -104,18 +122,9 @@ function toggleNotif() {
   document.getElementById('ndrop').classList.toggle('vis');
 }
 
-function markAllRead() {
-  document.querySelectorAll('#ndrop .al').forEach(a => {
-    a.classList.remove('unr');
-    const dot = a.querySelector('.ud'); if (dot) dot.remove();
-  });
-  document.querySelector('.ndot').classList.add('hidden');
-}
-
-function clearAlerts() {
-  const panels = document.querySelectorAll('.panel');
-  panels[1].querySelectorAll('.al').forEach(a => a.remove());
-  const c = document.querySelector('.scard.c4 .sv'); if (c) c.textContent='0';
+function openAlertPt(patId, tab, alertId) {
+  markAlertRead(alertId);
+  openPt(patId, tab, 'alerts');
 }
 
 document.addEventListener('click', function(e) {
@@ -123,6 +132,12 @@ document.addEventListener('click', function(e) {
     document.getElementById('ndrop').classList.remove('vis');
   if (!e.target.closest('.qv-panel') && !e.target.closest('.vbtn-qv'))
     closeQuickView();
+  if (!e.target.closest('.dash-dd')) {
+    document.getElementById('dash-dd-menu')?.classList.remove('vis');
+    document.getElementById('dash-sort-menu')?.classList.remove('vis');
+    document.getElementById('av-filter-dd-menu')?.classList.remove('vis');
+    document.getElementById('av-group-dd-menu')?.classList.remove('vis');
+  }
 });
 
 // ── Digital twin overlay ──────────────────────────────────────────────────────

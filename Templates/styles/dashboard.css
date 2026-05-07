@@ -57,6 +57,19 @@
 .abt2{font-size:9px;color:var(--dim);margin-top:3px}
 .ud{width:6px;height:6px;background:var(--blue);border-radius:50%;flex-shrink:0;margin-top:5px}
 
+/* ── Alert item layout ───────────────────────────────────────────────────────── */
+.ai.w{background:rgba(251,191,36,0.15)}
+.al-body{flex:1;min-width:0}
+.al-side{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;padding-top:2px}
+.al-rd-btn{background:none;border:none;color:var(--dim);font-size:11px;cursor:pointer;padding:1px 4px;border-radius:4px;line-height:1;font-family:inherit;transition:color 0.12s}
+.al-rd-btn:hover{color:var(--success)}
+.al-empty{padding:20px 16px;font-size:11px;color:var(--dim);text-align:center}
+
+/* ── Live pulse badge ────────────────────────────────────────────────────────── */
+.live-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;background:rgba(94,234,212,0.1);color:var(--success);letter-spacing:0.07em;margin-left:auto}
+.live-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--success);animation:lpulse 1.5s ease-in-out infinite}
+@keyframes lpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.65)}}
+
 /* ── Avatar risk colors ──────────────────────────────────────────────────────── */
 .pav.cr{background:rgba(251,113,133,0.2);color:var(--danger)}
 .pav.hi{background:rgba(251,191,36,0.2);color:var(--warning)}
@@ -172,3 +185,40 @@
 .qv-finding{display:flex;gap:8px;align-items:flex-start}
 .qv-ftxt{font-size:10px;color:var(--muted);line-height:1.5}
 .qv-open-btn{width:100%;justify-content:center;margin-top:auto}
+
+/* ── Dashboard patient list scroll ──────────────────────────────────────────── */
+#dash-pts-body{max-height:420px;overflow-y:auto}
+#dash-pts-body::after{content:'';display:block;height:18px}
+#dash-pts-body::-webkit-scrollbar{width:3px}
+#dash-pts-body::-webkit-scrollbar-thumb{background:var(--glass-strong);border-radius:2px}
+
+/* ── Alerts full-page view ───────────────────────────────────────────────────── */
+.av-bar{display:flex;align-items:center;justify-content:space-between;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:14px 20px;margin-bottom:4px}
+.av-stats{display:flex;gap:28px}
+.av-stat{display:flex;align-items:center;gap:10px}
+.av-n{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:800;letter-spacing:-0.03em;color:var(--ink)}
+.av-n.danger{color:var(--danger)}
+.av-n.warn{color:var(--warning)}
+.av-n.ok{color:var(--success)}
+.av-l{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+.av-actions{display:flex;gap:8px}
+.av-ctrl-bar{display:flex;gap:8px;margin-bottom:4px}
+.av-group-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--dim);display:flex;align-items:center;gap:7px;margin-top:6px}
+.av-gcount{background:var(--glass-strong);border-radius:10px;padding:1px 7px;font-size:9px;font-weight:700;color:var(--muted)}
+.av-empty{text-align:center;color:var(--dim);font-size:12px;padding:48px 0}
+
+/* ── Panel header with controls ─────────────────────────────────────────────── */
+.pt-ph{gap:0}
+.pt-ph-controls{display:flex;align-items:center;gap:6px;flex:1;justify-content:center}
+
+/* ── Shared dropdown ─────────────────────────────────────────────────────────── */
+.dash-dd{position:relative}
+.dash-dd-btn{display:flex;align-items:center;gap:0;padding:5px 10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.12s;white-space:nowrap}
+.dash-dd-btn:hover{border-color:var(--blue);color:var(--blue)}
+.dd-pfx{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--dim);padding-right:7px;margin-right:6px;border-right:1px solid var(--glass-border)}
+.dash-dd-arrow{font-size:9px;opacity:0.5;margin-left:5px}
+.dash-dd-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;background:rgba(8,18,37,0.97);border:1px solid var(--glass-border);border-radius:12px;min-width:120px;z-index:50;backdrop-filter:blur(20px);box-shadow:0 8px 30px rgba(0,0,0,0.4);overflow:hidden}
+.dash-dd-menu.vis{display:block}
+.dash-dd-item{padding:8px 14px;font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);transition:background 0.1s}
+.dash-dd-item:hover{background:rgba(56,189,248,0.1);color:var(--blue)}
+.dash-dd-item.act{color:var(--blue);font-weight:700}

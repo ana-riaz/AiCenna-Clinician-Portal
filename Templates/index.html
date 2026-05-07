@@ -29,9 +29,9 @@
       <div class="nav-item active" onclick="showDash()">
         <span>⊞</span> Dashboard
       </div>
-      <div class="nav-item" onclick="navPatients()">
-        <span>👤</span> My Patients
-        <span class="badge b">3</span>
+      <div class="nav-item" onclick="navAlerts()">
+        <span>🔔</span> Active Alerts
+        <span class="badge b" id="nav-al-badge" style="display:none">0</span>
       </div>
       <div class="nav-section">Records</div>
       <div class="nav-item" onclick="navLabs()">
@@ -63,10 +63,7 @@
       <!-- NOTIFICATION DROPDOWN -->
       <div class="ndrop" id="ndrop">
         <div class="ndh"><div class="ndt">Notifications</div><div class="nmr" onclick="markAllRead()">Mark all read</div></div>
-        <div class="al unr" onclick="openPt('ahmed');toggleNotif()"><div class="ai a">🚨</div><div><div class="abt">Critical — Ahmed K.</div><div class="abd">SpO2 dropped to 88%</div><div class="abt2">2 min ago</div></div><div class="ud"></div></div>
-        <div class="al unr" onclick="openPt('fatima','labs');toggleNotif()"><div class="ai l">🧪</div><div><div class="abt">Lab processed — Fatima R.</div><div class="abd">HbA1c flagged HIGH</div><div class="abt2">18 min ago</div></div><div class="ud"></div></div>
-        <div class="al" onclick="openPt('sara','sum');toggleNotif()"><div class="ai s">✦</div><div><div class="abt">Summary ready — Sara M.</div><div class="abd">Awaiting verification</div><div class="abt2">1 hr ago</div></div></div>
-        <div class="al" onclick="openPt('ahmed','sum');toggleNotif()"><div class="ai s">✦</div><div><div class="abt">Summary ready — Ahmed K.</div><div class="abd">Awaiting verification</div><div class="abt2">1 hr ago</div></div></div>
+        <div id="ndrop-alerts"></div>
       </div>
     </header>
 
@@ -75,45 +72,47 @@
       <!-- DASHBOARD VIEW -->
       <div class="dash" id="dashView">
         <div class="stats">
-          <div class="scard c1"><div class="sl">Total Patients</div><div class="sv">3</div><div class="ss"><span class="up">MVP stage</span></div></div>
+          <div class="scard c1"><div class="sl">Total Patients</div><div class="sv">10</div><div class="ss"><span class="up">MVP stage</span></div></div>
           <div class="scard c2"><div class="sl">Summaries Pending</div><div class="sv">2</div><div class="ss">Awaiting verification</div></div>
           <div class="scard c3"><div class="sl">Lab Reports</div><div class="sv">1</div><div class="ss"><span class="dn">1 flagged value</span></div></div>
           <div class="scard c4"><div class="sl">Active Alerts</div><div class="sv">2</div><div class="ss"><span class="dn">Needs attention</span></div></div>
         </div>
 
-        <div class="tcol">
-          <!-- PATIENT LIST PANEL -->
-          <div class="panel">
-            <div class="ph"><div class="pt">My Patients</div><div class="pa" onclick="showDash()">View all</div></div>
-            <div class="pth"><span>Patient</span><span>Risk</span><span>Last Vital</span><span></span></div>
-            <div class="ptr" onclick="openPt('ahmed')">
-              <div class="pp"><div class="pav cr">AK</div><div><div class="pn">Ahmed Khan</div><div class="pc">Hypertension · Diabetes</div></div></div>
-              <div><span class="rb cr">Critical</span></div>
-              <div class="pvit"><span class="fl">SpO2 88%</span></div>
-              <button class="vbtn" onclick="openPt('ahmed');event.stopPropagation()">View Twin</button>
+        <div class="panel">
+          <div class="ph pt-ph">
+            <div class="pt">My Patients</div>
+            <div class="pt-ph-controls">
+              <div class="dash-dd" id="dash-dd">
+                <button class="dash-dd-btn" onclick="toggleDashFilterDD()">
+                  <span class="dd-pfx">Filter</span>
+                  <span id="dash-dd-label">All</span>
+                  <span class="dash-dd-arrow">▾</span>
+                </button>
+                <div class="dash-dd-menu" id="dash-dd-menu">
+                  <div class="dash-dd-item act" onclick="setDashFilter('all',this)">All</div>
+                  <div class="dash-dd-item" onclick="setDashFilter('critical',this)">Critical</div>
+                  <div class="dash-dd-item" onclick="setDashFilter('high',this)">High</div>
+                  <div class="dash-dd-item" onclick="setDashFilter('medium',this)">Medium</div>
+                  <div class="dash-dd-item" onclick="setDashFilter('low',this)">Low</div>
+                </div>
+              </div>
+              <div class="dash-dd" id="dash-sort-dd">
+                <button class="dash-dd-btn" onclick="toggleDashSortDD()">
+                  <span class="dd-pfx">Sort</span>
+                  <span id="dash-sort-label">Risk</span>
+                  <span class="dash-dd-arrow">▾</span>
+                </button>
+                <div class="dash-dd-menu" id="dash-sort-menu">
+                  <div class="dash-dd-item act" onclick="setDashSort('risk',this)">Risk</div>
+                  <div class="dash-dd-item" onclick="setDashSort('name',this)">Name</div>
+                  <div class="dash-dd-item" onclick="setDashSort('age',this)">Age</div>
+                </div>
+              </div>
             </div>
-            <div class="ptr" onclick="openPt('fatima')">
-              <div class="pp"><div class="pav hi">FR</div><div><div class="pn">Fatima Rehman</div><div class="pc">Prediabetes · Neuropathy</div></div></div>
-              <div><span class="rb hi">High</span></div>
-              <div class="pvit"><span class="fl">HbA1c 6.4%</span></div>
-              <button class="vbtn" onclick="openPt('fatima');event.stopPropagation()">View Twin</button>
-            </div>
-            <div class="ptr" onclick="openPt('sara')">
-              <div class="pp"><div class="pav st">SM</div><div><div class="pn">Sara Malik</div><div class="pc">Post-op monitoring</div></div></div>
-              <div><span class="rb st">Low</span></div>
-              <div class="pvit">HR 68 · SpO2 97%</div>
-              <button class="vbtn" onclick="openPt('sara');event.stopPropagation()">View Twin</button>
-            </div>
+            <div class="pa" onclick="navPatients()">View all →</div>
           </div>
-
-          <!-- ALERTS PANEL -->
-          <div class="panel">
-            <div class="ph"><div class="pt">Alerts</div><div class="pa" onclick="clearAlerts()">Clear</div></div>
-            <div class="al unr" onclick="openPt('ahmed')"><div class="ai a">🚨</div><div><div class="abt">Ahmed K. — SpO2 Critical</div><div class="abd">SpO2 88%, below 90% threshold</div><div class="abt2">2 min ago</div></div></div>
-            <div class="al unr" onclick="openPt('fatima','labs')"><div class="ai l">🧪</div><div><div class="abt">Fatima R. — Lab Flagged</div><div class="abd">HbA1c 7.8% flagged HIGH in CBC</div><div class="abt2">18 min ago</div></div></div>
-            <div class="al" onclick="openPt('sara','sum')"><div class="ai s">✦</div><div><div class="abt">Sara M. — Summary Ready</div><div class="abd">Daily summary pending verification</div><div class="abt2">1 hr ago</div></div></div>
-            <div class="al" onclick="openPt('ahmed','sum')"><div class="ai s">✦</div><div><div class="abt">Ahmed K. — Summary Ready</div><div class="abd">Daily summary pending verification</div><div class="abt2">1 hr ago</div></div></div>
-          </div>
+          <div class="pth"><span>Patient</span><span>Risk</span><span>Last Vital</span><span></span></div>
+          <div id="dash-pts-body"></div>
         </div>
       </div>
 
@@ -138,10 +137,17 @@
         <div id="labs-list"></div>
       </div>
 
+      <!-- ALERTS VIEW -->
+      <div class="dash" id="alertsView">
+        <div class="view-title">Active Alerts</div>
+        <div class="view-sub">All patient alerts — click an alert to open the patient profile</div>
+        <div id="alerts-view-body"></div>
+      </div>
+
       <!-- PATIENT VIEW -->
       <div class="pview" id="ptView">
         <div class="pvhead">
-          <div class="bk" onclick="showDash()">← Back</div>
+          <div class="bk" onclick="ptBack()">← Back</div>
           <div class="pid">
             <div class="pbav" id="ptAv"></div>
             <div>
@@ -149,10 +155,10 @@
               <div class="pmm" id="ptMeta"></div>
             </div>
             <span class="rb" id="ptRisk"></span>
+            <div class="pt-score-ring" id="ptScoreRing"></div>
           </div>
           <div class="ptabs">
             <div class="tab act" data-tab="ov" onclick="swTab('ov',this)">Overview</div>
-            <div class="tab" data-tab="sum" onclick="swTab('sum',this)">AI Summary</div>
             <div class="tab" data-tab="labs" onclick="swTab('labs',this)">Lab Reports</div>
             <div class="tab" data-tab="hist" onclick="swTab('hist',this)">History</div>
             <div class="tab" data-tab="meds" onclick="swTab('meds',this)">Medications</div>
@@ -203,6 +209,7 @@
 <script src="data/patients.js"></script>
 <script src="components/twin.js"></script>
 <script src="components/vitals.js"></script>
+<script src="components/alerts.js"></script>
 <script src="components/modal.js"></script>
 <script src="pages/dashboard.js"></script>
 <script src="components/summary.js"></script>
@@ -210,5 +217,6 @@
 <script src="components/labs.js"></script>
 <script src="pages/patient.js"></script>
 <script src="app.js"></script>
+<script src="components/sim.js"></script>
 </body>
 </html>
