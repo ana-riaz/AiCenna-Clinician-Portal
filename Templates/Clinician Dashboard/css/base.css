@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #F8FAFF;
+  --muted: rgba(226,232,255,0.72);
+  --dim: rgba(203,213,255,0.54);
+  --navy: #081225;
+  --indigo: #162055;
+  --violet: #8B5CF6;
+  --blue: #38BDF8;
+  --cyan: #4DE8FF;
+  --rose: #F472B6;
+  --success: #5EEAD4;
+  --warning: #FBBF24;
+  --danger: #FB7185;
+  --glass: rgba(255,255,255,0.104);
+  --glass-strong: rgba(255,255,255,0.16);
+  --glass-border: rgba(255,255,255,0.22);
+  --field: rgba(255,255,255,0.13);
+  --field-border: rgba(226,232,255,0.24);
+  --sidebar-w: 230px;
+  --header-h: 58px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#07111F;color:var(--ink);height:100vh;overflow:hidden;font-size:13px}
+
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(135deg,#07111F 0%,#151C4F 50%,#231344 100%);z-index:0}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(56,189,248,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(139,92,246,0.08) 0%,transparent 60%);z-index:0}
+
+.hidden{display:none!important}

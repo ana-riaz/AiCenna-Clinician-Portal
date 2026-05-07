@@ -1,0 +1,44 @@
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
+/* Default-hidden secondary views; JS toggles display */
+#patientsView,#summariesView,#labsView{display:none}
+.shell{display:flex;height:100vh;position:relative;z-index:1}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.content{flex:1;overflow:hidden;display:flex}
+.dash{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.dash::-webkit-scrollbar{width:4px}
+.dash::-webkit-scrollbar-thumb{background:var(--glass-strong);border-radius:2px}
+
+/* ── Sidebar ────────────────────────────────────────────────────────────────── */
+.sidebar{width:var(--sidebar-w);background:rgba(8,18,37,0.8);backdrop-filter:blur(20px);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;flex-shrink:0;z-index:10}
+.logo{padding:0 20px;height:var(--header-h);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--glass-border)}
+.logo-img{height:32px;width:auto;object-fit:contain}
+.nav{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:2px}
+.nav-section{font-size:9px;font-weight:700;letter-spacing:0.1em;color:var(--dim);text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;cursor:pointer;color:var(--muted);transition:all 0.15s;font-size:12px;font-weight:500}
+.nav-item:hover{background:var(--glass);color:var(--ink)}
+.nav-item.active{background:linear-gradient(135deg,rgba(56,189,248,0.18),rgba(139,92,246,0.18));color:var(--ink);border:1px solid rgba(56,189,248,0.25)}
+.nav-item .badge{margin-left:auto;background:var(--danger);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px}
+.nav-item .badge.b{background:var(--violet)}
+.sidebar-footer{padding:14px;border-top:1px solid var(--glass-border)}
+.doctor-card{display:flex;align-items:center;gap:10px}
+.doc-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.doc-info .dn{font-weight:600;font-size:12px}
+.doc-info .dr{font-size:10px;color:var(--muted)}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.header{height:var(--header-h);background:rgba(8,18,37,0.6);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0;position:relative;z-index:20}
+.header-title{font-size:15px;font-weight:800;letter-spacing:-0.02em;flex:1;background:linear-gradient(90deg,var(--ink),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.search{display:flex;align-items:center;gap:8px;background:var(--field);border:1px solid var(--field-border);border-radius:12px;padding:7px 12px;width:200px}
+.search input{background:none;border:none;outline:none;color:var(--ink);font-family:inherit;font-size:12px;width:100%}
+.search input::placeholder{color:var(--dim)}
+.icon-btn{width:34px;height:34px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:all 0.15s;position:relative}
+.icon-btn:hover{border-color:var(--blue);color:var(--blue)}
+.ndot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid var(--navy)}
+.ndrop{position:absolute;top:calc(var(--header-h) + 8px);right:24px;width:320px;background:rgba(8,18,37,0.95);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:16px;z-index:100;box-shadow:0 20px 60px rgba(0,0,0,0.5);display:none}
+.ndrop.vis{display:block}
+.ndh{padding:13px 16px;border-bottom:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between}
+.ndt{font-size:12px;font-weight:700}
+.nmr{font-size:10px;color:var(--blue);cursor:pointer}
+
+/* ── Search icon ─────────────────────────────────────────────────────────────── */
+.search-icon{color:var(--dim);font-size:13px}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AiCenna — Doctor Dashboard</title>
+
+<!-- CSS variables, reset, background gradient -->
+<link rel="stylesheet" href="css/base.css"/>
+<!-- Shell chrome: layout, sidebar, header, notification dropdown -->
+<link rel="stylesheet" href="css/shell.css"/>
+<!-- Dashboard views: stats cards, patient table, risk badges, alerts -->
+<link rel="stylesheet" href="css/dashboard.css"/>
+<!-- Patient views: tabs, overview, summary, labs, history -->
+<link rel="stylesheet" href="css/patient.css"/>
+<!-- Report modal -->
+<link rel="stylesheet" href="css/modal.css"/>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="aicenna-logo.png" alt="AiCenna" class="logo-img"/>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" onclick="showDash()">
+        <span>⊞</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="navPatients()">
+        <span>👤</span> My Patients
+        <span class="badge b">3</span>
+      </div>
+      <div class="nav-section">Records</div>
+      <div class="nav-item" onclick="navLabs()">
+        <span>🧪</span> Lab Reports
+        <span class="badge">1</span>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="doctor-card">
+        <div class="doc-av">DI</div>
+        <div class="doc-info">
+          <div class="dn">Dr. Ibrahim</div>
+          <div class="dr">Cardiologist</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="header">
+      <div class="header-title" id="htitle">Dashboard</div>
+      <div class="search">
+        <span class="search-icon">⌕</span>
+        <input type="text" placeholder="Search patients…"/>
+      </div>
+      <div class="icon-btn" onclick="toggleNotif()">🔔<div class="ndot"></div></div>
+
+      <!-- NOTIFICATION DROPDOWN -->
+      <div class="ndrop" id="ndrop">
+        <div class="ndh"><div class="ndt">Notifications</div><div class="nmr" onclick="markAllRead()">Mark all read</div></div>
+        <div class="al unr" onclick="openPt('ahmed');toggleNotif()"><div class="ai a">🚨</div><div><div class="abt">Critical — Ahmed K.</div><div class="abd">SpO2 dropped to 88%</div><div class="abt2">2 min ago</div></div><div class="ud"></div></div>
+        <div class="al unr" onclick="openPt('fatima','labs');toggleNotif()"><div class="ai l">🧪</div><div><div class="abt">Lab processed — Fatima R.</div><div class="abd">HbA1c flagged HIGH</div><div class="abt2">18 min ago</div></div><div class="ud"></div></div>
+        <div class="al" onclick="openPt('sara','sum');toggleNotif()"><div class="ai s">✦</div><div><div class="abt">Summary ready — Sara M.</div><div class="abd">Awaiting verification</div><div class="abt2">1 hr ago</div></div></div>
+        <div class="al" onclick="openPt('ahmed','sum');toggleNotif()"><div class="ai s">✦</div><div><div class="abt">Summary ready — Ahmed K.</div><div class="abd">Awaiting verification</div><div class="abt2">1 hr ago</div></div></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- DASHBOARD VIEW -->
+      <div class="dash" id="dashView">
+        <div class="stats">
+          <div class="scard c1"><div class="sl">Total Patients</div><div class="sv">3</div><div class="ss"><span class="up">MVP stage</span></div></div>
+          <div class="scard c2"><div class="sl">Summaries Pending</div><div class="sv">2</div><div class="ss">Awaiting verification</div></div>
+          <div class="scard c3"><div class="sl">Lab Reports</div><div class="sv">1</div><div class="ss"><span class="dn">1 flagged value</span></div></div>
+          <div class="scard c4"><div class="sl">Active Alerts</div><div class="sv">2</div><div class="ss"><span class="dn">Needs attention</span></div></div>
+        </div>
+
+        <div class="tcol">
+          <!-- PATIENT LIST PANEL -->
+          <div class="panel">
+            <div class="ph"><div class="pt">My Patients</div><div class="pa" onclick="showDash()">View all</div></div>
+            <div class="pth"><span>Patient</span><span>Risk</span><span>Last Vital</span><span></span></div>
+            <div class="ptr" onclick="openPt('ahmed')">
+              <div class="pp"><div class="pav cr">AK</div><div><div class="pn">Ahmed Khan</div><div class="pc">Hypertension · Diabetes</div></div></div>
+              <div><span class="rb cr">Critical</span></div>
+              <div class="pvit"><span class="fl">SpO2 88%</span></div>
+              <button class="vbtn" onclick="openPt('ahmed');event.stopPropagation()">View Twin</button>
+            </div>
+            <div class="ptr" onclick="openPt('fatima')">
+              <div class="pp"><div class="pav hi">FR</div><div><div class="pn">Fatima Rehman</div><div class="pc">Prediabetes · Neuropathy</div></div></div>
+              <div><span class="rb hi">High</span></div>
+              <div class="pvit"><span class="fl">HbA1c 6.4%</span></div>
+              <button class="vbtn" onclick="openPt('fatima');event.stopPropagation()">View Twin</button>
+            </div>
+            <div class="ptr" onclick="openPt('sara')">
+              <div class="pp"><div class="pav st">SM</div><div><div class="pn">Sara Malik</div><div class="pc">Post-op monitoring</div></div></div>
+              <div><span class="rb st">Stable</span></div>
+              <div class="pvit">HR 68 · SpO2 97%</div>
+              <button class="vbtn" onclick="openPt('sara');event.stopPropagation()">View Twin</button>
+            </div>
+          </div>
+
+          <!-- ALERTS PANEL -->
+          <div class="panel">
+            <div class="ph"><div class="pt">Alerts</div><div class="pa" onclick="clearAlerts()">Clear</div></div>
+            <div class="al unr" onclick="openPt('ahmed')"><div class="ai a">🚨</div><div><div class="abt">Ahmed K. — SpO2 Critical</div><div class="abd">SpO2 88%, below 90% threshold</div><div class="abt2">2 min ago</div></div></div>
+            <div class="al unr" onclick="openPt('fatima','labs')"><div class="ai l">🧪</div><div><div class="abt">Fatima R. — Lab Flagged</div><div class="abd">HbA1c 7.8% flagged HIGH in CBC</div><div class="abt2">18 min ago</div></div></div>
+            <div class="al" onclick="openPt('sara','sum')"><div class="ai s">✦</div><div><div class="abt">Sara M. — Summary Ready</div><div class="abd">Daily summary pending verification</div><div class="abt2">1 hr ago</div></div></div>
+            <div class="al" onclick="openPt('ahmed','sum')"><div class="ai s">✦</div><div><div class="abt">Ahmed K. — Summary Ready</div><div class="abd">Daily summary pending verification</div><div class="abt2">1 hr ago</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATIENTS VIEW -->
+      <div class="dash" id="patientsView">
+        <div class="view-title">My Patients</div>
+        <div class="view-sub">Click a patient to open their full digital twin</div>
+        <div id="patients-list"></div>
+      </div>
+
+      <!-- SUMMARIES VIEW -->
+      <div class="dash" id="summariesView">
+        <div class="view-title">AI Summaries</div>
+        <div class="view-sub">All patient summaries — click to open full profile</div>
+        <div id="summaries-list"></div>
+      </div>
+
+      <!-- LAB REPORTS VIEW -->
+      <div class="dash" id="labsView">
+        <div class="view-title">Lab Reports</div>
+        <div class="view-sub">All patient lab results — click a row for the full report</div>
+        <div id="labs-list"></div>
+      </div>
+
+      <!-- PATIENT VIEW -->
+      <div class="pview" id="ptView">
+        <div class="pvhead">
+          <div class="bk" onclick="showDash()">← Back</div>
+          <div class="pid">
+            <div class="pbav" id="ptAv"></div>
+            <div>
+              <div class="pmn" id="ptName"></div>
+              <div class="pmm" id="ptMeta"></div>
+            </div>
+            <span class="rb" id="ptRisk"></span>
+          </div>
+          <div class="ptabs">
+            <div class="tab act" data-tab="ov" onclick="swTab('ov',this)">Overview</div>
+            <div class="tab" data-tab="sum" onclick="swTab('sum',this)">AI Summary</div>
+            <div class="tab" data-tab="labs" onclick="swTab('labs',this)">Lab Reports</div>
+            <div class="tab" data-tab="hist" onclick="swTab('hist',this)">History</div>
+          </div>
+        </div>
+
+        <div class="tcon">
+          <div class="tp act" id="t-ov"><div id="ov-content"></div></div>
+          <div class="tp" id="t-sum"><div id="sum-content"></div></div>
+          <div class="tp" id="t-labs"><div id="labs-content"></div></div>
+          <div class="tp" id="t-hist"><div id="hist-content"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- REPORT MODAL -->
+<div id="reportModal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- JS: data → renderers → app logic -->
+<script src="js/data.js"></script>
+<script src="js/patient-tabs.js"></script>
+<script src="js/list-views.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
