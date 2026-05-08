@@ -44,6 +44,9 @@
 .tp::-webkit-scrollbar{width:4px}
 .tp::-webkit-scrollbar-thumb{background:var(--glass-strong);border-radius:2px}
 .tp.act{display:block}
+#t-twin{padding:0;background:#060f1e}
+.twin-tab-view{height:100%;display:flex;align-items:center;justify-content:center}
+.twin-tab-view .twin-svg{height:80vh;width:auto;display:block}
 
 /* ── Overview layout ────────────────────────────────────────────────────────── */
 .ov-layout{display:flex;flex-direction:column;gap:12px}

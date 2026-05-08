@@ -107,6 +107,9 @@ function swTab(name, el) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('act'));
   document.getElementById('t-'+name).classList.add('act');
   if (el) el.classList.add('act');
+  if (name === 'twin' && currentPt) {
+    document.getElementById('twin-content').innerHTML = `<div class="twin-tab-view">${mkTwinSVG(currentPt)}</div>`;
+  }
 }
 
 function setNavActive(key) {

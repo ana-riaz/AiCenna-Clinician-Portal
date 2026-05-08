@@ -164,11 +164,7 @@
           <div class="ptabs">
             <div class="tab act" data-tab="ov" onclick="swTab('ov',this)">Overview</div>
             <!-- need a digital twin tab, i should be able to see the full screen view of twin which is classs = twinOverlay-->
-            <div class="tab" data-tab="twin" onclick="swTab('twin',this)">Digital Twin</div>
-            <!-- as we get into that Digital twin tab, we should see the full twin view-->
-             
-
-
+            <div class="tab" data-tab="twin" onclick="swTab('twin',this)">Digital Twin</div>             
 
             <div class="tab" data-tab="labs" onclick="swTab('labs',this)">Lab Reports</div>
             <div class="tab" data-tab="hist" onclick="swTab('hist',this)">History</div>
@@ -178,6 +174,7 @@
 
         <div class="tcon">
           <div class="tp act" id="t-ov"><div id="ov-content"></div></div>
+          <div class="tp" id="t-twin"><div id="twin-content"></div></div>
           <div class="tp" id="t-sum"><div id="sum-content"></div></div>
           <div class="tp" id="t-labs"><div id="labs-content"></div></div>
           <div class="tp" id="t-hist"><div id="hist-content"></div></div>
