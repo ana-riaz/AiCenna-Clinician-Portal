@@ -31,8 +31,25 @@ function renderOverview(id) {
     </div>
 
     <div class="ov-bottom">
-      <div class="ov-sec-card">
+        <div class="ov-sec-card">      
         <div class="ov-sec-hd">Demographics</div>
+        <div class="ob-row">
+          <span class="ob-k">Health Score</span>
+          <span class="ob-v">
+            <!-- Added a color dot based on score status -->
+            <span class="fdot ${d.healthScore >= 80 ? 'ok' : d.healthScore >= 60 ? 'warn' : 'danger'}"></span>
+            <strong>${d.healthScore}</strong>
+          </span>
+        </div>
+        <div class="ob-row"><span class="ob-k">Age</span><span class="ob-v">${d.age} years</span></div>
+        <div class="ob-row"><span class="ob-k">Gender</span><span class="ob-v">${d.gender}</span></div>
+        <div class="ob-row"><span class="ob-k">Height</span><span class="ob-v">${d.height} cm</span></div>
+        <div class="ob-row"><span class="ob-k">Weight</span><span class="ob-v">${d.weight} kg</span></div>
+        <div class="ob-row"><span class="ob-k">Blood Group</span><span class="ob-v">${d.bloodGroup}</span></div>
+      </div>
+
+      <div class="ov-sec-card">      
+        <div class="ov-sec-hd">Health Summary</div>
         ${demoRows.map(r => `<div class="ob-row"><span class="ob-k">${r.k}</span><span class="ob-v${r.cls?' '+r.cls:''}">${r.v}</span></div>`).join('')}
       </div>
       <div class="ov-sec-card">

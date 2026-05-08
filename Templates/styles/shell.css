@@ -39,8 +39,10 @@
 
 /* ── Header ─────────────────────────────────────────────────────────────────── */
 .header{height:var(--header-h);background:rgba(8,18,37,0.6);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0;position:relative;z-index:20}
+.header-back{display:flex;align-items:center;gap:6px;color:var(--muted);cursor:pointer;font-size:11px;font-weight:600;padding:0 10px;margin-right:10px;transition:color 0.12s;white-space:nowrap}
+.header-back:hover{color:var(--blue)}
 .header-title{font-size:15px;font-weight:800;letter-spacing:-0.02em;flex:1;background:linear-gradient(90deg,var(--ink),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.search{display:flex;align-items:center;gap:8px;background:var(--field);border:1px solid var(--field-border);border-radius:12px;padding:7px 12px;width:200px}
+.search{display:flex;align-items:center;gap:8px;background:var(--field);border:1px solid var(--field-border);border-radius:12px;padding:7px 12px;width:200px;margin-left:auto}
 .search input{background:none;border:none;outline:none;color:var(--ink);font-family:inherit;font-size:12px;width:100%}
 .search input::placeholder{color:var(--dim)}
 .icon-btn{width:34px;height:34px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:all 0.15s;position:relative}

@@ -70,7 +70,19 @@
 .scl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
 
 /* Demographics + Health Summary row */
-.ov-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width: 900px) {
+  .ov-bottom {
+    /* Stacks to 1 column on tablets/phones */
+    grid-template-columns: 1fr; 
+  }
+}
+.ov-bottom {
+  display: grid;
+  /* Changed from 1fr 1fr to 1fr 1fr 1fr */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 12px;
+  width: 100%;
+}
 .ov-sec-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;padding:16px 18px;backdrop-filter:blur(10px)}
 .ov-sec-hd{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--glass-border)}
 .ob-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:10px}
@@ -79,6 +91,24 @@
 .ob-v{font-weight:600;color:var(--muted)}
 .ob-v.warn{color:var(--warning)}
 .ob-v.ok{color:var(--success)}
+/* Styling for the score inside the card row */
+.ob-v strong {
+  font-size: 11px;
+  color: #fff; /* Brighten the score number */
+}
+
+/* Ensure the status dot shows up next to the score */
+.ob-v .fdot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.fdot.ok { background: var(--success); }
+.fdot.warn { background: var(--warning); }
+.fdot.danger { background: var(--danger); }
 .ov-health-group{margin-bottom:12px}
 .ov-health-group:last-child{margin-bottom:0}
 .ov-hlbl{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}

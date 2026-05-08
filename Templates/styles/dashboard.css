@@ -33,7 +33,6 @@
 
 /* Risk badges */
 .rb{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.04em}
-.rb::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
 .rb.cr{background:rgba(251,113,133,0.15);color:var(--danger)}
 .rb.hi{background:rgba(251,191,36,0.15);color:var(--warning)}
 .rb.st{background:rgba(94,234,212,0.12);color:var(--success)}

@@ -1,19 +1,31 @@
-// ── State ─────────────────────────────────────────────────────────────────────
+// add comments to all functions in app.js to understand hat they use and do, and how they interact with each other. Also add comments to important lines of code within the functions to explain their purpose and functionality.
 let currentPt = null;
 let summaryVerified = false;
 let _searchOrigin = null; // view to restore when search is cleared
 let _ptBack = 'dash';     // where the ← Back button returns to
 
 // ── Router ────────────────────────────────────────────────────────────────────
+
+/**
+ * Shows a specific view by ID
+ * @param {string} id - The ID of the view to display
+ */
 function showView(id) {
   ['dashView','patientsView','summariesView','labsView','alertsView'].forEach(v =>
     document.getElementById(v).style.display='none'
   );
   document.getElementById('ptView').classList.remove('vis');
+  document.getElementById('headerBack').style.display = 'none';
+  document.getElementById('htitle').style.display = 'block';
   document.getElementById(id).style.display='flex';
   currentPt = null;
 }
 
+/**
+ * Clears the search input and resets the patient search state. 
+ * If a search was initiated from a specific view (like labs), 
+ * it will restore that view when the search is cleared.
+ */
 function clearSearch() {
   const input = document.querySelector('.search input');
   if (input) input.value = '';
@@ -21,6 +33,10 @@ function clearSearch() {
   _searchOrigin = null;
 }
 
+/**
+ * Displays the dashboard view, sets the header title, marks the dashboard 
+ * nav item as active, and refreshes the patient list on the dashboard.
+ */
 function showDash() {
   clearSearch();
   showView('dashView');
@@ -28,7 +44,9 @@ function showDash() {
   setNavActive('dash');
   refreshDashPatients();
 }
-
+/**
+ * Navigates to the patients view, sets the header title, marks the patients
+ */
 function navPatients() {
   clearSearch();
   showView('patientsView');
@@ -38,6 +56,10 @@ function navPatients() {
   closeQuickView();
 }
 
+/**
+ * Navigates to the summaries view. If a patient is currently selected, 
+ * it will switch to the summary tab for that patient.
+ */
 function navSummaries() {
   setNavActive('summaries');
   if (currentPt) {
@@ -49,6 +71,10 @@ function navSummaries() {
   }
 }
 
+/**
+ * Navigates to the labs view. If a patient is currently selected, 
+ * it will switch to the labs tab for that patient. Otherwise, it will show the labs view with a list of lab reports.
+ */
 function navLabs() {
   clearSearch();
   setNavActive('labs');
@@ -61,6 +87,10 @@ function navLabs() {
   }
 }
 
+/**
+ * Navigates to the alerts view. Clears the search, shows the alerts view, 
+ * sets the header title, marks the alerts nav item as active, and renders the alerts view content.
+ */
 function navAlerts() {
   clearSearch();
   showView('alertsView');
@@ -70,9 +100,19 @@ function navAlerts() {
 }
 
 function ptBack() {
+  document.getElementById('headerBack').style.display = 'none';
+  document.getElementById('htitle').style.display = 'block';
   _ptBack === 'alerts' ? navAlerts() : showDash();
 }
 
+/**
+ * Opens a patient view for a given patient ID, optionally specifying which tab to open 
+ * and where the back button should return to.
+ * 
+ * @param {*} id 
+ * @param {*} tab 
+ * @param {*} backTo 
+ */
 function openPt(id, tab, backTo) {
   _ptBack = backTo || 'dash';
   currentPt = id;
@@ -81,15 +121,19 @@ function openPt(id, tab, backTo) {
   );
   document.getElementById('ptView').classList.add('vis');
   const d = patientData[id];
+  document.getElementById('headerBack').style.display = 'flex';
+  document.getElementById('htitle').style.display = 'none';
   const a = document.getElementById('ptAv');
-  a.textContent=d.init; a.style.background=d.bg; a.style.color=d.rc;
-  document.getElementById('ptMeta').textContent=`${d.age} yrs · ${d.sex} · ${d.height} · ${d.weight} · ${d.blood}`;
+  a.textContent = d.init;
+  a.style.background = d.bg;
+  a.style.color = d.rc;
+  document.getElementById('ptMeta').textContent = d.name;
   const rb = document.getElementById('ptRisk');
   rb.textContent=d.rl; rb.className='rb '+d.risk;
-  const _sc = d.healthScore>=80?'ok':d.healthScore>=60?'warn':'danger';
-  const _fill = ((d.healthScore/100)*87.96).toFixed(2);
-  document.getElementById('ptScoreRing').innerHTML =
-    `<svg viewBox="0 0 36 36" class="psring-svg"><circle cx="18" cy="18" r="14" class="psring-bg"/><circle cx="18" cy="18" r="14" class="psring-fill ${_sc}" stroke-dasharray="${_fill} 87.96"/></svg><span class="psring-num ${_sc}">${d.healthScore}</span>`;
+  // const _sc = d.healthScore>=80?'ok':d.healthScore>=60?'warn':'danger';
+  // const _fill = ((d.healthScore/100)*87.96).toFixed(2);
+  // document.getElementById('ptScoreRing').innerHTML =
+  //   `<svg viewBox="0 0 36 36" class="psring-svg"><circle cx="18" cy="18" r="14" class="psring-bg"/><circle cx="18" cy="18" r="14" class="psring-fill ${_sc}" stroke-dasharray="${_fill} 87.96"/></svg><span class="psring-num ${_sc}">${d.healthScore}</span>`;
   document.getElementById('htitle').textContent=d.name;
   document.getElementById('ov-content').innerHTML   = renderOverview(id);
   document.getElementById('labs-content').innerHTML = renderLabs(id);
@@ -102,6 +146,12 @@ function openPt(id, tab, backTo) {
   setNavActive(null);
 }
 
+/**
+ * Switches the active tab to the specified tab name and element. 
+ * If the digital twin tab is selected, it also renders the digital twin SVG for the current patient.
+ * @param {*} name 
+ * @param {*} el 
+ */
 function swTab(name, el) {
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('act'));
