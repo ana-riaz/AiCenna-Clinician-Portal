@@ -30,6 +30,10 @@
       <div class="nav-item active" onclick="showDash()">
         <span class="nav-icon">⊞</span><span class="nav-label"> Dashboard</span>
       </div>
+        <div class="nav-item active" onclick="navPatients()">
+        <span class="nav-icon">⊞</span><span class="nav-label"> My Patients </span>
+      </div>
+
       <div class="nav-item" onclick="navAlerts()">
         <span class="nav-icon">🔔</span><span class="nav-label"> Active Alerts</span>
         <span class="badge b nav-label" id="nav-al-badge" style="display:none">0</span>
@@ -159,6 +163,13 @@
           </div>
           <div class="ptabs">
             <div class="tab act" data-tab="ov" onclick="swTab('ov',this)">Overview</div>
+            <!-- need a digital twin tab, i should be able to see the full screen view of twin which is classs = twinOverlay-->
+            <div class="tab" data-tab="twin" onclick="swTab('twin',this)">Digital Twin</div>
+            <!-- as we get into that Digital twin tab, we should see the full twin view-->
+             
+
+
+
             <div class="tab" data-tab="labs" onclick="swTab('labs',this)">Lab Reports</div>
             <div class="tab" data-tab="hist" onclick="swTab('hist',this)">History</div>
             <div class="tab" data-tab="meds" onclick="swTab('meds',this)">Medications</div>
