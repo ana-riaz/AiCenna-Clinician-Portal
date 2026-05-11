@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #F8FAFF;
+  --muted: rgba(226,232,255,0.72);
+  --dim: rgba(203,213,255,0.54);
+  --navy: #081225;
+  --indigo: #162055;
+  --violet: #8B5CF6;
+  --blue: #38BDF8;
+  --cyan: #4DE8FF;
+  --rose: #F472B6;
+  --success: #5EEAD4;
+  --warning: #FBBF24;
+  --danger: #FB7185;
+  --glass: rgba(255,255,255,0.104);
+  --glass-strong: rgba(255,255,255,0.16);
+  --glass-border: rgba(255,255,255,0.22);
+  --field: rgba(255,255,255,0.13);
+  --field-border: rgba(226,232,255,0.24);
+  --sidebar-w: 230px;
+  --header-h: 58px;
+
+  --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-jakarta);
+  background: #07111F;
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #07111F 0%, #151C4F 50%, #231344 100%);
+  z-index: -2;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(56,189,248,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.08) 0%, transparent 60%);
+  z-index: -1;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-strong);
+  border-radius: 2px;
+}
+
+/* Custom animations */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.65); }
+}
+
+@keyframes ring-in {
+  from { stroke-dasharray: 0 87.96; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* Glass card styling */
+.glass-card {
+  @apply bg-glass border border-glass-border rounded-[18px] backdrop-blur-[10px];
+}
+
+/* Risk badge colors */
+.risk-critical { @apply bg-danger/15 text-danger; }
+.risk-high { @apply bg-warning/15 text-warning; }
+.risk-medium { @apply bg-violet/15 text-violet; }
+.risk-low { @apply bg-success/12 text-success; }
+
+/* Avatar risk colors */
+.avatar-critical { @apply bg-danger/20 text-danger; }
+.avatar-high { @apply bg-warning/20 text-warning; }
+.avatar-medium { @apply bg-violet/20 text-violet; }
+.avatar-low { @apply bg-success/20 text-success; }
+
+/* Tag colors */
+.tag-condition { @apply bg-danger/15 text-danger; }
+.tag-medication { @apply bg-[#38BDF8]/12 text-[#38BDF8]; }
+.tag-allergy { @apply bg-warning/12 text-warning; }
+.tag-family { @apply bg-violet/12 text-violet; }
+.tag-ok { @apply bg-success/12 text-success; }
+
+/* Vital trend colors */
+.trend-normal { @apply text-success; }
+.trend-elevated { @apply text-warning; }
+.trend-critical { @apply text-danger; }
+
+/* Flag badge colors */
+.flag-normal { @apply bg-success/8 text-success; }
+.flag-high { @apply bg-warning/15 text-warning; }
+.flag-critical { @apply bg-danger/15 text-danger; }
+
+/* Button styles */
+.btn-primary {
+  @apply bg-gradient-to-br from-[#38BDF8] to-violet text-white px-4 py-2 rounded-[10px] font-semibold text-sm;
+}
+
+.btn-danger {
+  @apply bg-danger/15 text-danger border border-danger/25 px-4 py-2 rounded-[10px] font-semibold text-sm;
+}
+
+.btn-ghost {
+  @apply bg-glass-strong text-muted border border-glass-border px-4 py-2 rounded-[10px] font-semibold text-sm;
+}
