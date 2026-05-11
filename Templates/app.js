@@ -102,7 +102,9 @@ function navAlerts() {
 function ptBack() {
   document.getElementById('headerBack').style.display = 'none';
   document.getElementById('htitle').style.display = 'block';
-  _ptBack === 'alerts' ? navAlerts() : showDash();
+  if (_ptBack === 'alerts') navAlerts();
+  else if (_ptBack === 'patients') navPatients();
+  else showDash();
 }
 
 /**
@@ -121,6 +123,8 @@ function openPt(id, tab, backTo) {
   );
   document.getElementById('ptView').classList.add('vis');
   const d = patientData[id];
+  const backLabels = { dash: '← Dashboard', patients: '← My Patients', alerts: '← Alerts' };
+  document.getElementById('headerBack').textContent = backLabels[_ptBack] || '← Back';
   document.getElementById('headerBack').style.display = 'flex';
   document.getElementById('htitle').style.display = 'none';
   const a = document.getElementById('ptAv');
@@ -130,10 +134,10 @@ function openPt(id, tab, backTo) {
   document.getElementById('ptMeta').textContent = d.name;
   const rb = document.getElementById('ptRisk');
   rb.textContent=d.rl; rb.className='rb '+d.risk;
-  // const _sc = d.healthScore>=80?'ok':d.healthScore>=60?'warn':'danger';
-  // const _fill = ((d.healthScore/100)*87.96).toFixed(2);
-  // document.getElementById('ptScoreRing').innerHTML =
-  //   `<svg viewBox="0 0 36 36" class="psring-svg"><circle cx="18" cy="18" r="14" class="psring-bg"/><circle cx="18" cy="18" r="14" class="psring-fill ${_sc}" stroke-dasharray="${_fill} 87.96"/></svg><span class="psring-num ${_sc}">${d.healthScore}</span>`;
+  const _sc = d.healthScore>=80?'ok':d.healthScore>=60?'warn':'danger';
+  const _fill = ((d.healthScore/100)*87.96).toFixed(2);
+  document.getElementById('ptScoreRing').innerHTML =
+    `<svg viewBox="0 0 36 36" class="psring-svg"><circle cx="18" cy="18" r="14" class="psring-bg"/><circle cx="18" cy="18" r="14" class="psring-fill ${_sc}" stroke-dasharray="${_fill} 87.96"/></svg><span class="psring-num ${_sc}">${d.healthScore}</span>`;
   document.getElementById('htitle').textContent=d.name;
   document.getElementById('ov-content').innerHTML   = renderOverview(id);
   document.getElementById('labs-content').innerHTML = renderLabs(id);
@@ -163,10 +167,11 @@ function swTab(name, el) {
 }
 
 function setNavActive(key) {
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const map = {dash:0, alerts:1, labs:2};
-  if (key !== null && map[key] !== undefined)
-    document.querySelectorAll('.nav-item')[map[key]].classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (key) {
+    const el = document.querySelector(`.nav-item[data-nav="${key}"]`);
+    if (el) el.classList.add('active');
+  }
 }
 
 // ── Notifications ─────────────────────────────────────────────────────────────

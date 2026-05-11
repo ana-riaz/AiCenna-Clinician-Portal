@@ -1,6 +1,7 @@
 /* Stats cards */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.scard{background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;padding:16px 18px;backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.scard{background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;padding:16px 18px;backdrop-filter:blur(10px);position:relative;overflow:hidden;cursor:pointer;transition:border-color 0.15s,transform 0.12s}
+.scard:hover{border-color:var(--glass-strong);transform:translateY(-1px)}
 .scard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0}
 .scard.c1::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
 .scard.c2::before{background:linear-gradient(90deg,var(--violet),var(--rose))}
@@ -11,6 +12,13 @@
 .ss{font-size:10px;color:var(--dim);margin-top:5px}
 .ss .up{color:var(--success)}
 .ss .dn{color:var(--danger)}
+
+/* Stat card icon */
+.scard-icon{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.scard.c1 .scard-icon{background:rgba(56,189,248,0.12);color:var(--blue)}
+.scard.c2 .scard-icon{background:rgba(139,92,246,0.12);color:var(--violet)}
+.scard.c3 .scard-icon{background:rgba(251,191,36,0.12);color:var(--warning)}
+.scard.c4 .scard-icon{background:rgba(251,113,133,0.12);color:var(--danger)}
 
 /* Two-column layout */
 .tcol{display:grid;grid-template-columns:1fr 340px;gap:14px}

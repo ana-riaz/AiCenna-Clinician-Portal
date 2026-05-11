@@ -70,7 +70,7 @@ function renderPatientsCards() {
         <div class="vstat-label">${x.label}</div>
         <div class="vstat-val ${x.c}">${x.val}<span class="vstat-unit">${x.unit}</span></div>
       </div>`).join('');
-    return `<div class="panel list-card" onclick="openPt('${id}')">
+    return `<div class="panel list-card" onclick="openPt('${id}', null, 'patients')">
       <div class="ph">
         <div class="ph-left">
           <div class="pav lg ${d.risk}">${d.init}</div>
@@ -81,7 +81,7 @@ function renderPatientsCards() {
         </div>
         <div class="ph-right">
           <span class="rb ${d.risk}">${d.rl}</span>
-          <button class="vbtn vbtn-qv" onclick="openQuickView('${id}');event.stopPropagation()" title="Quick preview">↗</button>
+          <button class="vbtn vbtn-qv" onclick="openQuickView('${id}');event.stopPropagation()" title="Quick preview">Preview</button>
         </div>
       </div>
       <div class="pt-scores-row">
@@ -106,7 +106,7 @@ function renderPatientsCards() {
 
 // ── Patients list view (controls + cards) ─────────────────────────────────────
 function renderPatientsView() {
-  const filters = ['all','critical','high','low'];
+  const filters = ['all','critical','high','medium','low'];
   const filterBtns = filters.map(f =>
     `<button class="pt-filter-btn${f===ptFilter?' act':''}" onclick="setPtFilter('${f}',this)">${f==='all'?'All':f[0].toUpperCase()+f.slice(1)}</button>`
   ).join('');
@@ -182,12 +182,12 @@ function refreshDashPatients() {
   });
   el.innerHTML = ids.map(id => {
     const d = patientData[id];
-    return `<div class="ptr" onclick="openPt('${id}')">
+    return `<div class="ptr" onclick="openPt('${id}', null, 'dash')">
       <div class="pp"><div class="pav ${d.risk}">${d.init}</div>
         <div><div class="pn">${d.name}</div><div class="pc">${d.conditions.slice(0,2).join(' · ')}</div></div></div>
       <div><span class="rb ${d.risk}">${d.rl}</span></div>
       <div class="pvit" id="dashvit-${id}">${_dashVitCell(id)}</div>
-      <button class="vbtn" onclick="openPt('${id}');event.stopPropagation()">View Twin</button>
+      <button class="vbtn" onclick="openPt('${id}', null, 'dash');event.stopPropagation()">Open →</button>
     </div>`;
   }).join('');
 }
@@ -300,5 +300,5 @@ function renderQuickView(ptId) {
           <div class="qv-ftxt">${f.txt}</div>
         </div>`).join('')}
     </div>
-    <button class="btn btnp qv-open-btn" onclick="closeQuickView();openPt('${ptId}')">Open Full Profile →</button>`;
+    <button class="btn btnp qv-open-btn" onclick="closeQuickView();openPt('${ptId}', null, 'patients')">Open Full Profile →</button>`;
 }

@@ -1,0 +1,6 @@
+Lab Reports/
+__pycache__/
+apis/
+venv/
+static/
+.claude/

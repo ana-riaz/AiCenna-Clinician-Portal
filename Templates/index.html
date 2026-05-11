@@ -27,20 +27,39 @@
     </div>
     <nav class="nav">
       <div class="nav-section"><span class="nav-label">Overview</span></div>
-      <div class="nav-item active" onclick="showDash()">
-        <span class="nav-icon">⊞</span><span class="nav-label"> Dashboard</span>
+      <div class="nav-item" data-nav="dash" title="Dashboard" onclick="showDash()">
+        <span class="nav-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
       </div>
-        <div class="nav-item active" onclick="navPatients()">
-        <span class="nav-icon">⊞</span><span class="nav-label"> My Patients </span>
+      <div class="nav-item" data-nav="patients" title="My Patients" onclick="navPatients()">
+        <span class="nav-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </span>
+        <span class="nav-label">My Patients</span>
       </div>
-
-      <div class="nav-item" onclick="navAlerts()">
-        <span class="nav-icon">🔔</span><span class="nav-label"> Active Alerts</span>
+      <div class="nav-item" data-nav="alerts" title="Active Alerts" onclick="navAlerts()">
+        <span class="nav-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+          </svg>
+        </span>
+        <span class="nav-label">Active Alerts</span>
         <span class="badge b nav-label" id="nav-al-badge" style="display:none">0</span>
       </div>
       <div class="nav-section"><span class="nav-label">Records</span></div>
-      <div class="nav-item" onclick="navLabs()">
-        <span class="nav-icon">🧪</span><span class="nav-label"> Lab Reports</span>
+      <div class="nav-item" data-nav="labs" title="Lab Reports" onclick="navLabs()">
+        <span class="nav-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2h12"/><path d="M6 2v8L2 18a2 2 0 001.8 3h16.4A2 2 0 0022 18l-4-8V2"/>
+          </svg>
+        </span>
+        <span class="nav-label">Lab Reports</span>
         <span class="badge nav-label">1</span>
       </div>
     </nav>
@@ -60,10 +79,17 @@
       <div class="header-back" id="headerBack" onclick="ptBack()" style="display:none;">← Back</div>
       <div class="header-title" id="htitle">Dashboard</div>
       <div class="search">
-        <span class="search-icon">⌕</span>
+        <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
         <input type="text" placeholder="Search patients…" oninput="onSearch(this.value)"/>
       </div>
-      <div class="icon-btn" onclick="toggleNotif()">🔔<div class="ndot"></div></div>
+      <div class="icon-btn" onclick="toggleNotif()" title="Notifications">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+        </svg>
+        <div class="ndot"></div>
+      </div>
 
       <!-- NOTIFICATION DROPDOWN -->
       <div class="ndrop" id="ndrop">
@@ -77,10 +103,38 @@
       <!-- DASHBOARD VIEW -->
       <div class="dash" id="dashView">
         <div class="stats">
-          <div class="scard c1"><div class="sl">Total Patients</div><div class="sv">10</div><div class="ss"><span class="up">MVP stage</span></div></div>
-          <div class="scard c2"><div class="sl">Summaries Pending</div><div class="sv">2</div><div class="ss">Awaiting verification</div></div>
-          <div class="scard c3"><div class="sl">Lab Reports</div><div class="sv">1</div><div class="ss"><span class="dn">1 flagged value</span></div></div>
-          <div class="scard c4"><div class="sl">Active Alerts</div><div class="sv">2</div><div class="ss"><span class="dn">Needs attention</span></div></div>
+          <div class="scard c1" onclick="navPatients()">
+            <div class="scard-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+            </div>
+            <div class="sl">Total Patients</div><div class="sv">10</div><div class="ss"><span class="up">All monitored</span></div>
+          </div>
+          <div class="scard c2" onclick="navSummaries()">
+            <div class="scard-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div class="sl">Summaries Pending</div><div class="sv">2</div><div class="ss">Awaiting verification</div>
+          </div>
+          <div class="scard c3" onclick="navLabs()">
+            <div class="scard-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2h12"/><path d="M6 2v8L2 18a2 2 0 001.8 3h16.4A2 2 0 0022 18l-4-8V2"/>
+              </svg>
+            </div>
+            <div class="sl">Lab Reports</div><div class="sv">1</div><div class="ss"><span class="dn">1 flagged value</span></div>
+          </div>
+          <div class="scard c4" onclick="navAlerts()">
+            <div class="scard-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+              </svg>
+            </div>
+            <div class="sl">Active Alerts</div><div class="sv">2</div><div class="ss"><span class="dn">Needs attention</span></div>
+          </div>
         </div>
 
         <div class="panel">
@@ -116,7 +170,7 @@
             </div>
             <div class="pa" onclick="navPatients()">View all →</div>
           </div>
-          <div class="pth"><span>Patient</span><span>Risk</span><span>Last Vital</span><span></span></div>
+          <div class="pth"><span>Patient</span><span>Risk</span><span>Last Vital</span><span>Action</span></div>
           <div id="dash-pts-body"></div>
         </div>
       </div>
