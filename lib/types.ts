@@ -119,6 +119,7 @@ export interface Patient {
   lifestyle: HistoryRecord[];
   femaleSpecific: HistoryRecord[] | null;
   medicationDetail: MedicationDetail;
+  prescriptions: Prescription[];
 }
 
 // Alert types
@@ -138,9 +139,31 @@ export interface Alert {
   panel: boolean;
 }
 
+// Prescription types
+export interface PrescriptionItem {
+  type: "medication" | "lab" | "referral";
+  name: string;
+  dosage?: string;
+  duration?: string;
+  instructions?: string;
+  status: "pending" | "filled" | "ordered" | "completed" | "cancelled";
+}
+
+export interface Prescription {
+  id: string;
+  date: string;
+  doctor: string;
+  specialty: string;
+  clinic: string;
+  source: "upload" | "sync";
+  status: "active" | "completed" | "expired";
+  items: PrescriptionItem[];
+  notes?: string;
+}
+
 // View types
 export type ViewType = "dash" | "patients" | "summaries" | "labs" | "alerts";
-export type PatientTab = "ov" | "twin" | "labs" | "hist" | "meds";
+export type PatientTab = "ov" | "twin" | "labs" | "hist" | "meds" | "rx";
 
 // Filter types
 export type RiskFilter = "all" | "critical" | "high" | "medium" | "low";

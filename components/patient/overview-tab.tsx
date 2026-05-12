@@ -82,13 +82,15 @@ export function OverviewTab({ patientId }: OverviewTabProps) {
       {/* Main Grid: Twin + Vitals */}
       <div className="grid grid-cols-[315px_1fr] gap-3.5 items-stretch">
         {/* Digital Twin */}
-        <div className="flex flex-col items-center px-4">
-          <div className="text-[10px] font-bold text-dim uppercase tracking-widest mb-1 text-center flex-shrink-0">
+        <div className="flex flex-col items-center px-4 -mt-3">
+          <br></br>
+          <div className="text-[10px] font-bold text-dim uppercase tracking-widest mb-0 text-center flex-shrink-0">
             Digital Twin
           </div>
+          <br></br>
           <div
             onClick={() => switchTab("twin")}
-            className="flex-1 min-h-0 overflow-hidden flex items-center justify-center cursor-pointer transition-opacity hover:opacity-85"
+            className="flex-1 min-h-0 overflow-hidden flex items-start justify-center cursor-pointer transition-opacity hover:opacity-85"
             title="Open Digital Twin view"
           >
             <DigitalTwinSvg patientId={patientId} className="h-full max-h-[400px] w-auto" />

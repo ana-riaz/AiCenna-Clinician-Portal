@@ -176,6 +176,42 @@ export const patientData: Record<string, Patient> = {
         },
       ],
     },
+    prescriptions: [
+      {
+        id: "rx-ahmed-1",
+        date: "May 7, 2026",
+        doctor: "Dr. Sarah Johnson",
+        specialty: "Internal Medicine",
+        clinic: "City Medical Center",
+        source: "sync",
+        status: "active",
+        notes: "SpO2 critically low — urgent cardiology referral. CBC shows thrombocytopenia; haematology follow-up required within 2 weeks.",
+        items: [
+          { type: "medication", name: "Metformin 1000mg", dosage: "Twice daily with meals", duration: "90 days", status: "pending" },
+          { type: "medication", name: "Lisinopril 10mg", dosage: "Once daily morning", duration: "90 days", status: "filled" },
+          { type: "medication", name: "Aspirin 81mg", dosage: "Once daily evening", duration: "90 days", status: "filled" },
+          { type: "lab", name: "CBC with Differential — repeat", instructions: "Fasting · 4 weeks", status: "ordered" },
+          { type: "referral", name: "Cardiology — Dr. Ahmed Raza", instructions: "Urgent · within 7 days", status: "pending" },
+          { type: "referral", name: "Haematology Consult", instructions: "Re: thrombocytopenia + blasts", status: "pending" },
+        ],
+      },
+      {
+        id: "rx-ahmed-2",
+        date: "Mar 15, 2026",
+        doctor: "Dr. Sarah Johnson",
+        specialty: "Internal Medicine",
+        clinic: "City Medical Center",
+        source: "upload",
+        status: "completed",
+        notes: "Routine follow-up. HbA1c improved slightly. Reinforce dietary compliance.",
+        items: [
+          { type: "medication", name: "Metformin 500mg", dosage: "Twice daily", duration: "60 days", status: "filled" },
+          { type: "medication", name: "Aspirin 81mg", dosage: "Once daily", duration: "60 days", status: "filled" },
+          { type: "lab", name: "HbA1c", status: "completed" },
+          { type: "lab", name: "Fasting Blood Glucose", status: "completed" },
+        ],
+      },
+    ],
   },
 
   fatima: {
@@ -317,6 +353,24 @@ export const patientData: Record<string, Patient> = {
         },
       ],
     },
+    prescriptions: [
+      {
+        id: "rx-fatima-1",
+        date: "Apr 22, 2026",
+        doctor: "Dr. Nadia Hussain",
+        specialty: "Endocrinology",
+        clinic: "Wellness Diabetes Clinic",
+        source: "sync",
+        status: "active",
+        notes: "Glucose trending upward post-meal. Metformin dose increased. Sleep quality poor — refer to sleep specialist if no improvement in 4 weeks.",
+        items: [
+          { type: "medication", name: "Metformin 500mg", dosage: "Once daily with dinner", duration: "60 days", status: "filled" },
+          { type: "medication", name: "Pregabalin 75mg", dosage: "Once nightly", duration: "30 days", instructions: "For neuropathic pain", status: "pending" },
+          { type: "lab", name: "HbA1c + Fasting Glucose Panel", instructions: "Fasting · 8 weeks", status: "ordered" },
+          { type: "lab", name: "Vitamin B12", status: "ordered" },
+        ],
+      },
+    ],
   },
 
   sara: {
@@ -444,6 +498,23 @@ export const patientData: Record<string, Patient> = {
       ],
       past: [],
     },
+    prescriptions: [
+      {
+        id: "rx-sara-1",
+        date: "May 2, 2026",
+        doctor: "Dr. Kamran Ali",
+        specialty: "Orthopaedic Surgery",
+        clinic: "National Surgical Hospital",
+        source: "sync",
+        status: "active",
+        notes: "Post-op day 12. Wound healing well. Continue physiotherapy 3×/week. Pain medication to taper off by week 6.",
+        items: [
+          { type: "medication", name: "Ibuprofen 400mg", dosage: "Three times daily after meals", duration: "3 weeks", instructions: "Taper to twice daily after week 2", status: "filled" },
+          { type: "medication", name: "Pantoprazole 40mg", dosage: "Once daily before breakfast", duration: "3 weeks", status: "filled" },
+          { type: "referral", name: "Physiotherapy — Post-op Rehab", instructions: "3 sessions/week for 6 weeks", status: "ordered" },
+        ],
+      },
+    ],
   },
 
   omar: {
@@ -571,6 +642,24 @@ export const patientData: Record<string, Patient> = {
       ],
       past: [],
     },
+    prescriptions: [
+      {
+        id: "rx-omar-1",
+        date: "Apr 10, 2026",
+        doctor: "Dr. Imran Sheikh",
+        specialty: "Cardiology",
+        clinic: "Heart & Vascular Institute",
+        source: "upload",
+        status: "active",
+        notes: "Lipid panel shows elevated LDL. Initiating statin therapy. Lifestyle modification critical — dietary review recommended.",
+        items: [
+          { type: "medication", name: "Atorvastatin 10mg", dosage: "Once daily at bedtime", duration: "90 days", status: "filled" },
+          { type: "lab", name: "Lipid Panel — repeat", instructions: "Fasting · 12 weeks", status: "ordered" },
+          { type: "lab", name: "LFT (Liver Function)", instructions: "Before statin initiation", status: "completed" },
+          { type: "referral", name: "Dietitian / Nutritionist", instructions: "Low-sodium, low-fat diet plan", status: "pending" },
+        ],
+      },
+    ],
   },
 
   khalid: {
@@ -682,6 +771,22 @@ export const patientData: Record<string, Patient> = {
       ],
       past: [],
     },
+    prescriptions: [
+      {
+        id: "rx-khalid-1",
+        date: "Mar 28, 2026",
+        doctor: "Dr. Zara Qureshi",
+        specialty: "Psychiatry",
+        clinic: "Mind Health Clinic",
+        source: "sync",
+        status: "active",
+        notes: "Mild GAD, well-controlled. Sertraline at lowest therapeutic dose. CBT sessions ongoing. Review in 3 months.",
+        items: [
+          { type: "medication", name: "Sertraline 25mg", dosage: "Once daily morning", duration: "90 days", instructions: "Take with food", status: "filled" },
+          { type: "referral", name: "CBT Therapist — ongoing", instructions: "Bi-weekly sessions", status: "ordered" },
+        ],
+      },
+    ],
   },
 };
 

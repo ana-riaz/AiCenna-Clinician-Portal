@@ -36,7 +36,7 @@ export function DigitalTwinSvg({ patientId, className }: DigitalTwinSvgProps) {
   return (
     <svg
       className={cn(className)}
-      viewBox="0 0 200 420"
+      viewBox="0 12 200 420"
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>

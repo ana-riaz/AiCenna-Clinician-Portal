@@ -9,6 +9,7 @@ import { DigitalTwinTab } from "@/components/patient/digital-twin-tab";
 import { LabsTab } from "@/components/patient/labs-tab";
 import { HistoryTab } from "@/components/patient/history-tab";
 import { MedicationsTab } from "@/components/patient/medications-tab";
+import { PrescriptionsTab } from "@/components/patient/prescriptions-tab";
 
 interface PatientViewProps {
   patientId: string;
@@ -20,6 +21,7 @@ const tabs: { key: PatientTab; label: string }[] = [
   { key: "labs", label: "Lab Reports" },
   { key: "hist", label: "History" },
   { key: "meds", label: "Medications" },
+  { key: "rx", label: "Prescriptions" },
 ];
 
 export function PatientView({ patientId }: PatientViewProps) {
@@ -114,6 +116,7 @@ export function PatientView({ patientId }: PatientViewProps) {
         {currentTab === "labs" && <LabsTab patientId={patientId} />}
         {currentTab === "hist" && <HistoryTab patientId={patientId} />}
         {currentTab === "meds" && <MedicationsTab patientId={patientId} />}
+        {currentTab === "rx" && <PrescriptionsTab patientId={patientId} />}
       </div>
     </div>
   );
