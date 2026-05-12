@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #F8FAFF;
+  --muted: rgba(226,232,255,0.72);
+  --dim: rgba(203,213,255,0.54);
+  --navy: #081225;
+  --indigo: #162055;
+  --violet: #8B5CF6;
+  --blue: #38BDF8;
+  --cyan: #4DE8FF;
+  --rose: #F472B6;
+  --success: #5EEAD4;
+  --warning: #FBBF24;
+  --danger: #FB7185;
+
+  /* RGB channel values for Tailwind opacity modifiers (bg-danger/15, etc.) */
+  --danger-ch: 251 113 133;
+  --warning-ch: 251 191 36;
+  --success-ch: 94 234 212;
+  --violet-ch: 139 92 246;
+  --glass: rgba(255,255,255,0.104);
+  --glass-strong: rgba(255,255,255,0.16);
+  --glass-border: rgba(255,255,255,0.22);
+  --field: rgba(255,255,255,0.13);
+  --field-border: rgba(226,232,255,0.24);
+  --sidebar-w: 230px;
+  --header-h: 58px;
+
+  --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-jakarta);
+  background: #07111F;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #07111F 0%, #151C4F 50%, #231344 100%);
+  z-index: -2;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(56,189,248,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.08) 0%, transparent 60%);
+  z-index: -1;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-strong);
+  border-radius: 2px;
+}
+
+/* Custom animations */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.65); }
+}
+
+@keyframes ring-in {
+  from { stroke-dasharray: 0 87.96; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* Glass card styling */
+.glass-card {
+  @apply bg-glass border border-glass-border rounded-[18px] backdrop-blur-[10px];
+}
+
+/* Risk badge colors */
+.risk-critical { background-color: rgba(251,113,133,0.15); color: #FB7185; }
+.risk-high     { background-color: rgba(251,191,36,0.15);  color: #FBBF24; }
+.risk-medium   { background-color: rgba(139,92,246,0.15);  color: #8B5CF6; }
+.risk-low      { background-color: rgba(94,234,212,0.12);  color: #5EEAD4; }
+
+/* Avatar risk colors */
+.avatar-critical { background-color: rgba(251,113,133,0.20); color: #FB7185; }
+.avatar-high     { background-color: rgba(251,191,36,0.20);  color: #FBBF24; }
+.avatar-medium   { background-color: rgba(139,92,246,0.20);  color: #8B5CF6; }
+.avatar-low      { background-color: rgba(94,234,212,0.20);  color: #5EEAD4; }
+
+/* Tag colors */
+.tag-condition { background-color: rgba(251,113,133,0.15); color: #FB7185; }
+.tag-medication { background-color: rgba(56,189,248,0.12); color: #38BDF8; }
+.tag-allergy   { background-color: rgba(251,191,36,0.12);  color: #FBBF24; }
+.tag-family    { background-color: rgba(139,92,246,0.12);  color: #8B5CF6; }
+.tag-ok        { background-color: rgba(94,234,212,0.12);  color: #5EEAD4; }
+
+/* Vital trend colors */
+.trend-normal   { color: #5EEAD4; }
+.trend-elevated { color: #FBBF24; }
+.trend-critical { color: #FB7185; }
+
+/* Flag badge colors */
+.flag-normal   { background-color: rgba(94,234,212,0.08);  color: #5EEAD4; }
+.flag-high     { background-color: rgba(251,191,36,0.15);  color: #FBBF24; }
+.flag-critical { background-color: rgba(251,113,133,0.15); color: #FB7185; }
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #38BDF8, #8B5CF6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn-danger {
+  background-color: rgba(251,113,133,0.15);
+  color: #FB7185;
+  border: 1px solid rgba(251,113,133,0.25);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn-ghost {
+  @apply bg-glass-strong text-muted border border-glass-border px-4 py-2 rounded-[10px] font-semibold text-sm;
+}
