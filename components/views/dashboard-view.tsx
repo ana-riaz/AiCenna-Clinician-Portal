@@ -27,6 +27,15 @@ export function DashboardView() {
   const patients = getAllPatients();
   const summariesPending = alerts.filter((a) => a.type === "summary" && !a.read).length;
   const activeAlerts = alerts.filter((a) => !a.read && a.panel).length;
+  const labFlaggedCount = patients.filter((p) => {
+    const byName = new Map<string, (typeof p.labs)[0]>();
+    for (const lab of p.labs) {
+      const d = new Date(lab.date.split("·")[0].trim());
+      const prev = byName.get(lab.name);
+      if (!prev || d > new Date(prev.date.split("·")[0].trim())) byName.set(lab.name, lab);
+    }
+    return Array.from(byName.values()).some((lab) => lab.rows.some((r) => r.flag === "CRITICAL"));
+  }).length;
 
   // Filter and sort patients
   const filteredPatients = patients
@@ -101,9 +110,13 @@ export function DashboardView() {
           <div className="text-[10px] text-muted font-semibold mb-2 uppercase tracking-wide">
             Lab Reports
           </div>
-          <div className="text-2xl font-extrabold tracking-tight">1</div>
+          <div className="text-2xl font-extrabold tracking-tight">{labFlaggedCount}</div>
           <div className="text-[10px] text-dim mt-1">
-            <span className="text-danger">1 flagged value</span>
+            <span className={labFlaggedCount > 0 ? "text-danger" : "text-success"}>
+              {labFlaggedCount > 0
+                ? `${labFlaggedCount} patient${labFlaggedCount !== 1 ? "s" : ""} flagged`
+                : "All clear"}
+            </span>
           </div>
         </button>
 

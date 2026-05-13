@@ -2,217 +2,235 @@
 
 import { useState } from "react";
 import { useApp } from "@/lib/context/app-context";
-import { cn, formatRelativeTime } from "@/lib/utils";
+import { patientData } from "@/lib/data/patients";
+import { Alert, AlertCaseStatus } from "@/lib/types";
+import { cn, formatRelativeTime, getAvatarClass, getRiskClass } from "@/lib/utils";
 import {
-  AlertTriangle,
   AlertCircle,
-  FileText,
-  FlaskConical,
-  Check,
-  CheckCheck,
-  Trash2,
+  AlertTriangle,
+  CheckCircle2,
   ChevronDown,
+  ClipboardList,
+  FileText,
+  Stethoscope,
+  X,
 } from "lucide-react";
-import { Alert } from "@/lib/types";
 
-type AlertFilter = "all" | "critical" | "warning" | "unread";
+type AlertFilter = "all" | "critical" | "warning" | "action";
 type AlertGroup = "severity" | "patient";
 
-function getAlertIcon(alert: Alert) {
-  if (alert.type === "summary") return <FileText size={12} />;
-  if (alert.type === "lab") return <FlaskConical size={12} />;
-  if (alert.severity === "critical") return <AlertTriangle size={12} />;
-  return <AlertCircle size={12} />;
+interface ActiveAlert {
+  alert: Alert;
+  status?: AlertCaseStatus;
+  note?: string;
 }
 
-function getAlertIconClass(alert: Alert) {
-  if (alert.type === "summary") return "bg-success/12 text-success";
-  if (alert.type === "lab") return "bg-[#38bdf8]/12 text-[#38bdf8]";
-  if (alert.severity === "critical") return "bg-danger/12 text-danger";
-  return "bg-warning/12 text-warning";
+interface NoteFlow {
+  alert: Alert;
+  status: AlertCaseStatus;
 }
 
 function getIndicatorClass(alert: Alert) {
-  if (alert.severity === "critical") return "bg-danger";
-  if (alert.severity === "warning") return "bg-warning";
-  return "bg-success";
+  return alert.severity === "critical" ? "bg-danger" : "bg-warning";
+}
+
+function getIconClass(alert: Alert) {
+  return alert.severity === "critical"
+    ? "bg-danger/12 text-danger"
+    : "bg-warning/12 text-warning";
+}
+
+function getFilteredAlerts(alerts: ActiveAlert[], filter: AlertFilter) {
+  if (filter === "critical") return alerts.filter((item) => item.alert.severity === "critical");
+  if (filter === "warning") return alerts.filter((item) => item.alert.severity === "warning");
+  if (filter === "action") return alerts.filter((item) => item.status === "action");
+  return alerts;
 }
 
 export function AlertsView() {
-  const { alerts, markAlertRead, markAllAlertsRead, clearAlerts, handleAlertClick } = useApp();
+  const { alerts, alertCaseUpdates, handleAlertClick, updateAlertCase } = useApp();
   const [filter, setFilter] = useState<AlertFilter>("all");
   const [groupBy, setGroupBy] = useState<AlertGroup>("severity");
   const [filterOpen, setFilterOpen] = useState(false);
   const [groupOpen, setGroupOpen] = useState(false);
+  const [noteFlow, setNoteFlow] = useState<NoteFlow | null>(null);
+  const [note, setNote] = useState("");
 
-  // Filter panel alerts only
-  const panelAlerts = alerts.filter((a) => a.panel);
+  const activeAlerts: ActiveAlert[] = alerts
+    .filter(
+      (alert) =>
+        alert.panel &&
+        alert.type === "vital" &&
+        alertCaseUpdates[alert.id]?.status !== "resolved"
+    )
+    .map((alert) => ({
+      alert,
+      status: alertCaseUpdates[alert.id]?.status,
+      note: alertCaseUpdates[alert.id]?.note,
+    }));
 
-  const criticalAlerts = panelAlerts.filter((a) => a.severity === "critical");
-  const warningAlerts = panelAlerts.filter((a) => a.severity === "warning");
-  const unreadCount = panelAlerts.filter((a) => !a.read).length;
-  const totalAlerts = panelAlerts.length;
+  const visibleAlerts = getFilteredAlerts(activeAlerts, filter);
+  const criticalCount = activeAlerts.filter((item) => item.alert.severity === "critical").length;
+  const warningCount = activeAlerts.filter((item) => item.alert.severity === "warning").length;
+  const actionCount = activeAlerts.filter((item) => item.status === "action").length;
 
-  // Filter alerts based on current filter
-  const getFilteredAlerts = (alertsToFilter: Alert[]) => {
-    switch (filter) {
-      case "critical":
-        return alertsToFilter.filter((a) => a.severity === "critical");
-      case "warning":
-        return alertsToFilter.filter((a) => a.severity === "warning");
-      case "unread":
-        return alertsToFilter.filter((a) => !a.read);
-      default:
-        return alertsToFilter;
-    }
+  const openNoteFlow = (alert: Alert, status: AlertCaseStatus) => {
+    setNoteFlow({ alert, status });
+    setNote(alertCaseUpdates[alert.id]?.note || "");
   };
 
-  const renderAlertRow = (alert: Alert) => (
-    <button
-      key={alert.id}
-      onClick={() => handleAlertClick(alert)}
-      className={cn(
-        "relative w-full text-left p-2.5 pl-3.5 border-b border-[rgba(255,255,255,0.05)] cursor-pointer transition-all flex gap-2.5 hover:bg-[rgba(255,255,255,0.03)]",
-        !alert.read && "bg-gradient-to-r from-[rgba(56,189,248,0.04)] to-transparent"
-      )}
-    >
-      {/* Indicator */}
-      <div className={cn("absolute left-0 top-0 bottom-0 w-0.5 rounded-r-sm opacity-90", getIndicatorClass(alert))} />
+  const closeNoteFlow = () => {
+    setNoteFlow(null);
+    setNote("");
+  };
 
-      {/* Icon */}
-      <div className={cn("w-7 h-7 rounded-[7px] flex items-center justify-center flex-shrink-0", getAlertIconClass(alert))}>
-        {getAlertIcon(alert)}
-      </div>
+  const submitNote = () => {
+    if (!noteFlow || !note.trim()) return;
+    updateAlertCase(noteFlow.alert.id, noteFlow.status, note.trim());
+    closeNoteFlow();
+  };
 
-      {/* Body */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          <span
-            className={cn(
-              "text-[8px] font-bold uppercase tracking-wide py-0.5 px-1.5 rounded-sm",
-              alert.severity === "critical" && "bg-danger/15 text-danger",
-              alert.severity === "warning" && "bg-warning/15 text-warning",
-              alert.severity === "info" && "bg-success/12 text-success"
-            )}
+  const renderAlertRow = ({ alert, status, note: savedNote }: ActiveAlert) => {
+    const patient = patientData[alert.patId];
+
+    return (
+      <div
+        key={alert.id}
+        className={cn(
+          "relative p-3 pl-4 border-b border-[rgba(255,255,255,0.05)] last:border-b-0 hover:bg-[rgba(255,255,255,0.025)] transition-all",
+          status === "action" && "bg-gradient-to-r from-warning/5 to-transparent"
+        )}
+      >
+        <div className={cn("absolute left-0 top-0 bottom-0 w-0.5 rounded-r-sm opacity-90", getIndicatorClass(alert))} />
+
+        <div className="grid grid-cols-[minmax(220px,1.3fr)_minmax(170px,0.8fr)_220px] gap-3 items-start">
+          <button
+            onClick={() => handleAlertClick(alert)}
+            className="text-left flex items-start gap-2.5 min-w-0"
           >
-            {alert.severity}
-          </span>
-          <span className="text-[9px] text-dim font-medium">{formatRelativeTime(alert.time)}</span>
-        </div>
-        <div className="text-[11px] font-semibold mb-0.5 text-ink leading-tight">{alert.title}</div>
-        <div className="text-[10px] text-muted leading-snug">{alert.body}</div>
-      </div>
+            <div className={cn("w-8 h-8 rounded-[8px] flex items-center justify-center flex-shrink-0", getIconClass(alert))}>
+              {alert.severity === "critical" ? <AlertTriangle size={14} /> : <AlertCircle size={14} />}
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                <span
+                  className={cn(
+                    "text-[8px] font-bold uppercase tracking-wide py-0.5 px-1.5 rounded-sm",
+                    alert.severity === "critical" ? "bg-danger/15 text-danger" : "bg-warning/15 text-warning"
+                  )}
+                >
+                  {alert.severity}
+                </span>
+                {status === "action" && (
+                  <span className="text-[8px] font-bold uppercase tracking-wide py-0.5 px-1.5 rounded-sm bg-warning/15 text-warning">
+                    Action
+                  </span>
+                )}
+                <span className="text-[9px] text-dim font-medium">{formatRelativeTime(alert.time)}</span>
+              </div>
+              <div className="text-[11px] font-semibold text-ink leading-tight">{alert.title}</div>
+              <div className="text-[10px] text-muted leading-snug mt-0.5">{alert.body}</div>
+              {savedNote && (
+                <div className="mt-2 flex gap-1.5 text-[10px] text-muted leading-snug bg-white/[0.03] border border-white/[0.06] rounded-lg px-2.5 py-2">
+                  <FileText size={11} className="text-[#38bdf8] mt-0.5 flex-shrink-0" />
+                  <span>{savedNote}</span>
+                </div>
+              )}
+            </div>
+          </button>
 
-      {/* Side */}
-      <div className="flex flex-col items-center gap-1 flex-shrink-0 pt-0.5">
-        {!alert.read && <div className="w-1.5 h-1.5 bg-[#38bdf8] rounded-full flex-shrink-0" />}
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            markAlertRead(alert.id);
-          }}
-          className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-dim cursor-pointer p-1 rounded hover:bg-[rgba(16,185,129,0.15)] hover:border-[rgba(16,185,129,0.25)] hover:text-success transition-all"
-          title="Mark read"
-        >
-          <Check size={10} />
+          <div className="flex items-center gap-2 min-w-0">
+            {patient && (
+              <>
+                <div
+                  className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0",
+                    getAvatarClass(patient.risk)
+                  )}
+                >
+                  {patient.init}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11px] font-bold text-ink truncate">{patient.name}</div>
+                  <span
+                    className={cn(
+                      "inline-block mt-1 py-0.5 px-2 rounded-full text-[8px] font-bold tracking-wide",
+                      getRiskClass(patient.risk)
+                    )}
+                  >
+                    {patient.rl}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end gap-2">
+            <button
+              onClick={() => openNoteFlow(alert, "action")}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-warning/15 text-warning border border-warning/25 hover:bg-warning/25 transition-all"
+            >
+              <Stethoscope size={12} />
+              Take Action
+            </button>
+            <button
+              onClick={() => openNoteFlow(alert, "resolved")}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-success/15 text-success border border-success/25 hover:bg-success/25 transition-all"
+            >
+              <CheckCircle2 size={12} />
+              Resolve
+            </button>
+          </div>
         </div>
       </div>
-    </button>
+    );
+  };
+
+  const renderEmpty = () => (
+    <div className="text-center text-dim text-sm py-16 bg-[rgba(255,255,255,0.02)] border border-dashed border-[rgba(255,255,255,0.1)] rounded-[14px]">
+      No vital alerts match this filter
+    </div>
   );
 
   return (
     <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
-      {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="text-base font-semibold tracking-tight text-ink mb-0.5">Alert Center</h1>
+          <h1 className="text-base font-semibold tracking-tight text-ink mb-0.5">Active Vital Alerts</h1>
           <p className="text-[11px] text-muted">
-            {totalAlerts} active alert{totalAlerts !== 1 ? "s" : ""} requiring attention
+            Vitals only. Resolved alerts leave this queue; actioned alerts remain until resolved.
           </p>
-        </div>
-        <div className="flex gap-1.5">
-          <button
-            onClick={markAllAlertsRead}
-            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-md text-[10px] font-semibold cursor-pointer border border-transparent bg-[rgba(255,255,255,0.06)] text-muted hover:bg-[rgba(255,255,255,0.1)] hover:text-ink transition-all"
-          >
-            <CheckCheck size={14} />
-            <span>Mark all read</span>
-          </button>
-          <button
-            onClick={clearAlerts}
-            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-md text-[10px] font-semibold cursor-pointer border border-transparent bg-[rgba(255,255,255,0.06)] text-muted hover:bg-[rgba(255,255,255,0.1)] hover:text-ink transition-all"
-          >
-            <Trash2 size={14} />
-            <span>Clear all</span>
-          </button>
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-2.5 mb-3">
-        <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-danger hover:bg-[rgba(255,255,255,0.06)] transition-all">
+        <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-danger">
           <div className="flex items-center justify-center w-7 h-7 rounded-[7px] bg-danger/12 text-danger mb-2">
             <AlertTriangle size={14} />
           </div>
-          <div className="font-mono text-xl font-bold text-danger leading-none">
-            {criticalAlerts.filter((a) => !a.read).length}
-          </div>
-          <div className="text-[9px] text-muted font-medium uppercase tracking-wide mt-0.5">
-            Critical Alerts
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[rgba(255,255,255,0.06)]">
-            <div
-              className="h-full bg-gradient-to-r from-danger to-danger/70"
-              style={{
-                width: totalAlerts
-                  ? `${(criticalAlerts.filter((a) => !a.read).length / totalAlerts) * 100}%`
-                  : "0%",
-              }}
-            />
-          </div>
+          <div className="font-mono text-xl font-bold text-danger leading-none">{criticalCount}</div>
+          <div className="text-[9px] text-muted font-medium uppercase tracking-wide mt-0.5">Critical Vitals</div>
         </div>
 
-        <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-warning hover:bg-[rgba(255,255,255,0.06)] transition-all">
+        <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-warning">
           <div className="flex items-center justify-center w-7 h-7 rounded-[7px] bg-warning/12 text-warning mb-2">
             <AlertCircle size={14} />
           </div>
-          <div className="font-mono text-xl font-bold text-warning leading-none">
-            {warningAlerts.filter((a) => !a.read).length}
-          </div>
+          <div className="font-mono text-xl font-bold text-warning leading-none">{warningCount}</div>
           <div className="text-[9px] text-muted font-medium uppercase tracking-wide mt-0.5">Warnings</div>
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[rgba(255,255,255,0.06)]">
-            <div
-              className="h-full bg-gradient-to-r from-warning to-warning/70"
-              style={{
-                width: totalAlerts
-                  ? `${(warningAlerts.filter((a) => !a.read).length / totalAlerts) * 100}%`
-                  : "0%",
-              }}
-            />
-          </div>
         </div>
 
-        <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-[#38bdf8] hover:bg-[rgba(255,255,255,0.06)] transition-all">
+        <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-[#38bdf8]">
           <div className="flex items-center justify-center w-7 h-7 rounded-[7px] bg-[#38bdf8]/12 text-[#38bdf8] mb-2">
-            <FileText size={14} />
+            <Stethoscope size={14} />
           </div>
-          <div className="font-mono text-xl font-bold text-[#38bdf8] leading-none">{unreadCount}</div>
-          <div className="text-[9px] text-muted font-medium uppercase tracking-wide mt-0.5">Unread</div>
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[rgba(255,255,255,0.06)]">
-            <div
-              className="h-full bg-gradient-to-r from-[#0ea5e9] to-[#38bdf8]"
-              style={{
-                width: totalAlerts ? `${(unreadCount / totalAlerts) * 100}%` : "0%",
-              }}
-            />
-          </div>
+          <div className="font-mono text-xl font-bold text-[#38bdf8] leading-none">{actionCount}</div>
+          <div className="text-[9px] text-muted font-medium uppercase tracking-wide mt-0.5">In Action</div>
         </div>
       </div>
 
-      {/* Toolbar */}
       <div className="flex items-center justify-between p-2 px-3 bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] rounded-lg">
         <div className="flex gap-1.5">
-          {/* Filter Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
@@ -227,26 +245,25 @@ export function AlertsView() {
             </button>
             {filterOpen && (
               <div className="absolute top-full mt-1 left-0 bg-[rgba(8,18,37,0.98)] border border-glass-border rounded-lg py-1 z-50 min-w-[120px]">
-                {(["all", "critical", "warning", "unread"] as AlertFilter[]).map((f) => (
+                {(["all", "critical", "warning", "action"] as AlertFilter[]).map((item) => (
                   <button
-                    key={f}
+                    key={item}
                     onClick={() => {
-                      setFilter(f);
+                      setFilter(item);
                       setFilterOpen(false);
                     }}
                     className={cn(
                       "w-full px-3 py-1.5 text-left text-xs hover:bg-glass transition-colors capitalize",
-                      filter === f && "text-[#38bdf8] bg-[rgba(56,189,248,0.1)]"
+                      filter === item && "text-[#38bdf8] bg-[rgba(56,189,248,0.1)]"
                     )}
                   >
-                    {f}
+                    {item}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Group Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
@@ -261,19 +278,19 @@ export function AlertsView() {
             </button>
             {groupOpen && (
               <div className="absolute top-full mt-1 left-0 bg-[rgba(8,18,37,0.98)] border border-glass-border rounded-lg py-1 z-50 min-w-[120px]">
-                {(["severity", "patient"] as AlertGroup[]).map((g) => (
+                {(["severity", "patient"] as AlertGroup[]).map((item) => (
                   <button
-                    key={g}
+                    key={item}
                     onClick={() => {
-                      setGroupBy(g);
+                      setGroupBy(item);
                       setGroupOpen(false);
                     }}
                     className={cn(
                       "w-full px-3 py-1.5 text-left text-xs hover:bg-glass transition-colors capitalize",
-                      groupBy === g && "text-[#38bdf8] bg-[rgba(56,189,248,0.1)]"
+                      groupBy === item && "text-[#38bdf8] bg-[rgba(56,189,248,0.1)]"
                     )}
                   >
-                    {g}
+                    {item}
                   </button>
                 ))}
               </div>
@@ -282,86 +299,120 @@ export function AlertsView() {
         </div>
       </div>
 
-      {/* Alerts List */}
       {groupBy === "severity" ? (
         <div className="flex flex-col gap-2.5">
-          {(() => {
-            const groups: { label: string; severity: string; items: Alert[] }[] = [
-              { label: "Critical", severity: "critical", items: criticalAlerts },
-              { label: "Warning",  severity: "warning",  items: warningAlerts  },
-            ];
-            let hasAny = false;
-            const rendered = groups.map(({ label, severity, items }) => {
-              if (filter === "critical" && severity !== "critical") return null;
-              if (filter === "warning"  && severity !== "warning")  return null;
-              const visible = getFilteredAlerts(items);
-              if (!visible.length) return null;
-              hasAny = true;
-              return (
-                <div key={severity}>
-                  <div className="flex items-center gap-2 mb-1.5 px-0.5">
-                    <span
-                      className={cn(
-                        "text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded",
-                        severity === "critical"
-                          ? "bg-danger/15 text-danger"
-                          : "bg-warning/15 text-warning"
-                      )}
-                    >
-                      {label}
-                    </span>
-                    <span className="text-[9px] text-dim">{visible.length} alert{visible.length !== 1 ? "s" : ""}</span>
-                  </div>
-                  <div className="glass-card overflow-hidden">
-                    {visible.map(renderAlertRow)}
-                  </div>
+          {(["critical", "warning"] as const).map((severity) => {
+            const items = visibleAlerts.filter((item) => item.alert.severity === severity);
+            if (!items.length) return null;
+            return (
+              <div key={severity}>
+                <div className="flex items-center gap-2 mb-1.5 px-0.5">
+                  <span
+                    className={cn(
+                      "text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded",
+                      severity === "critical" ? "bg-danger/15 text-danger" : "bg-warning/15 text-warning"
+                    )}
+                  >
+                    {severity}
+                  </span>
+                  <span className="text-[9px] text-dim">{items.length} alert{items.length !== 1 ? "s" : ""}</span>
                 </div>
-              );
-            });
-            if (!hasAny) return (
-              <div className="text-center text-dim text-sm py-16 bg-[rgba(255,255,255,0.02)] border border-dashed border-[rgba(255,255,255,0.1)] rounded-[14px]">
-                No alerts match this filter
+                <div className="glass-card overflow-hidden">{items.map(renderAlertRow)}</div>
               </div>
             );
-            return rendered;
-          })()}
+          })}
+          {visibleAlerts.length === 0 && renderEmpty()}
         </div>
       ) : (
-        // Group by patient
         <div className="flex flex-col gap-2.5">
-          {(() => {
-            const byPatient: Record<string, Alert[]> = {};
-            getFilteredAlerts(panelAlerts.filter((a) => a.severity !== "info")).forEach((a) => {
-              if (!byPatient[a.patId]) byPatient[a.patId] = [];
-              byPatient[a.patId].push(a);
-            });
-            const entries = Object.entries(byPatient);
-            if (!entries.length) return (
-              <div className="text-center text-dim text-sm py-16 bg-[rgba(255,255,255,0.02)] border border-dashed border-[rgba(255,255,255,0.1)] rounded-[14px]">
-                No alerts match this filter
+          {Object.entries(
+            visibleAlerts.reduce<Record<string, ActiveAlert[]>>((groups, item) => {
+              if (!groups[item.alert.patId]) groups[item.alert.patId] = [];
+              groups[item.alert.patId].push(item);
+              return groups;
+            }, {})
+          ).map(([patId, items]) => (
+            <div key={patId}>
+              <div className="flex items-center gap-2 mb-1.5 px-0.5">
+                <span className="text-[9px] font-bold uppercase tracking-widest text-dim">
+                  {patientData[patId]?.name || patId}
+                </span>
+                <span className="text-[9px] text-dim">{items.length} alert{items.length !== 1 ? "s" : ""}</span>
               </div>
-            );
-            return entries.map(([patId, patientAlerts]) => (
-              <div key={patId}>
-                <div className="flex items-center gap-2 mb-1.5 px-0.5">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-dim">
-                    {patientAlerts[0]?.title.split("—")[0].trim()}
-                  </span>
-                  <span className="text-[9px] text-dim">{patientAlerts.length} alert{patientAlerts.length !== 1 ? "s" : ""}</span>
-                </div>
-                <div className="glass-card overflow-hidden">
-                  {patientAlerts.map(renderAlertRow)}
-                </div>
-              </div>
-            ));
-          })()}
+              <div className="glass-card overflow-hidden">{items.map(renderAlertRow)}</div>
+            </div>
+          ))}
+          {visibleAlerts.length === 0 && renderEmpty()}
         </div>
       )}
 
-      {/* Empty State — only shown when not in grouped mode (groups handle their own empty state) */}
-      {groupBy !== "severity" && groupBy !== "patient" && getFilteredAlerts(panelAlerts).length === 0 && (
-        <div className="text-center text-dim text-sm py-16 bg-[rgba(255,255,255,0.02)] border border-dashed border-[rgba(255,255,255,0.1)] rounded-[14px]">
-          No alerts match this filter
+      {noteFlow && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeNoteFlow} />
+          <div className="relative w-full max-w-lg glass-card overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.55)]">
+            <div className="flex items-start justify-between gap-3 px-4 py-3 border-b border-glass-border">
+              <div>
+                <div className="text-[12px] font-bold text-ink">
+                  {noteFlow.status === "resolved" ? "Resolve vital alert" : "Take clinical action"}
+                </div>
+                <div className="text-[10px] text-muted mt-0.5">
+                  {noteFlow.alert.title} | {noteFlow.alert.body}
+                </div>
+              </div>
+              <button
+                onClick={closeNoteFlow}
+                className="p-1.5 rounded-lg text-dim hover:text-ink hover:bg-white/10 transition-colors"
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            <div className="p-4 flex flex-col gap-3">
+              <div className="flex items-start gap-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] px-3 py-2.5">
+                <ClipboardList size={14} className="text-[#38bdf8] mt-0.5 flex-shrink-0" />
+                <div className="text-[10px] text-muted leading-relaxed">
+                  Add the clinical note for this vital alert. Resolved alerts leave the queue; actioned alerts remain visible until resolved.
+                </div>
+              </div>
+
+              <textarea
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
+                rows={4}
+                placeholder={
+                  noteFlow.status === "resolved"
+                    ? "Example: Reviewed repeat vitals. Values returned to acceptable range; no further action required."
+                    : "Example: Contacted patient, adjusted monitoring plan, and scheduled follow-up within 48 hours."
+                }
+                className="w-full bg-field border border-field-border rounded-xl px-3 py-2.5 text-[11px] text-ink placeholder:text-dim outline-none focus:border-[#38bdf8] resize-none transition-colors"
+              />
+
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-[9px] text-dim">Note is required to update the alert.</div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={closeNoteFlow}
+                    className="px-3 py-1.5 rounded-lg text-[10px] font-bold bg-glass text-dim hover:text-muted transition-all border border-glass-border"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={submitNote}
+                    disabled={!note.trim()}
+                    className={cn(
+                      "px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all border",
+                      noteFlow.status === "resolved"
+                        ? "bg-success/15 text-success border-success/25 hover:bg-success/25"
+                        : "bg-warning/15 text-warning border-warning/25 hover:bg-warning/25",
+                      !note.trim() && "opacity-45 cursor-not-allowed"
+                    )}
+                  >
+                    {noteFlow.status === "resolved" ? "Save & Resolve" : "Save Action"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

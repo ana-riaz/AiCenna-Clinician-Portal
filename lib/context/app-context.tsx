@@ -1,7 +1,20 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
-import { Alert, ViewType, PatientTab, RiskFilter, SortOption, VitalFilter, VITAL_META, RISK_ORDER } from "@/lib/types";
+import {
+  Alert,
+  AlertCaseStatus,
+  AlertCaseUpdate,
+  LabCaseStatus,
+  LabCaseUpdate,
+  ViewType,
+  PatientTab,
+  RiskFilter,
+  SortOption,
+  VitalFilter,
+  VITAL_META,
+  RISK_ORDER,
+} from "@/lib/types";
 import { patientData, getAllPatients } from "@/lib/data/patients";
 
 interface AppState {
@@ -21,9 +34,13 @@ interface AppState {
 
   // Alerts
   alerts: Alert[];
+  alertCaseUpdates: Record<string, AlertCaseUpdate>;
 
   // Summary verification state
   summaryVerified: Record<string, boolean>;
+
+  // Lab case workflow state
+  labCaseUpdates: Record<string, LabCaseUpdate>;
 }
 
 interface AppContextValue extends AppState {
@@ -32,6 +49,7 @@ interface AppContextValue extends AppState {
   showPatients: () => void;
   showAlerts: () => void;
   showLabs: () => void;
+  showAppointments: () => void;
   openPatient: (id: string, tab?: PatientTab, backTo?: ViewType) => void;
   goBack: () => void;
   switchTab: (tab: PatientTab) => void;
@@ -49,9 +67,13 @@ interface AppContextValue extends AppState {
   markAllAlertsRead: () => void;
   clearAlerts: () => void;
   handleAlertClick: (alert: Alert) => void;
+  updateAlertCase: (alertId: string, status: AlertCaseStatus, note: string) => void;
 
   // Summary
   verifySummary: (patientId: string) => void;
+
+  // Lab cases
+  updateLabCase: (caseId: string, status: LabCaseStatus, note: string) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -106,21 +128,20 @@ function buildInitialAlerts(): Alert[] {
       }
     });
 
-    // Lab alerts
-    let labAlertAdded = false;
+    // Historical lab issues stay in the Lab Reports queue; notification alerts
+    // should only be created when a new report is added.
+    let labAlertAdded = true;
     patient.labs.forEach((lab) => {
       if (labAlertAdded) return;
-      const flaggedRow =
-        lab.rows.find((r) => r.flag === "CRITICAL") ||
-        lab.rows.find((r) => r.flag === "HIGH");
+      const flaggedRow = lab.rows.find((r) => r.flag === "CRITICAL");
       if (flaggedRow) {
         labAlertAdded = true;
         alerts.push({
           id: generateAlertId(),
           patId,
           type: "lab",
-          severity: flaggedRow.flag === "CRITICAL" ? "critical" : "warning",
-          title: `${patient.name.split(" ")[0]} — Lab ${flaggedRow.flag}`,
+          severity: "critical",
+          title: `${patient.name.split(" ")[0]} — Lab Critical`,
           body: `${flaggedRow.test} ${flaggedRow.val} in ${lab.name}`,
           time: now - 18 * 60000,
           read: false,
@@ -161,7 +182,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     sortOption: "risk",
     vitalFilter: "7d",
     alerts: [],
+    alertCaseUpdates: {},
     summaryVerified: {},
+    labCaseUpdates: {},
   });
 
   // Initialize alerts on client side
@@ -201,6 +224,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({
       ...prev,
       currentView: "labs",
+      currentPatient: null,
+      searchQuery: "",
+    }));
+  }, []);
+
+  const showAppointments = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      currentView: "appointments",
       currentPatient: null,
       searchQuery: "",
     }));
@@ -285,6 +317,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((prev) => {
       const tab: PatientTab =
         alert.type === "lab" ? "labs" : alert.type === "summary" ? "ov" : "ov";
+      const backTo: ViewType = alert.panel
+        ? "alerts"
+        : prev.currentPatient
+          ? prev.backTo
+          : prev.currentView;
+
       return {
         ...prev,
         alerts: prev.alerts.map((a) =>
@@ -292,9 +330,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
         ),
         currentPatient: alert.patId,
         currentTab: tab,
-        backTo: "alerts",
+        backTo,
       };
     });
+  }, []);
+
+  const updateAlertCase = useCallback((alertId: string, status: AlertCaseStatus, note: string) => {
+    setState((prev) => ({
+      ...prev,
+      alerts: prev.alerts.map((alert) =>
+        alert.id === alertId ? { ...alert, read: true } : alert
+      ),
+      alertCaseUpdates: {
+        ...prev.alertCaseUpdates,
+        [alertId]: {
+          status,
+          note,
+          updatedAt: Date.now(),
+        },
+      },
+    }));
   }, []);
 
   // Summary
@@ -305,12 +360,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const updateLabCase = useCallback((caseId: string, status: LabCaseStatus, note: string) => {
+    setState((prev) => ({
+      ...prev,
+      labCaseUpdates: {
+        ...prev.labCaseUpdates,
+        [caseId]: {
+          status,
+          note,
+          updatedAt: Date.now(),
+        },
+      },
+    }));
+  }, []);
+
   const value: AppContextValue = {
     ...state,
     showDashboard,
     showPatients,
     showAlerts,
     showLabs,
+    showAppointments,
     openPatient,
     goBack,
     switchTab,
@@ -322,7 +392,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     markAllAlertsRead,
     clearAlerts,
     handleAlertClick,
+    updateAlertCase,
     verifySummary,
+    updateLabCase,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

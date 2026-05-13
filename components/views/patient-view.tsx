@@ -24,6 +24,69 @@ const tabs: { key: PatientTab; label: string }[] = [
   { key: "rx", label: "Prescriptions" },
 ];
 
+function diseaseRiskScore(risk: string) {
+  if (risk === "cr") return 92;
+  if (risk === "hi") return 76;
+  if (risk === "me") return 58;
+  if (risk === "st") return 28;
+  return 18;
+}
+
+function ScoreRing({
+  label,
+  value,
+  tone,
+  delay = 0,
+}: {
+  label: string;
+  value: number;
+  tone: "cyan" | "health" | "risk";
+  delay?: number;
+}) {
+  const circumference = 87.96;
+  const fill = ((Math.max(0, Math.min(100, value)) / 100) * circumference).toFixed(2);
+  const toneClass =
+    tone === "risk"
+      ? value >= 80
+        ? "text-danger"
+        : value >= 55
+          ? "text-warning"
+          : "text-success"
+      : tone === "health"
+        ? getScoreClass(value)
+        : "text-cyan";
+  const stroke = tone === "risk" ? "var(--danger)" : tone === "health" ? "currentColor" : "var(--cyan)";
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className="relative h-10 w-10 flex-shrink-0">
+        <svg viewBox="0 0 36 36" className={cn("h-10 w-10 -rotate-90", toneClass)}>
+          <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3.2" />
+          <circle
+            cx="18"
+            cy="18"
+            r="14"
+            fill="none"
+            stroke={stroke}
+            strokeWidth="3.2"
+            strokeLinecap="round"
+            strokeDasharray={`${fill} ${circumference}`}
+            className="animate-ring-in"
+            style={{ animationDelay: `${delay}ms` }}
+          />
+        </svg>
+        <div className={cn("absolute inset-0 flex items-center justify-center text-[10px] font-black font-mono", toneClass)}>
+          {value}
+        </div>
+      </div>
+      <div className="min-w-[54px]">
+        <div className="text-[8px] font-bold uppercase tracking-widest text-dim leading-tight">{label}</div>
+        <div className="text-[8px] text-dim font-mono">/100</div>
+      </div>
+    </div>
+  );
+}
+
 export function PatientView({ patientId }: PatientViewProps) {
   const { currentTab, switchTab } = useApp();
   const patient = patientData[patientId];
@@ -36,8 +99,11 @@ export function PatientView({ patientId }: PatientViewProps) {
     );
   }
 
-  const scoreClass = getScoreClass(patient.healthScore);
-  const fillPercent = ((patient.healthScore / 100) * 87.96).toFixed(2);
+  const scores = [
+    { label: "BOS", value: patient.baselineScore, tone: "cyan" as const },
+    { label: "Health", value: patient.healthScore, tone: "health" as const },
+    { label: "Disease Risk", value: diseaseRiskScore(patient.risk), tone: "risk" as const },
+  ];
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -69,26 +135,11 @@ export function PatientView({ patientId }: PatientViewProps) {
         {/* Divider */}
         <div className="w-px h-8 bg-glass-border flex-shrink-0" />
 
-        {/* Health Score */}
-        <div className="flex flex-col gap-1 flex-shrink-0">
-          <div className="text-[9px] text-dim uppercase tracking-widest">Health Score</div>
-          <div className="flex items-baseline gap-1.5">
-            <span className={cn("text-[22px] font-black font-mono leading-none", scoreClass)}>
-              {patient.healthScore}
-            </span>
-            <span className="text-[10px] text-dim">/100</span>
-          </div>
-          <div className="w-24 h-1.5 rounded-full bg-white/10">
-            <div
-              className={cn(
-                "h-full rounded-full transition-all duration-700",
-                patient.healthScore >= 80 ? "bg-success"
-                  : patient.healthScore >= 60 ? "bg-warning"
-                  : "bg-danger"
-              )}
-              style={{ width: `${patient.healthScore}%` }}
-            />
-          </div>
+        {/* Score Rings */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          {scores.map((score, idx) => (
+            <ScoreRing key={score.label} {...score} delay={idx * 120} />
+          ))}
         </div>
 
         {/* Tabs */}

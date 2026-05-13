@@ -1,7 +1,7 @@
 "use client";
 
 import { patientData } from "@/lib/data/patients";
-import { DigitalTwinSvg } from "@/components/patient/digital-twin-svg";
+import { DigitalTwinHologram } from "@/components/patient/digital-twin-hologram";
 
 interface DigitalTwinTabProps {
   patientId: string;
@@ -14,7 +14,7 @@ export function DigitalTwinTab({ patientId }: DigitalTwinTabProps) {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="flex items-center justify-center p-6 min-h-full">
-        <DigitalTwinSvg patientId={patientId} className="max-h-[520px] w-auto" />
+        <DigitalTwinHologram patientId={patientId} className="h-[min(620px,calc(100vh-180px))] max-w-[760px]" />
       </div>
     </div>
   );

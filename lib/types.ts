@@ -24,7 +24,7 @@ export interface LabRow {
   test: string;
   val: string;
   ref: string;
-  flag: "NORMAL" | "HIGH" | "CRITICAL";
+  flag: "NORMAL" | "CRITICAL";
 }
 
 export interface LabReport {
@@ -33,6 +33,14 @@ export interface LabReport {
   status: string;
   statusCls: "ok" | "f";
   rows: LabRow[];
+}
+
+export type LabCaseStatus = "action" | "resolved";
+
+export interface LabCaseUpdate {
+  status: LabCaseStatus;
+  note: string;
+  updatedAt: number;
 }
 
 // Finding type
@@ -139,6 +147,14 @@ export interface Alert {
   panel: boolean;
 }
 
+export type AlertCaseStatus = "action" | "resolved";
+
+export interface AlertCaseUpdate {
+  status: AlertCaseStatus;
+  note: string;
+  updatedAt: number;
+}
+
 // Prescription types
 export interface PrescriptionItem {
   type: "medication" | "lab" | "referral";
@@ -162,7 +178,7 @@ export interface Prescription {
 }
 
 // View types
-export type ViewType = "dash" | "patients" | "summaries" | "labs" | "alerts";
+export type ViewType = "dash" | "patients" | "summaries" | "labs" | "alerts" | "appointments";
 export type PatientTab = "ov" | "twin" | "labs" | "hist" | "meds" | "rx";
 
 // Filter types

@@ -7,6 +7,7 @@ import {
   LayoutGrid,
   Users,
   Bell,
+  CalendarDays,
   FlaskConical,
   ChevronLeft,
   ChevronRight,
@@ -19,10 +20,11 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { key: "dash", label: "Dashboard", icon: LayoutGrid, section: "Overview" },
+  { key: "dash",     label: "Dashboard",   icon: LayoutGrid, section: "Overview" },
   { key: "patients", label: "My Patients", icon: Users },
-  { key: "alerts", label: "Active Alerts", icon: Bell, hasBadge: true },
-  { key: "labs", label: "Lab Reports", icon: FlaskConical, section: "Records", badge: "1" },
+  { key: "appointments", label: "Appointments", icon: CalendarDays },
+  { key: "alerts",   label: "Active Alerts", icon: Bell, hasBadge: true },
+  { key: "labs",     label: "Lab Reports", icon: FlaskConical, section: "Records" },
 ];
 
 export function Sidebar({ activeNav, onNavChange, alertCount }: SidebarProps) {
@@ -65,22 +67,17 @@ export function Sidebar({ activeNav, onNavChange, alertCount }: SidebarProps) {
 
       {/* Navigation */}
       <nav className={cn("flex-1 flex flex-col gap-0.5", collapsed ? "p-1.5" : "p-3")}>
-        {navItems.map((item, idx) => {
+        {navItems.map((item) => {
           const showSection = item.section && !collapsed;
           const Icon = item.icon;
           const isActive = activeNav === item.key;
-          const badgeValue = item.hasBadge ? alertCount : item.badge ? parseInt(item.badge) : 0;
+          const badgeValue = item.hasBadge ? alertCount : 0;
 
           return (
             <div key={item.key}>
               {showSection && (
                 <div className="text-[9px] font-bold tracking-wider text-[#94a3b8] uppercase py-2.5 px-2">
                   {item.section}
-                </div>
-              )}
-              {idx === 3 && !collapsed && (
-                <div className="text-[9px] font-bold tracking-wider text-[#94a3b8] uppercase py-2.5 px-2">
-                  Records
                 </div>
               )}
               <button
@@ -99,12 +96,7 @@ export function Sidebar({ activeNav, onNavChange, alertCount }: SidebarProps) {
                 </span>
                 {!collapsed && <span>{item.label}</span>}
                 {!collapsed && badgeValue > 0 && (
-                  <span
-                    className={cn(
-                      "ml-auto text-[9px] font-bold py-0.5 px-1.5 rounded-full text-white",
-                      item.hasBadge ? "bg-danger" : "bg-violet"
-                    )}
-                  >
+                  <span className="ml-auto text-[9px] font-bold py-0.5 px-1.5 rounded-full text-white bg-danger">
                     {badgeValue}
                   </span>
                 )}

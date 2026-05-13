@@ -8,6 +8,7 @@ import { DashboardView } from "@/components/views/dashboard-view";
 import { PatientsView } from "@/components/views/patients-view";
 import { AlertsView } from "@/components/views/alerts-view";
 import { LabsView } from "@/components/views/labs-view";
+import { AppointmentsView } from "@/components/views/appointments-view";
 import { PatientView } from "@/components/views/patient-view";
 import { patientData } from "@/lib/data/patients";
 
@@ -18,10 +19,12 @@ function AppShell() {
     backTo,
     searchQuery,
     alerts,
+    alertCaseUpdates,
     showDashboard,
     showPatients,
     showAlerts,
     showLabs,
+    showAppointments,
     goBack,
     setSearchQuery,
     handleAlertClick,
@@ -30,52 +33,45 @@ function AppShell() {
 
   const handleNavChange = (nav: string) => {
     switch (nav) {
-      case "dash":
-        showDashboard();
-        break;
-      case "patients":
-        showPatients();
-        break;
-      case "alerts":
-        showAlerts();
-        break;
-      case "labs":
-        showLabs();
-        break;
+      case "dash":     showDashboard(); break;
+      case "patients": showPatients();  break;
+      case "alerts":   showAlerts();    break;
+      case "labs":     showLabs();      break;
+      case "appointments": showAppointments(); break;
     }
   };
 
-  const alertCount = alerts.filter((a) => !a.read && a.severity !== "info").length;
+  const alertCount = alerts.filter(
+    (a) =>
+      a.panel &&
+      a.type === "vital" &&
+      !a.read &&
+      alertCaseUpdates[a.id]?.status !== "resolved"
+  ).length;
 
   const getTitle = () => {
-    if (currentPatient) {
-      return patientData[currentPatient]?.name || "Patient";
-    }
+    if (currentPatient) return patientData[currentPatient]?.name || "Patient";
     switch (currentView) {
-      case "dash":
-        return "Dashboard";
-      case "patients":
-        return "My Patients";
-      case "alerts":
-        return "Active Alerts";
-      case "labs":
-        return "Lab Reports";
-      default:
-        return "Dashboard";
+      case "dash":     return "Dashboard";
+      case "patients": return "My Patients";
+      case "alerts":   return "Active Alerts";
+      case "labs":     return "Lab Reports";
+      case "appointments": return "Appointments";
+      default:         return "Dashboard";
     }
   };
 
   const getBackLabel = () => {
     const labels: Record<string, string> = {
-      dash: "Dashboard",
+      dash:     "Dashboard",
       patients: "My Patients",
-      alerts: "Alerts",
-      labs: "Lab Reports",
+      alerts:   "Alerts",
+      labs:     "Lab Reports",
+      appointments: "Appointments",
     };
     return labels[backTo] || "Back";
   };
 
-  // Filter notifications for header (non-panel alerts)
   const notificationAlerts = alerts.filter((a) => !a.panel);
 
   return (
@@ -104,10 +100,11 @@ function AppShell() {
             <PatientView patientId={currentPatient} />
           ) : (
             <>
-              {currentView === "dash" && <DashboardView />}
+              {currentView === "dash"     && <DashboardView />}
               {currentView === "patients" && <PatientsView />}
-              {currentView === "alerts" && <AlertsView />}
-              {currentView === "labs" && <LabsView />}
+              {currentView === "alerts"   && <AlertsView />}
+              {currentView === "labs"     && <LabsView />}
+              {currentView === "appointments" && <AppointmentsView />}
             </>
           )}
         </div>

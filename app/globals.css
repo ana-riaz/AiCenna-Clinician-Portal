@@ -92,6 +92,10 @@ body::after {
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
+.animate-ring-in {
+  animation: ring-in 900ms ease-out both;
+}
+
 /* Glass card styling */
 .glass-card {
   @apply bg-glass border border-glass-border rounded-[18px] backdrop-blur-[10px];
