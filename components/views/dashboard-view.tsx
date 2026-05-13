@@ -18,7 +18,7 @@ const riskMap: Record<string, string> = {
 };
 
 export function DashboardView() {
-  const { alerts, openPatient, showPatients, showAlerts, showLabs } = useApp();
+  const { alerts, openPatient, showPatients, showSummaries, showAlerts, showLabs } = useApp();
   const [filter, setFilter] = useState<DashFilter>("all");
   const [sort, setSort] = useState<DashSort>("risk");
   const [filterOpen, setFilterOpen] = useState(false);
@@ -83,7 +83,7 @@ export function DashboardView() {
         </button>
 
         <button
-          onClick={showPatients}
+          onClick={showSummaries}
           className="glass-card relative overflow-hidden p-4 cursor-pointer transition-all hover:border-glass-strong hover:-translate-y-0.5"
         >
           <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-[18px] bg-gradient-to-r from-violet to-rose" />

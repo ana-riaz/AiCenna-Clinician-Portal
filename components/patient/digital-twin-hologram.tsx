@@ -404,7 +404,7 @@ export function DigitalTwinHologram({ patientId, className }: DigitalTwinHologra
   if (!patient) return null;
 
   return (
-    <div className={cn("relative isolate flex min-h-[260px] w-full items-center justify-center overflow-hidden", className)}>
+    <div className={cn("relative isolate flex min-h-0 w-full items-center justify-center overflow-hidden", className)}>
       <div className="absolute bottom-[8%] h-[18%] w-[64%] rounded-full border border-cyan-300/20 bg-cyan-300/5 shadow-[0_0_42px_rgba(34,211,238,0.18)]" />
       <div className="absolute bottom-[12%] h-[9%] w-[44%] rounded-full border border-white/10" />
       <canvas ref={canvasRef} className="relative z-10 h-full w-full" aria-label="Patient digital twin hologram" />

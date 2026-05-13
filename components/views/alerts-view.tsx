@@ -194,14 +194,6 @@ export function AlertsView() {
 
   return (
     <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <h1 className="text-base font-semibold tracking-tight text-ink mb-0.5">Active Vital Alerts</h1>
-          <p className="text-[11px] text-muted">
-            Vitals only. Resolved alerts leave this queue; actioned alerts remain until resolved.
-          </p>
-        </div>
-      </div>
 
       <div className="grid grid-cols-3 gap-2.5 mb-3">
         <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-[10px] p-3 relative overflow-hidden border-t-2 border-t-danger">

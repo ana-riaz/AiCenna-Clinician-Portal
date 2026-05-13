@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactNode, useState } from "react";
 import { Bell, Search, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Alert } from "@/lib/types";
@@ -16,6 +17,7 @@ interface HeaderProps {
   alerts: Alert[];
   onAlertClick: (alert: Alert) => void;
   onMarkAllRead: () => void;
+  patientHeaderContent?: ReactNode;
 }
 
 function getAlertIcon(alert: Alert) {
@@ -42,39 +44,60 @@ export function Header({
   alerts,
   onAlertClick,
   onMarkAllRead,
+  patientHeaderContent,
 }: HeaderProps) {
+  const [searchOpen, setSearchOpen] = useState(false);
   const unreadCount = alerts.filter((a) => !a.read).length;
+  const showSearchInput = searchOpen || !!searchQuery;
 
   return (
-    <header className="h-[58px] bg-[rgba(8,18,37,0.6)] backdrop-blur-[20px] border-b border-glass-border flex items-center px-6 gap-3.5 flex-shrink-0 relative z-20">
+    <header className="h-[58px] bg-[rgba(8,18,37,0.6)] backdrop-blur-[20px] border-b border-glass-border flex items-center px-4 gap-3 flex-shrink-0 relative z-20">
       {/* Back Button */}
       {showBack && (
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-muted cursor-pointer text-[11px] font-semibold px-2.5 mr-2.5 transition-colors hover:text-[#38bdf8] whitespace-nowrap"
+          className="h-[34px] w-[28px] flex items-center justify-center text-muted cursor-pointer transition-colors hover:text-[#38bdf8] flex-shrink-0"
+          title={backLabel}
         >
           <ArrowLeft size={14} />
-          {backLabel}
         </button>
       )}
 
+      {patientHeaderContent}
+
       {/* Title */}
-      {!showBack && (
+      {!showBack && !patientHeaderContent && (
         <h1 className="text-[15px] font-extrabold tracking-tight flex-1 bg-gradient-to-r from-ink to-muted bg-clip-text text-transparent">
           {title}
         </h1>
       )}
 
       {/* Search */}
-      <div className="flex items-center gap-2 bg-field border border-field-border rounded-xl py-1.5 px-3 w-[200px] ml-auto">
-        <Search size={13} className="text-dim" />
-        <input
-          type="text"
-          placeholder="Search patients..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="bg-transparent border-none outline-none text-ink font-sans text-xs w-full placeholder:text-dim"
-        />
+      <div className="ml-auto flex items-center flex-shrink-0">
+        {showSearchInput ? (
+          <div className="flex items-center gap-2 bg-field border border-field-border rounded-xl py-1.5 px-3 w-[190px]">
+            <Search size={13} className="text-dim" />
+            <input
+              type="text"
+              placeholder="Search patients..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              onBlur={() => {
+                if (!searchQuery) setSearchOpen(false);
+              }}
+              autoFocus={searchOpen}
+              className="bg-transparent border-none outline-none text-ink font-sans text-xs w-full placeholder:text-dim"
+            />
+          </div>
+        ) : (
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="w-[34px] h-[34px] bg-glass border border-glass-border rounded-[10px] cursor-pointer flex items-center justify-center text-muted transition-all hover:border-[#38bdf8] hover:text-[#38bdf8]"
+            title="Search"
+          >
+            <Search size={15} />
+          </button>
+        )}
       </div>
 
       {/* Notifications */}

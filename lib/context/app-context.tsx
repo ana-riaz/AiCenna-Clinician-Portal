@@ -47,6 +47,7 @@ interface AppContextValue extends AppState {
   // Navigation actions
   showDashboard: () => void;
   showPatients: () => void;
+  showSummaries: () => void;
   showAlerts: () => void;
   showLabs: () => void;
   showAppointments: () => void;
@@ -206,6 +207,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({
       ...prev,
       currentView: "patients",
+      currentPatient: null,
+      searchQuery: "",
+    }));
+  }, []);
+
+  const showSummaries = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      currentView: "summaries",
       currentPatient: null,
       searchQuery: "",
     }));
@@ -378,6 +388,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     ...state,
     showDashboard,
     showPatients,
+    showSummaries,
     showAlerts,
     showLabs,
     showAppointments,

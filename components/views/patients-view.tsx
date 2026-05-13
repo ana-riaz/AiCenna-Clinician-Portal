@@ -67,15 +67,7 @@ export function PatientsView() {
 
   return (
     <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
-      {/* Title */}
-      <div>
-        <div className="text-[15px] font-extrabold tracking-tight mb-1">
-          My Patients
-        </div>
-        <div className="text-[11px] text-muted">
-          Click a patient to open their digital twin
-        </div>
-      </div>
+
 
       {/* Controls */}
       <div className="flex items-center justify-between gap-3 flex-wrap">

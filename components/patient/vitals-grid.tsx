@@ -53,7 +53,7 @@ export function VitalsGrid({ patientId, filter }: VitalsGridProps) {
 
         if (!vital || !history) {
           return (
-            <div key={meta.key} className="glass-card p-3 min-h-[140px]">
+            <div key={meta.key} className="glass-card p-2.5 min-h-[120px]">
               <div className="text-[9px] font-bold text-dim uppercase tracking-wider mb-1.5 flex items-center justify-between">
                 {meta.label}
                 <span className="text-[8px] py-0.5 px-1.5 rounded bg-glass-strong text-dim normal-case tracking-normal">
@@ -84,7 +84,7 @@ export function VitalsGrid({ patientId, filter }: VitalsGridProps) {
         const midV = Math.round((maxV + minV) / 2);
 
         return (
-          <div key={meta.key} className="glass-card p-3 min-h-[140px]">
+          <div key={meta.key} className="glass-card p-2.5 min-h-[120px]">
             <div className="text-[9px] font-bold text-dim uppercase tracking-wider mb-1.5 flex items-center justify-between">
               {meta.label}
               <span className="text-[8px] py-0.5 px-1.5 rounded bg-glass-strong text-dim normal-case tracking-normal">

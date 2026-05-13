@@ -3,7 +3,7 @@
 import { useApp } from "@/lib/context/app-context";
 import { patientData } from "@/lib/data/patients";
 import { PatientTab } from "@/lib/types";
-import { cn, getRiskClass, getAvatarClass, getScoreClass } from "@/lib/utils";
+import { cn, getRiskClass, getAvatarClass } from "@/lib/utils";
 import { OverviewTab } from "@/components/patient/overview-tab";
 import { DigitalTwinTab } from "@/components/patient/digital-twin-tab";
 import { LabsTab } from "@/components/patient/labs-tab";
@@ -24,71 +24,59 @@ const tabs: { key: PatientTab; label: string }[] = [
   { key: "rx", label: "Prescriptions" },
 ];
 
-function diseaseRiskScore(risk: string) {
-  if (risk === "cr") return 92;
-  if (risk === "hi") return 76;
-  if (risk === "me") return 58;
-  if (risk === "st") return 28;
-  return 18;
-}
+export function PatientHeaderControls({ patientId }: PatientViewProps) {
+  const { currentTab, switchTab } = useApp();
+  const patient = patientData[patientId];
 
-function ScoreRing({
-  label,
-  value,
-  tone,
-  delay = 0,
-}: {
-  label: string;
-  value: number;
-  tone: "cyan" | "health" | "risk";
-  delay?: number;
-}) {
-  const circumference = 87.96;
-  const fill = ((Math.max(0, Math.min(100, value)) / 100) * circumference).toFixed(2);
-  const toneClass =
-    tone === "risk"
-      ? value >= 80
-        ? "text-danger"
-        : value >= 55
-          ? "text-warning"
-          : "text-success"
-      : tone === "health"
-        ? getScoreClass(value)
-        : "text-cyan";
-  const stroke = tone === "risk" ? "var(--danger)" : tone === "health" ? "currentColor" : "var(--cyan)";
+  if (!patient) return null;
 
   return (
-    <div className="flex items-center gap-1.5">
-      <div className="relative h-10 w-10 flex-shrink-0">
-        <svg viewBox="0 0 36 36" className={cn("h-10 w-10 -rotate-90", toneClass)}>
-          <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3.2" />
-          <circle
-            cx="18"
-            cy="18"
-            r="14"
-            fill="none"
-            stroke={stroke}
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeDasharray={`${fill} ${circumference}`}
-            className="animate-ring-in"
-            style={{ animationDelay: `${delay}ms` }}
-          />
-        </svg>
-        <div className={cn("absolute inset-0 flex items-center justify-center text-[10px] font-black font-mono", toneClass)}>
-          {value}
+    <div className="flex min-w-0 flex-1 items-center gap-3">
+      <div className="flex items-center gap-2.5 min-w-[150px]">
+        <div
+          className={cn(
+            "w-[34px] h-[34px] rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
+            getAvatarClass(patient.risk)
+          )}
+        >
+          {patient.init}
+        </div>
+        <div className="min-w-0">
+          <div className="text-[12px] font-bold text-ink leading-tight truncate">{patient.name}</div>
+          <span
+            className={cn(
+              "inline-block mt-0.5 py-0.5 px-2 rounded-full text-[8px] font-bold tracking-wide",
+              getRiskClass(patient.risk)
+            )}
+          >
+            {patient.rl}
+          </span>
         </div>
       </div>
-      <div className="min-w-[54px]">
-        <div className="text-[8px] font-bold uppercase tracking-widest text-dim leading-tight">{label}</div>
-        <div className="text-[8px] text-dim font-mono">/100</div>
+
+      <div className="w-px h-8 bg-glass-border flex-shrink-0" />
+
+      <div className="flex gap-0 min-w-0 overflow-x-auto">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => switchTab(tab.key)}
+            className={cn(
+              "h-[58px] px-3 text-[10px] font-semibold text-muted cursor-pointer border-b-2 border-transparent transition-all whitespace-nowrap",
+              "hover:text-ink",
+              currentTab === tab.key && "text-[#38bdf8] border-b-[#38bdf8]"
+            )}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
     </div>
   );
 }
 
 export function PatientView({ patientId }: PatientViewProps) {
-  const { currentTab, switchTab } = useApp();
+  const { currentTab } = useApp();
   const patient = patientData[patientId];
 
   if (!patient) {
@@ -99,67 +87,8 @@ export function PatientView({ patientId }: PatientViewProps) {
     );
   }
 
-  const scores = [
-    { label: "BOS", value: patient.baselineScore, tone: "cyan" as const },
-    { label: "Health", value: patient.healthScore, tone: "health" as const },
-    { label: "Disease Risk", value: diseaseRiskScore(patient.risk), tone: "risk" as const },
-  ];
-
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      {/* Patient Header */}
-      <div className="bg-[rgba(8,18,37,0.7)] backdrop-blur-[20px] border-b border-glass-border px-6 flex items-center gap-4 flex-shrink-0">
-        {/* Patient Info */}
-        <div className="flex items-center gap-3 py-2.5">
-          <div
-            className={cn(
-              "w-[38px] h-[38px] rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0",
-              getAvatarClass(patient.risk)
-            )}
-          >
-            {patient.init}
-          </div>
-          <div className="min-w-0">
-            <div className="text-[13px] font-bold text-ink leading-tight">{patient.name}</div>
-            <span
-              className={cn(
-                "inline-block mt-0.5 py-0.5 px-2 rounded-full text-[9px] font-bold tracking-wide",
-                getRiskClass(patient.risk)
-              )}
-            >
-              {patient.rl}
-            </span>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="w-px h-8 bg-glass-border flex-shrink-0" />
-
-        {/* Score Rings */}
-        <div className="flex items-center gap-4 flex-shrink-0">
-          {scores.map((score, idx) => (
-            <ScoreRing key={score.label} {...score} delay={idx * 120} />
-          ))}
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-0 ml-auto">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => switchTab(tab.key)}
-              className={cn(
-                "py-4 px-4 text-[11px] font-semibold text-muted cursor-pointer border-b-2 border-transparent transition-all whitespace-nowrap",
-                "hover:text-ink",
-                currentTab === tab.key && "text-[#38bdf8] border-b-[#38bdf8]"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Tab Content */}
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
         {currentTab === "ov" && <OverviewTab patientId={patientId} />}
